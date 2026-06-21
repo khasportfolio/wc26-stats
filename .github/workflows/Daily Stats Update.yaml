@@ -11,9 +11,9 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.14'
-      - run: python scripts/fetch_espn_stats.py --all
-      - run: python scripts/compute_ratings.py
-      - run: python scripts/build_dashboard.py
+      - run: python fetch_espn_stats.py --all
+      - run: python compute_ratings.py
+      - run: python build_dashboard.py
       - name: Commit & push
         run: |
           git config user.name "github-actions[bot]"
