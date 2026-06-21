@@ -1,0 +1,23 @@
+name: Daily Stats Update
+on:
+  schedule:
+    - cron: '0 8 * * *'  # 8 AM UTC daily during tournament
+  workflow_dispatch: {}  # manual trigger
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: python scripts/fetch_espn_stats.py --all
+      - run: python scripts/compute_ratings.py
+      - run: python scripts/build_dashboard.py
+      - name: Commit & push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "actions@github.com"
+          git add data/ public/
+          git diff --cached --quiet || git commit -m "Auto-update stats $(date -u +%Y-%m-%d)"
+          git push
