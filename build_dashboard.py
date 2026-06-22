@@ -414,7 +414,7 @@ def generate_html(all_team_data):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>World Cup 2026 — Advanced Analytics Dashboard</title>
     <meta name="description" content="World Cup 2026 team analytics: 6 composite dimensions from 120+ ESPN match stats, updated daily.">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚽</text></svg>">
+    <link rel="icon" href="favicon.svg" type="image/svg+xml">
     <style>
         :root {
             --wc-green: #3CAC3B;
@@ -422,29 +422,57 @@ def generate_html(all_team_data):
             --wc-red: #E61D25;
             --wc-light-gray: #D1D4D1;
             --wc-dark-gray: #474A4A;
+            --bg: #FAFAFA;
+            --card-bg: #FFFFFF;
+            --card-border: #E2E4E2;
+            --text-primary: #2D2D2D;
+            --text-secondary: #5F6368;
+            --text-muted: #8A8F94;
+            --bar-bg: #ECEEED;
+            --grid-line: rgba(209,212,209,0.7);
+            --grid-axis: rgba(209,212,209,0.5);
+            --radar-label: #5F6368;
+            --hover-shadow: rgba(42,57,141,0.08);
+            --luminance-threshold: 200;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0F1318;
+                --card-bg: #1A1F27;
+                --card-border: #2D333B;
+                --text-primary: #E6EDF3;
+                --text-secondary: #A8B1BA;
+                --text-muted: #6E7681;
+                --bar-bg: #2D333B;
+                --grid-line: rgba(100,110,120,0.5);
+                --grid-axis: rgba(100,110,120,0.35);
+                --radar-label: #A8B1BA;
+                --hover-shadow: rgba(88,166,255,0.1);
+                --luminance-threshold: 80;
+            }
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: #FAFAFA;
-            color: #2D2D2D;
+            background: var(--bg);
+            color: var(--text-primary);
             padding: 24px;
             min-height: 100vh;
         }
         h1 { text-align: center; font-size: 1.8rem; color: var(--wc-blue); margin-bottom: 4px; }
-        .subtitle { text-align: center; color: #5F6368; font-size: 0.85rem; margin-bottom: 20px; }
+        .subtitle { text-align: center; color: var(--text-secondary); font-size: 0.85rem; margin-bottom: 20px; }
 
         .controls {
             display: flex; justify-content: center; gap: 12px;
             margin-bottom: 20px; flex-wrap: wrap; align-items: center;
         }
         .controls select, .controls input {
-            padding: 6px 12px; border-radius: 6px; border: 1px solid #E2E4E2;
-            background: #FFFFFF; color: #2D2D2D; font-size: 0.8rem;
+            padding: 6px 12px; border-radius: 6px; border: 1px solid var(--card-border);
+            background: var(--card-bg); color: var(--text-primary); font-size: 0.8rem;
         }
         .controls input { width: 180px; }
         .controls input:focus, .controls select:focus { outline: 2px solid var(--wc-blue); border-color: var(--wc-blue); }
-        .controls label { font-size: 0.8rem; color: #5F6368; }
+        .controls label { font-size: 0.8rem; color: var(--text-secondary); }
 
         .grid {
             display: grid;
@@ -452,15 +480,15 @@ def generate_html(all_team_data):
             gap: 14px; max-width: 1600px; margin: 0 auto;
         }
         .card {
-            background: #FFFFFF; border: 1px solid #E2E4E2; border-radius: 10px;
+            background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 10px;
             padding: 16px; transition: all 0.2s; border-top: 3px solid var(--wc-green);
         }
-        .card:hover { border-color: var(--wc-blue); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(42,57,141,0.08); }
+        .card:hover { border-color: var(--wc-blue); transform: translateY(-1px); box-shadow: 0 4px 12px var(--hover-shadow); }
         .card-header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 10px;
         }
-        .team-name { font-weight: 600; font-size: 0.95rem; color: #2D2D2D; }
+        .team-name { font-weight: 600; font-size: 0.95rem; color: var(--text-primary); }
         .rank-badge {
             font-size: 0.7rem; font-weight: 700; padding: 2px 8px;
             border-radius: 10px; background: rgba(42,57,141,0.08); color: var(--wc-blue);
@@ -474,16 +502,16 @@ def generate_html(all_team_data):
             display: flex; align-items: center; margin-bottom: 4px;
             font-size: 0.7rem;
         }
-        .dim-label { width: 75px; color: #5F6368; font-weight: 500; }
+        .dim-label { width: 75px; color: var(--text-secondary); font-weight: 500; }
         .dim-bar-bg {
-            flex: 1; height: 7px; background: #ECEEED;
+            flex: 1; height: 7px; background: var(--bar-bg);
             border-radius: 4px; overflow: hidden; position: relative;
         }
         .dim-bar {
             height: 100%; border-radius: 4px;
             transition: width 0.4s ease;
         }
-        .dim-val { width: 32px; text-align: right; color: #8A8F94; font-size: 0.65rem; }
+        .dim-val { width: 32px; text-align: right; color: var(--text-muted); font-size: 0.65rem; }
         .con-dot {
             width: 7px; height: 7px; border-radius: 50%; margin-left: 4px;
             display: inline-block; flex-shrink: 0;
@@ -495,17 +523,17 @@ def generate_html(all_team_data):
 
         .consistency-row {
             display: flex; align-items: center; justify-content: space-between;
-            margin-top: 8px; padding-top: 6px; border-top: 1px solid #E2E4E2;
+            margin-top: 8px; padding-top: 6px; border-top: 1px solid var(--card-border);
             font-size: 0.68rem;
         }
-        .con-label { color: #8A8F94; }
+        .con-label { color: var(--text-muted); }
         .con-badge {
             padding: 2px 7px; border-radius: 8px; font-weight: 600; font-size: 0.65rem;
         }
         .con-badge-high { background: rgba(60,172,59,0.1); color: #2D8A2C; }
         .con-badge-med { background: rgba(230,168,23,0.1); color: #B8860B; }
         .con-badge-low { background: rgba(230,29,37,0.1); color: #C41920; }
-        .con-badge-na { background: rgba(209,212,209,0.3); color: #8A8F94; }
+        .con-badge-na { background: rgba(209,212,209,0.3); color: var(--text-muted); }
 
         .bar-finishing { background: linear-gradient(90deg, #E61D25, #C41920); }
         .bar-creation { background: linear-gradient(90deg, #2A398D, #1E2A6B); }
@@ -516,15 +544,15 @@ def generate_html(all_team_data):
 
         .meta-row {
             display: flex; justify-content: space-between;
-            font-size: 0.63rem; color: #8A8F94; margin-top: 6px;
-            border-top: 1px solid #E2E4E2; padding-top: 6px;
+            font-size: 0.63rem; color: var(--text-muted); margin-top: 6px;
+            border-top: 1px solid var(--card-border); padding-top: 6px;
         }
 
         .legend {
             display: flex; justify-content: center; gap: 16px;
             margin-bottom: 16px; flex-wrap: wrap;
         }
-        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: #5F6368; }
+        .legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.72rem; color: var(--text-secondary); }
         .legend-dot { width: 10px; height: 10px; border-radius: 2px; }
         .dot-fin { background: #E61D25; }
         .dot-cre { background: #2A398D; }
@@ -532,6 +560,16 @@ def generate_html(all_team_data):
         .dot-def { background: #5B7EC2; }
         .dot-phy { background: #E67E22; }
         .dot-press { background: #8E44AD; }
+
+        @media (prefers-color-scheme: dark) {
+            .rank-badge { background: rgba(88,166,255,0.12); color: #79B8FF; }
+            h1 { color: #79B8FF; }
+            .con-badge-high { background: rgba(60,172,59,0.15); color: #56D364; }
+            .con-badge-med { background: rgba(230,168,23,0.15); color: #E6A817; }
+            .con-badge-low { background: rgba(230,29,37,0.15); color: #F87171; }
+            .con-na { background: #3D444D; }
+            .bar-creation { background: linear-gradient(90deg, #5B7EC2, #3A5CA0); }
+        }
     </style>
 </head>
 <body>
@@ -630,14 +668,30 @@ const COUNTRY_COLORS = {
 
 function getTeamColors(name) {
     const c = COUNTRY_COLORS[name] || ["#3CAC3B","#2A398D"];
-    // If primary is white/very light, use secondary for visibility on white bg
+    // If primary is white/very light (or very dark in dark mode), use secondary
     const hex = c[0].replace("#","");
     const r = parseInt(hex.substring(0,2),16);
     const g = parseInt(hex.substring(2,4),16);
     const b = parseInt(hex.substring(4,6),16);
     const luminance = (0.299*r + 0.587*g + 0.114*b);
-    if (luminance > 200) return [c[1], c[0]];
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    // In light mode, swap if too bright; in dark mode, swap if too dark
+    if (!isDark && luminance > 200) return [c[1], c[0]];
+    if (isDark && luminance < 40) return [c[1], c[0]];
     return c;
+}
+
+function getGridColor() {
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return isDark ? "rgba(100,110,120,0.5)" : "rgba(209,212,209,0.7)";
+}
+function getAxisColor() {
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return isDark ? "rgba(100,110,120,0.35)" : "rgba(209,212,209,0.5)";
+}
+function getLabelColor() {
+    const isDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    return isDark ? "#A8B1BA" : "#5F6368";
 }
 
 function drawRadar(canvas, team) {
@@ -658,7 +712,7 @@ function drawRadar(canvas, team) {
             if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
         }
         ctx.closePath();
-        ctx.strokeStyle = "rgba(209,212,209,0.7)";
+        ctx.strokeStyle = getGridColor();
         ctx.lineWidth = 0.5;
         ctx.stroke();
     }
@@ -669,7 +723,7 @@ function drawRadar(canvas, team) {
         ctx.beginPath();
         ctx.moveTo(cx, cy);
         ctx.lineTo(cx + Math.cos(angle) * r, cy + Math.sin(angle) * r);
-        ctx.strokeStyle = "rgba(209,212,209,0.5)";
+        ctx.strokeStyle = getAxisColor();
         ctx.lineWidth = 0.5;
         ctx.stroke();
     }
@@ -706,7 +760,7 @@ function drawRadar(canvas, team) {
         const lx = cx + Math.cos(angle) * (r + 14);
         const ly = cy + Math.sin(angle) * (r + 14);
         ctx.font = "9px system-ui";
-        ctx.fillStyle = "#5F6368";
+        ctx.fillStyle = getLabelColor();
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         ctx.fillText(DIM_LABELS[i], lx, ly);
@@ -800,6 +854,9 @@ function render() {
 }
 
 render();
+
+// Re-render when system theme changes
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", () => render());
 </script>
 </body>
 </html>'''
