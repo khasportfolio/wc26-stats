@@ -225,7 +225,7 @@ const COLORS=["#E61D25","#2A398D","#3CAC3B","#5B7EC2","#E67E22","#8E44AD"];
 const DIM_LABELS=["Finishing","Creation","Control","Defense","Physical","Pressing"];
 function drawTrendChart(canvas,trend,highlight){
 const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
-const pad={top:10,bottom:28,left:5,right:5},cW=w-pad.left-pad.right,cH=h-pad.top-pad.bottom;
+const pad={top:10,bottom:32,left:5,right:5},cW=w-pad.left-pad.right,cH=h-pad.top-pad.bottom;
 ctx.clearRect(0,0,w,h);if(!trend.length)return;
 const isDark=window.matchMedia("(prefers-color-scheme:dark)").matches;
 ctx.strokeStyle=isDark?"rgba(100,110,120,.3)":"rgba(209,212,209,.5)";ctx.lineWidth=.5;
@@ -239,8 +239,11 @@ if(on){trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2),y=pad.top+cH
 });ctx.globalAlpha=1;
 ctx.font="9px system-ui";ctx.fillStyle=isDark?"#6E7681":"#8A8F94";ctx.textAlign="center";
 trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2);
-ctx.fillText(`vs ${(pt.opponent||"").substring(0,10)}`,x,h-5);
-ctx.fillText(`${pt.goals}-${pt.conceded}`,x,h-15)})}
+const opp=shortName(pt.opponent||"");
+ctx.fillText(`vs ${opp}`,x,h-5);
+ctx.fillText(`${pt.goals}-${pt.conceded}`,x,h-16)})}
+const SHORT_NAMES={"Bosnia and Herzegovina":"Bosnia","Czech Republic":"Czechia","South Africa":"S. Africa","South Korea":"S. Korea","New Zealand":"N. Zealand","Saudi Arabia":"S. Arabia","Ivory Coast":"Iv. Coast","Cape Verde":"C. Verde","United States":"USA"};
+function shortName(n){return SHORT_NAMES[n]||n.substring(0,12)}}
 function createCard(name,trend){
 const card=document.createElement("div");card.className="card";
 card.innerHTML=`<div class="card-header"><span class="team-name">${name}</span><span class="match-count">${trend.length} matches</span></div><canvas class="trend-chart" width="420" height="160"></canvas>`;
