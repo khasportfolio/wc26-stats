@@ -1,0 +1,25 @@
+# World Cup 2026 — Round of 32 Qualified Teams
+# Add team names as they qualify (one per line, matching CSV filenames)
+# Lines starting with # are comments
+South Africa
+Canada
+Brazil
+Japan
+Germany
+Paraguay
+Netherlands
+Morocco
+Ivory Coast
+Norway
+France
+Sweden
+Mexico
+Belgium
+USA
+Bosnia and Herzegovina
+Spain
+Switzerland
+Australia
+Egypt
+Argentina
+Cape Verde

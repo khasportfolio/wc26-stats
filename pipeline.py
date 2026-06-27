@@ -82,10 +82,16 @@ def main():
     else:
         print("\n  ⏭ Skipping ESPN fetch (--skip-fetch)")
 
-    # Step 2: Build advanced dashboard
-    run_step("Building advanced analytics dashboard", [sys.executable, "build_dashboard.py"])
+    # Step 1b: Deduplicate data (fix ESPN name normalization issues)
+    run_step("Deduplicating team CSVs", [sys.executable, "dedup_data.py"])
 
-    # Step 3: Done
+    # Step 2: Build advanced dashboard (group stage — archived)
+    run_step("Building group stage dashboard", [sys.executable, "build_dashboard.py"])
+
+    # Step 3: Build R32 dashboard + trends
+    run_step("Building R32 dashboard + trends", [sys.executable, "build_r32_dashboard.py"])
+
+    # Step 4: Done
     print("\n" + "=" * 60)
     print("  ✓ Pipeline complete!")
     print(f"    Output: {PUBLIC_DIR}")

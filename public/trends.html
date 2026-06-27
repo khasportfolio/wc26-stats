@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 — Team Trends</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root {
+    --wc-green:#3CAC3B;--wc-blue:#2A398D;--wc-red:#E61D25;
+    --bg:#FAFAFA;--card-bg:#FFF;--card-border:#E2E4E2;
+    --text-primary:#2D2D2D;--text-secondary:#5F6368;--text-muted:#8A8F94;
+    --bar-bg:#ECEEED;--hover-shadow:rgba(42,57,141,.08);
+}
+@media(prefers-color-scheme:dark){:root{
+    --bg:#0F1318;--card-bg:#1A1F27;--card-border:#2D333B;
+    --text-primary:#E6EDF3;--text-secondary:#A8B1BA;--text-muted:#6E7681;
+    --bar-bg:#2D333B;--hover-shadow:rgba(88,166,255,.1);
+}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text-primary);padding:24px;min-height:100vh}
+h1{text-align:center;font-size:1.8rem;color:var(--wc-blue);margin-bottom:4px}
+.subtitle{text-align:center;color:var(--text-secondary);font-size:.85rem;margin-bottom:8px}
+.nav{text-align:center;margin-bottom:20px;font-size:.85rem}
+.nav-link{color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:4px}
+.nav-link:hover{background:var(--bar-bg)}
+.nav-link.active{color:var(--wc-blue);font-weight:600;background:rgba(42,57,141,.08)}
+.controls{display:flex;justify-content:center;gap:12px;margin-bottom:20px;flex-wrap:wrap;align-items:center}
+.controls select,.controls input{padding:6px 12px;border-radius:6px;border:1px solid var(--card-border);background:var(--card-bg);color:var(--text-primary);font-size:.8rem}
+.controls input{width:180px}
+.controls label{font-size:.8rem;color:var(--text-secondary)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:16px;max-width:1600px;margin:0 auto}
+.card{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:18px;transition:all .2s;border-top:3px solid var(--wc-green)}
+.card:hover{border-color:var(--wc-blue);box-shadow:0 4px 12px var(--hover-shadow)}
+.card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.team-name{font-weight:600;font-size:1rem}
+.match-count{font-size:.7rem;color:var(--text-muted)}
+canvas.trend-chart{width:100%;height:160px;display:block}
+.legend{display:flex;justify-content:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text-secondary)}
+.legend-dot{width:10px;height:10px;border-radius:2px}
+.dot-fin{background:#E61D25}.dot-cre{background:#2A398D}.dot-ctrl{background:#3CAC3B}
+.dot-def{background:#5B7EC2}.dot-phy{background:#E67E22}.dot-press{background:#8E44AD}
+@media(prefers-color-scheme:dark){h1{color:#79B8FF}.nav-link.active{color:#79B8FF;background:rgba(88,166,255,.12)}}
+</style>
+</head>
+<body>
+<h1>⚽ World Cup 2026 — Team Trends</h1>
+<p class="subtitle">Per-match dimension scores · Normalized across all R32 team performances</p>
+<div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> · <a href="r32.html" class="nav-link">Round of 32</a> · <a href="trends.html" class="nav-link active">Trends</a></div>
+<div class="legend">
+<div class="legend-item"><div class="legend-dot dot-fin"></div>Finishing</div>
+<div class="legend-item"><div class="legend-dot dot-cre"></div>Creation</div>
+<div class="legend-item"><div class="legend-dot dot-ctrl"></div>Control</div>
+<div class="legend-item"><div class="legend-dot dot-def"></div>Defense</div>
+<div class="legend-item"><div class="legend-dot dot-phy"></div>Physicality</div>
+<div class="legend-item"><div class="legend-dot dot-press"></div>Pressing</div>
+</div>
+<div class="controls">
+<label>Filter:</label>
+<input type="text" id="filter" placeholder="Type team name..." oninput="render()">
+<label>Highlight:</label>
+<select id="highlight" onchange="render()">
+<option value="all">All Dimensions</option>
+<option value="finishing">Finishing</option><option value="creation">Creation</option>
+<option value="control">Control</option><option value="defense">Defense</option>
+<option value="physicality">Physicality</option><option value="pressing">Pressing</option>
+</select>
+</div>
+<div class="grid" id="grid"></div>
+<script>
+const trendsData={
+  "Argentina": [
+    {
+      "match": 1,
+      "opponent": "Algeria",
+      "date": "6/16/2026",
+      "goals": 3,
+      "conceded": 1,
+      "finishing": 55.5,
+      "creation": 11.6,
+      "control": 60.2,
+      "defense": 78.3,
+      "physicality": 37.7,
+      "pressing": 44.1
+    },
+    {
+      "match": 2,
+      "opponent": "Austria",
+      "date": "6/22/2026",
+      "goals": 2,
+      "conceded": 0,
+      "finishing": 26.5,
+      "creation": 19.2,
+      "control": 65.4,
+      "defense": 75.3,
+      "physicality": 51.9,
+      "pressing": 29.4
+    }
+  ],
+  "Australia": [
+    {
+      "match": 1,
+      "opponent": "Turkey",
+      "date": "6/14/2026",
+      "goals": 2,
+      "conceded": 0,
+      "finishing": 47.2,
+      "creation": 19.6,
+      "control": 19.5,
+      "defense": 53.4,
+      "physicality": 48.8,
+      "pressing": 15.5
+    },
+    {
+      "match": 2,
+      "opponent": "USA",
+      "date": "6/19/2026",
+      "goals": 0,
+      "conceded": 2,
+      "finishing": 12.9,
+      "creation": 12.1,
+      "control": 28.5,
+      "defense": 42.7,
+      "physicality": 75.3,
+      "pressing": 56.0
+    },
+    {
+      "match": 3,
+      "opponent": "Paraguay",
+      "date": "6/25/2026",
+      "goals": 0,
+      "conceded": 0,
+      "finishing": 12.0,
+      "creation": 22.0,
+      "control": 63.5,
+      "defense": 78.0,
+      "physicality": 67.9,
+      "pressing": 55.1
+    }
+  ],
+  "Belgium": [
+    {
+      "match": 1,
+      "opponent": "Egypt",
+      "date": "6/15/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 18.2,
+      "creation": 52.8,
+      "control": 58.6,
+      "defense": 67.1,
+      "physicality": 59.9,
+      "pressing": 67.3
+    },
+    {
+      "match": 2,
+      "opponent": "Iran",
+      "date": "6/21/2026",
+      "goals": 0,
+      "conceded": 1,
+      "finishing": 2.4,
+      "creation": 57.7,
+      "control": 82.4,
+      "defense": 57.3,
+      "physicality": 54.0,
+      "pressing": 85.7
+    },
+    {
+      "match": 3,
+      "opponent": "New Zealand",
+      "date": "6/26/2026",
+      "goals": 5,
+      "conceded": 1,
+      "finishing": 68.4,
+      "creation": 91.2,
+      "control": 63.4,
+      "defense": 85.6,
+      "physicality": 39.1,
+      "pressing": 58.5
+    }
+  ],
+  "Bosnia and Herzegovina": [
+    {
+      "match": 1,
+      "opponent": "Canada",
+      "date": "6/12/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 23.7,
+      "creation": 22.6,
+      "control": 24.9,
+      "defense": 61.3,
+      "physicality": 100.0,
+      "pressing": 72.3
+    },
+    {
+      "match": 2,
+      "opponent": "Switzerland",
+      "date": "6/18/2026",
+      "goals": 1,
+      "conceded": 4,
+      "finishing": 31.9,
+      "creation": 7.1,
+      "control": 35.0,
+      "defense": 15.1,
+      "physicality": 46.4,
+      "pressing": 52.9
+    },
+    {
+      "match": 3,
+      "opponent": "Qatar",
+      "date": "6/24/2026",
+      "goals": 3,
+      "conceded": 1,
+      "finishing": 54.6,
+      "creation": 30.8,
+      "control": 61.7,
+      "defense": 58.0,
+      "physicality": 45.4,
+      "pressing": 35.0
+    }
+  ],
+  "Brazil": [
+    {
+      "match": 1,
+      "opponent": "Morocco",
+      "date": "6/13/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 22.6,
+      "creation": 23.9,
+      "control": 59.6,
+      "defense": 53.9,
+      "physicality": 55.1,
+      "pressing": 66.2
+    },
+    {
+      "match": 2,
+      "opponent": "Haiti",
+      "date": "6/19/2026",
+      "goals": 3,
+      "conceded": 0,
+      "finishing": 57.3,
+      "creation": 35.7,
+      "control": 65.5,
+      "defense": 77.6,
+      "physicality": 56.2,
+      "pressing": 54.7
+    },
+    {
+      "match": 3,
+      "opponent": "Scotland",
+      "date": "6/24/2026",
+      "goals": 3,
+      "conceded": 0,
+      "finishing": 38.7,
+      "creation": 74.3,
+      "control": 70.2,
+      "defense": 75.7,
+      "physicality": 54.7,
+      "pressing": 34.2
+    }
+  ],
+  "Canada": [
+    {
+      "match": 1,
+      "opponent": "Bosnia and Herzegovina",
+      "date": "6/12/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 12.0,
+      "creation": 50.4,
+      "control": 57.3,
+      "defense": 61.0,
+      "physicality": 70.0,
+      "pressing": 69.6
+    },
+    {
+      "match": 2,
+      "opponent": "Qatar",
+      "date": "6/18/2026",
+      "goals": 6,
+      "conceded": 0,
+      "finishing": 77.2,
+      "creation": 100.0,
+      "control": 88.6,
+      "defense": 87.6,
+      "physicality": 36.1,
+      "pressing": 71.4
+    },
+    {
+      "match": 3,
+      "opponent": "Switzerland",
+      "date": "6/24/2026",
+      "goals": 1,
+      "conceded": 2,
+      "finishing": 25.4,
+      "creation": 52.0,
+      "control": 40.2,
+      "defense": 52.8,
+      "physicality": 52.3,
+      "pressing": 47.6
+    }
+  ],
+  "Cape Verde": [
+    {
+      "match": 1,
+      "opponent": "Spain",
+      "date": "6/15/2026",
+      "goals": 0,
+      "conceded": 0,
+      "finishing": 9.7,
+      "creation": 4.7,
+      "control": 18.0,
+      "defense": 67.5,
+      "physicality": 36.4,
+      "pressing": 8.1
+    },
+    {
+      "match": 2,
+      "opponent": "Uruguay",
+      "date": "6/21/2026",
+      "goals": 2,
+      "conceded": 2,
+      "finishing": 38.0,
+      "creation": 9.1,
+      "control": 25.7,
+      "defense": 52.1,
+      "physicality": 53.9,
+      "pressing": 14.3
+    },
+    {
+      "match": 3,
+      "opponent": "Saudi Arabia",
+      "date": "6/26/2026",
+      "goals": 0,
+      "conceded": 0,
+      "finishing": 1.9,
+      "creation": 35.4,
+      "control": 55.3,
+      "defense": 90.2,
+      "physicality": 60.4,
+      "pressing": 66.4
+    }
+  ],
+  "Egypt": [
+    {
+      "match": 1,
+      "opponent": "Belgium",
+      "date": "6/15/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 11.1,
+      "creation": 23.3,
+      "control": 45.4,
+      "defense": 84.9,
+      "physicality": 56.6,
+      "pressing": 58.2
+    },
+    {
+      "match": 2,
+      "opponent": "New Zealand",
+      "date": "6/21/2026",
+      "goals": 3,
+      "conceded": 1,
+      "finishing": 47.7,
+      "creation": 55.8,
+      "control": 65.4,
+      "defense": 62.4,
+      "physicality": 59.3,
+      "pressing": 68.4
+    },
+    {
+      "match": 3,
+      "opponent": "Iran",
+      "date": "6/26/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 21.2,
+      "creation": 36.0,
+      "control": 73.3,
+      "defense": 52.1,
+      "physicality": 67.3,
+      "pressing": 44.7
+    }
+  ],
+  "France": [
+    {
+      "match": 1,
+      "opponent": "Senegal",
+      "date": "6/16/2026",
+      "goals": 3,
+      "conceded": 1,
+      "finishing": 59.1,
+      "creation": 43.3,
+      "control": 64.8,
+      "defense": 66.6,
+      "physicality": 44.9,
+      "pressing": 57.0
+    },
+    {
+      "match": 2,
+      "opponent": "Iraq",
+      "date": "6/22/2026",
+      "goals": 3,
+      "conceded": 0,
+      "finishing": 41.1,
+      "creation": 58.8,
+      "control": 70.2,
+      "defense": 68.3,
+      "physicality": 41.8,
+      "pressing": 83.9
+    },
+    {
+      "match": 3,
+      "opponent": "Norway",
+      "date": "6/26/2026",
+      "goals": 4,
+      "conceded": 1,
+      "finishing": 58.2,
+      "creation": 41.6,
+      "control": 66.7,
+      "defense": 59.3,
+      "physicality": 50.0,
+      "pressing": 70.1
+    }
+  ],
+  "Germany": [
+    {
+      "match": 1,
+      "opponent": "Curacao",
+      "date": "6/14/2026",
+      "goals": 7,
+      "conceded": 1,
+      "finishing": 100.0,
+      "creation": 90.0,
+      "control": 79.2,
+      "defense": 85.9,
+      "physicality": 50.7,
+      "pressing": 82.3
+    },
+    {
+      "match": 2,
+      "opponent": "Ivory Coast",
+      "date": "6/20/2026",
+      "goals": 2,
+      "conceded": 1,
+      "finishing": 37.6,
+      "creation": 70.8,
+      "control": 75.4,
+      "defense": 67.2,
+      "physicality": 43.9,
+      "pressing": 75.4
+    },
+    {
+      "match": 3,
+      "opponent": "Ecuador",
+      "date": "6/25/2026",
+      "goals": 1,
+      "conceded": 2,
+      "finishing": 28.0,
+      "creation": 34.6,
+      "control": 73.4,
+      "defense": 48.1,
+      "physicality": 50.7,
+      "pressing": 50.5
+    }
+  ],
+  "Ivory Coast": [
+    {
+      "match": 1,
+      "opponent": "Ecuador",
+      "date": "6/14/2026",
+      "goals": 1,
+      "conceded": 0,
+      "finishing": 9.5,
+      "creation": 24.9,
+      "control": 52.9,
+      "defense": 72.6,
+      "physicality": 60.8,
+      "pressing": 52.9
+    },
+    {
+      "match": 2,
+      "opponent": "Germany",
+      "date": "6/20/2026",
+      "goals": 1,
+      "conceded": 2,
+      "finishing": 19.3,
+      "creation": 17.5,
+      "control": 44.8,
+      "defense": 54.2,
+      "physicality": 50.0,
+      "pressing": 51.1
+    },
+    {
+      "match": 3,
+      "opponent": "Curacao",
+      "date": "6/25/2026",
+      "goals": 2,
+      "conceded": 0,
+      "finishing": 41.8,
+      "creation": 31.8,
+      "control": 77.4,
+      "defense": 76.8,
+      "physicality": 38.7,
+      "pressing": 57.5
+    }
+  ],
+  "Japan": [
+    {
+      "match": 1,
+      "opponent": "Netherlands",
+      "date": "6/14/2026",
+      "goals": 2,
+      "conceded": 2,
+      "finishing": 39.3,
+      "creation": 26.5,
+      "control": 36.9,
+      "defense": 43.2,
+      "physicality": 28.6,
+      "pressing": 0.0
+    },
+    {
+      "match": 2,
+      "opponent": "Tunisia",
+      "date": "6/21/2026",
+      "goals": 4,
+      "conceded": 0,
+      "finishing": 65.4,
+      "creation": 44.3,
+      "control": 73.7,
+      "defense": 80.3,
+      "physicality": 51.5,
+      "pressing": 48.3
+    },
+    {
+      "match": 3,
+      "opponent": "Sweden",
+      "date": "6/25/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 26.7,
+      "creation": 29.9,
+      "control": 54.5,
+      "defense": 51.9,
+      "physicality": 59.1,
+      "pressing": 56.9
+    }
+  ],
+  "Mexico": [
+    {
+      "match": 1,
+      "opponent": "South Africa",
+      "date": "6/11/2026",
+      "goals": 2,
+      "conceded": 0,
+      "finishing": 42.1,
+      "creation": 36.5,
+      "control": 67.9,
+      "defense": 78.3,
+      "physicality": 54.1,
+      "pressing": 55.4
+    },
+    {
+      "match": 2,
+      "opponent": "South Korea",
+      "date": "6/18/2026",
+      "goals": 1,
+      "conceded": 0,
+      "finishing": 28.4,
+      "creation": 12.7,
+      "control": 43.4,
+      "defense": 59.2,
+      "physicality": 46.8,
+      "pressing": 59.2
+    },
+    {
+      "match": 3,
+      "opponent": "Czech Republic",
+      "date": "6/24/2026",
+      "goals": 3,
+      "conceded": 0,
+      "finishing": 55.3,
+      "creation": 40.2,
+      "control": 47.1,
+      "defense": 68.3,
+      "physicality": 39.0,
+      "pressing": 38.3
+    }
+  ],
+  "Morocco": [
+    {
+      "match": 1,
+      "opponent": "Brazil",
+      "date": "6/13/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 18.2,
+      "creation": 27.7,
+      "control": 55.8,
+      "defense": 66.2,
+      "physicality": 54.5,
+      "pressing": 48.2
+    },
+    {
+      "match": 2,
+      "opponent": "Scotland",
+      "date": "6/19/2026",
+      "goals": 1,
+      "conceded": 0,
+      "finishing": 22.7,
+      "creation": 42.7,
+      "control": 76.8,
+      "defense": 66.1,
+      "physicality": 36.5,
+      "pressing": 24.2
+    },
+    {
+      "match": 3,
+      "opponent": "Haiti",
+      "date": "6/24/2026",
+      "goals": 4,
+      "conceded": 2,
+      "finishing": 58.1,
+      "creation": 56.3,
+      "control": 77.3,
+      "defense": 56.2,
+      "physicality": 61.0,
+      "pressing": 70.5
+    }
+  ],
+  "Netherlands": [
+    {
+      "match": 1,
+      "opponent": "Japan",
+      "date": "6/14/2026",
+      "goals": 2,
+      "conceded": 2,
+      "finishing": 43.4,
+      "creation": 40.2,
+      "control": 67.3,
+      "defense": 44.9,
+      "physicality": 56.0,
+      "pressing": 27.2
+    },
+    {
+      "match": 2,
+      "opponent": "Sweden",
+      "date": "6/20/2026",
+      "goals": 5,
+      "conceded": 1,
+      "finishing": 87.7,
+      "creation": 37.6,
+      "control": 55.6,
+      "defense": 54.0,
+      "physicality": 46.8,
+      "pressing": 53.1
+    },
+    {
+      "match": 3,
+      "opponent": "Tunisia",
+      "date": "6/25/2026",
+      "goals": 3,
+      "conceded": 1,
+      "finishing": 52.0,
+      "creation": 65.9,
+      "control": 87.4,
+      "defense": 65.5,
+      "physicality": 43.2,
+      "pressing": 76.4
+    }
+  ],
+  "Norway": [
+    {
+      "match": 1,
+      "opponent": "Iraq",
+      "date": "6/16/2026",
+      "goals": 4,
+      "conceded": 1,
+      "finishing": 59.6,
+      "creation": 36.9,
+      "control": 69.8,
+      "defense": 51.8,
+      "physicality": 54.7,
+      "pressing": 50.5
+    },
+    {
+      "match": 2,
+      "opponent": "Senegal",
+      "date": "6/22/2026",
+      "goals": 3,
+      "conceded": 2,
+      "finishing": 51.0,
+      "creation": 40.0,
+      "control": 37.5,
+      "defense": 41.7,
+      "physicality": 49.4,
+      "pressing": 45.8
+    },
+    {
+      "match": 3,
+      "opponent": "France",
+      "date": "6/26/2026",
+      "goals": 1,
+      "conceded": 4,
+      "finishing": 19.7,
+      "creation": 26.3,
+      "control": 43.8,
+      "defense": 37.9,
+      "physicality": 40.5,
+      "pressing": 52.6
+    }
+  ],
+  "Paraguay": [
+    {
+      "match": 1,
+      "opponent": "USA",
+      "date": "6/12/2026",
+      "goals": 1,
+      "conceded": 4,
+      "finishing": 30.3,
+      "creation": 13.7,
+      "control": 27.1,
+      "defense": 42.9,
+      "physicality": 60.2,
+      "pressing": 37.9
+    },
+    {
+      "match": 2,
+      "opponent": "Turkey",
+      "date": "6/19/2026",
+      "goals": 1,
+      "conceded": 0,
+      "finishing": 25.9,
+      "creation": 11.5,
+      "control": 0.0,
+      "defense": 60.9,
+      "physicality": 74.3,
+      "pressing": 38.1
+    },
+    {
+      "match": 3,
+      "opponent": "Australia",
+      "date": "6/25/2026",
+      "goals": 0,
+      "conceded": 0,
+      "finishing": 11.6,
+      "creation": 13.1,
+      "control": 43.6,
+      "defense": 78.5,
+      "physicality": 58.6,
+      "pressing": 38.1
+    }
+  ],
+  "South Africa": [
+    {
+      "match": 1,
+      "opponent": "Mexico",
+      "date": "6/11/2026",
+      "goals": 0,
+      "conceded": 2,
+      "finishing": 19.3,
+      "creation": 3.2,
+      "control": 34.5,
+      "defense": 35.4,
+      "physicality": 34.8,
+      "pressing": 26.7
+    },
+    {
+      "match": 2,
+      "opponent": "Czech Republic",
+      "date": "6/18/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 18.7,
+      "creation": 29.5,
+      "control": 73.2,
+      "defense": 71.3,
+      "physicality": 46.4,
+      "pressing": 61.8
+    },
+    {
+      "match": 3,
+      "opponent": "South Korea",
+      "date": "6/24/2026",
+      "goals": 1,
+      "conceded": 0,
+      "finishing": 21.3,
+      "creation": 19.2,
+      "control": 29.1,
+      "defense": 80.3,
+      "physicality": 46.6,
+      "pressing": 29.2
+    }
+  ],
+  "Spain": [
+    {
+      "match": 1,
+      "opponent": "Cape Verde",
+      "date": "6/15/2026",
+      "goals": 0,
+      "conceded": 0,
+      "finishing": 0.0,
+      "creation": 89.8,
+      "control": 100.0,
+      "defense": 85.5,
+      "physicality": 50.0,
+      "pressing": 100.0
+    },
+    {
+      "match": 2,
+      "opponent": "Saudi Arabia",
+      "date": "6/21/2026",
+      "goals": 4,
+      "conceded": 0,
+      "finishing": 64.3,
+      "creation": 68.8,
+      "control": 89.1,
+      "defense": 83.3,
+      "physicality": 35.6,
+      "pressing": 87.2
+    },
+    {
+      "match": 3,
+      "opponent": "Uruguay",
+      "date": "6/26/2026",
+      "goals": 1,
+      "conceded": 0,
+      "finishing": 20.6,
+      "creation": 20.4,
+      "control": 81.0,
+      "defense": 76.2,
+      "physicality": 59.6,
+      "pressing": 69.0
+    }
+  ],
+  "Sweden": [
+    {
+      "match": 1,
+      "opponent": "Tunisia",
+      "date": "6/14/2026",
+      "goals": 5,
+      "conceded": 1,
+      "finishing": 91.5,
+      "creation": 0.0,
+      "control": 29.9,
+      "defense": 66.9,
+      "physicality": 0.0,
+      "pressing": 16.8
+    },
+    {
+      "match": 2,
+      "opponent": "Netherlands",
+      "date": "6/20/2026",
+      "goals": 1,
+      "conceded": 5,
+      "finishing": 30.0,
+      "creation": 36.9,
+      "control": 50.6,
+      "defense": 0.0,
+      "physicality": 50.4,
+      "pressing": 22.1
+    },
+    {
+      "match": 3,
+      "opponent": "Japan",
+      "date": "6/25/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 26.8,
+      "creation": 28.4,
+      "control": 45.4,
+      "defense": 44.1,
+      "physicality": 49.5,
+      "pressing": 29.9
+    }
+  ],
+  "Switzerland": [
+    {
+      "match": 1,
+      "opponent": "Qatar",
+      "date": "6/13/2026",
+      "goals": 1,
+      "conceded": 1,
+      "finishing": 8.5,
+      "creation": 94.5,
+      "control": 79.7,
+      "defense": 68.6,
+      "physicality": 41.6,
+      "pressing": 78.4
+    },
+    {
+      "match": 2,
+      "opponent": "Bosnia and Herzegovina",
+      "date": "6/18/2026",
+      "goals": 4,
+      "conceded": 1,
+      "finishing": 70.4,
+      "creation": 43.8,
+      "control": 73.6,
+      "defense": 67.1,
+      "physicality": 49.8,
+      "pressing": 53.1
+    },
+    {
+      "match": 3,
+      "opponent": "Canada",
+      "date": "6/24/2026",
+      "goals": 2,
+      "conceded": 1,
+      "finishing": 42.8,
+      "creation": 20.5,
+      "control": 56.4,
+      "defense": 38.3,
+      "physicality": 60.0,
+      "pressing": 51.1
+    }
+  ],
+  "USA": [
+    {
+      "match": 1,
+      "opponent": "Paraguay",
+      "date": "6/12/2026",
+      "goals": 4,
+      "conceded": 1,
+      "finishing": 68.4,
+      "creation": 52.1,
+      "control": 76.6,
+      "defense": 65.3,
+      "physicality": 67.2,
+      "pressing": 68.8
+    },
+    {
+      "match": 2,
+      "opponent": "Australia",
+      "date": "6/19/2026",
+      "goals": 2,
+      "conceded": 0,
+      "finishing": 34.6,
+      "creation": 32.2,
+      "control": 69.3,
+      "defense": 100.0,
+      "physicality": 59.2,
+      "pressing": 64.9
+    },
+    {
+      "match": 3,
+      "opponent": "Turkey",
+      "date": "6/25/2026",
+      "goals": 2,
+      "conceded": 3,
+      "finishing": 31.8,
+      "creation": 45.5,
+      "control": 58.6,
+      "defense": 23.2,
+      "physicality": 48.2,
+      "pressing": 52.7
+    }
+  ]
+};
+
+const DIMS=["finishing","creation","control","defense","physicality","pressing"];
+const COLORS=["#E61D25","#2A398D","#3CAC3B","#5B7EC2","#E67E22","#8E44AD"];
+const DIM_LABELS=["Finishing","Creation","Control","Defense","Physical","Pressing"];
+function drawTrendChart(canvas,trend,highlight){
+const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
+const pad={top:10,bottom:28,left:5,right:5},cW=w-pad.left-pad.right,cH=h-pad.top-pad.bottom;
+ctx.clearRect(0,0,w,h);if(!trend.length)return;
+const isDark=window.matchMedia("(prefers-color-scheme:dark)").matches;
+ctx.strokeStyle=isDark?"rgba(100,110,120,.3)":"rgba(209,212,209,.5)";ctx.lineWidth=.5;
+for(let p=0;p<=100;p+=25){const y=pad.top+cH*(1-p/100);ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(w-pad.right,y);ctx.stroke()}
+const n=trend.length,xStep=n>1?cW/(n-1):cW/2;
+DIMS.forEach((dim,di)=>{
+const on=highlight==="all"||highlight===dim;
+ctx.globalAlpha=on?1:.15;ctx.strokeStyle=COLORS[di];ctx.lineWidth=on?2.5:1;
+ctx.beginPath();trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2),y=pad.top+cH*(1-pt[dim]/100);pi===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});ctx.stroke();
+if(on){trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2),y=pad.top+cH*(1-pt[dim]/100);ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=COLORS[di];ctx.fill()})}
+});ctx.globalAlpha=1;
+ctx.font="9px system-ui";ctx.fillStyle=isDark?"#6E7681":"#8A8F94";ctx.textAlign="center";
+trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2);
+ctx.fillText(`vs ${(pt.opponent||"").substring(0,10)}`,x,h-5);
+ctx.fillText(`${pt.goals}-${pt.conceded}`,x,h-15)})}
+function createCard(name,trend){
+const card=document.createElement("div");card.className="card";
+card.innerHTML=`<div class="card-header"><span class="team-name">${name}</span><span class="match-count">${trend.length} matches</span></div><canvas class="trend-chart" width="420" height="160"></canvas>`;
+return card}
+function render(){
+const filter=document.getElementById("filter").value.toLowerCase();
+const highlight=document.getElementById("highlight").value;
+const grid=document.getElementById("grid");grid.innerHTML="";
+Object.keys(trendsData).sort().filter(n=>n.toLowerCase().includes(filter)).forEach(name=>{
+const card=createCard(name,trendsData[name]);grid.appendChild(card);
+drawTrendChart(card.querySelector("canvas"),trendsData[name],highlight)})}
+render();window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>render());
+</script>
+</body></html>
