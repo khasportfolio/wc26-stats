@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>World Cup 2026 — Bracket Predictions</title>
+<title>World Cup 2026 — Tournament Bracket</title>
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <style>
 :root {
@@ -20,878 +20,285 @@
     --win-green:#56D364;--lose-gray:#555;
 }}
 *{margin:0;padding:0;box-sizing:border-box}
-body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text-primary);padding:24px;min-height:100vh}
-h1{text-align:center;font-size:1.8rem;color:var(--wc-blue);margin-bottom:4px}
-.subtitle{text-align:center;color:var(--text-secondary);font-size:.85rem;margin-bottom:8px}
-.nav{text-align:center;margin-bottom:20px;font-size:.85rem}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text-primary);padding:20px;min-height:100vh}
+h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
+.subtitle{text-align:center;color:var(--text-secondary);font-size:.82rem;margin-bottom:8px}
+.methodology{font-size:0.72rem;color:var(--text-muted);text-align:center;margin-bottom:12px}
+.nav{text-align:center;margin-bottom:24px;font-size:.85rem}
 .nav-link{color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:4px}
 .nav-link:hover{background:var(--bar-bg)}
 .nav-link.active{color:var(--wc-blue);font-weight:600;background:rgba(42,57,141,.08)}
 @media(prefers-color-scheme:dark){h1{color:#79B8FF}.nav-link.active{color:#79B8FF;background:rgba(88,166,255,.12)}}
-.bracket-container{overflow-x:auto;padding:20px 0}
-.round{display:inline-block;vertical-align:top;margin-right:10px}
-.round-title{text-align:center;font-size:.75rem;font-weight:600;color:var(--text-muted);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px}
-.matchup{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;margin-bottom:8px;overflow:hidden;width:220px}
-.matchup-team{display:flex;align-items:center;padding:6px 10px;font-size:.78rem;gap:6px;border-bottom:1px solid var(--card-border)}
-.matchup-team:last-child{border-bottom:none}
+
+/* Bracket layout */
+.bracket-wrapper{display:flex;align-items:flex-start;justify-content:center;gap:6px;overflow-x:auto;padding:10px 0;min-height:800px}
+.round{display:flex;flex-direction:column;justify-content:space-around;min-height:100%}
+.round-label{text-align:center;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;white-space:nowrap}
+
+/* Matchup cards */
+.matchup{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;margin:4px 0;width:195px;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.matchup:hover{transform:translateY(-1px);box-shadow:0 3px 10px var(--hover-shadow)}
+.matchup-info{text-align:center;font-size:.56rem;color:var(--text-muted);padding:3px 6px;background:var(--bar-bg);border-bottom:1px solid var(--card-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.matchup-team{display:flex;align-items:center;padding:5px 8px;font-size:.74rem;gap:5px}
+.matchup-team .flag{font-size:.85rem;flex-shrink:0}
+.matchup-team .team-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.matchup-team .prob{margin-left:auto;font-size:.62rem;font-weight:600;opacity:.7;flex-shrink:0}
 .matchup-team.winner{font-weight:700;color:var(--win-green)}
-.matchup-team.loser{color:var(--lose-gray)}
-.prob{margin-left:auto;font-size:.65rem;font-weight:600;opacity:.7}
 .matchup-team.winner .prob{opacity:1}
-.vs-badge{text-align:center;font-size:.6rem;color:var(--text-muted);padding:2px;background:var(--bar-bg)}
-.matchup-info{text-align:center;font-size:.58rem;color:var(--text-muted);padding:3px;background:var(--bar-bg);border-top:1px solid var(--card-border)}
-.analysis{max-width:1200px;margin:30px auto 0}
-.analysis h2{font-size:1.2rem;color:var(--wc-blue);margin-bottom:15px;text-align:center}
-@media(prefers-color-scheme:dark){.analysis h2{color:#79B8FF}}
-.match-analysis{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:16px;margin-bottom:12px}
-.ma-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
-.ma-teams{font-weight:600;font-size:.9rem}
-.ma-prediction{font-size:.75rem;padding:3px 8px;border-radius:6px;background:rgba(60,172,59,.1);color:var(--win-green);font-weight:600}
-.ma-bars{display:flex;gap:4px;margin-top:8px}
-.ma-bar{flex:1;text-align:center}
-.ma-bar-label{font-size:.6rem;color:var(--text-muted);margin-bottom:2px}
-.ma-bar-track{height:6px;background:var(--bar-bg);border-radius:3px;overflow:hidden;display:flex}
-.ma-bar-a{background:var(--wc-blue);border-radius:3px 0 0 3px}
-.ma-bar-b{background:var(--wc-red);border-radius:0 3px 3px 0}
-.champion-card{text-align:center;margin:30px auto;padding:30px;background:var(--card-bg);border:2px solid var(--wc-green);border-radius:16px;max-width:400px}
-.champion-card h2{color:var(--wc-green);font-size:1.5rem;margin-bottom:5px}
-.champion-card .team{font-size:2rem;font-weight:700}
+.matchup-team.loser{color:var(--lose-gray)}
+.matchup-team.tbd{color:var(--text-muted);font-style:italic}
+
+/* Probability bar between teams */
+.prob-bar{display:flex;height:4px;margin:0 8px;border-radius:2px;overflow:hidden}
+.prob-fill-a{background:var(--wc-blue);height:100%}
+.prob-fill-b{background:var(--wc-red);height:100%}
+
+/* Empty future matchups */
+.empty-future{opacity:.6;border-style:dashed}
+
+/* Round spacing for bracket feel */
+.round.r32-col .matchup{margin:3px 0}
+.round.r16-col .matchup{margin:22px 0}
+.round.qf-col .matchup{margin:60px 0}
+.round.sf-col .matchup{margin:140px 0}
+.round.final-col .matchup{margin:0}
+.round.final-col{justify-content:center}
+
+/* Connector lines (CSS-only) */
+.round.r16-col,.round.qf-col,.round.sf-col,.round.final-col{padding-top:20px}
+
+/* Legend */
+.legend{display:flex;justify-content:center;gap:16px;margin:16px 0;flex-wrap:wrap;font-size:.72rem;color:var(--text-secondary)}
+.legend-item{display:flex;align-items:center;gap:4px}
+.leg-box{width:12px;height:12px;border-radius:2px}
+.leg-predicted{background:var(--wc-blue)}
+.leg-opponent{background:var(--wc-red)}
+.leg-empty{background:var(--bar-bg);border:1px dashed var(--card-border)}
+
+/* Trophy */
+.trophy{text-align:center;font-size:2.5rem;margin:10px 0}
 </style>
 </head>
 <body>
-<h1>⚽ World Cup 2026 — Bracket Predictions</h1>
-<p class="subtitle">Statistical predictions based on 6-dimension group-stage performance analysis</p>
+<h1>⚽ World Cup 2026 — Tournament Bracket</h1>
+<p class="subtitle">R32 predictions based on 6-dimension performance model · R16→Final shown as empty slots</p>
+<p class="methodology">Only Round of 32 matchups are predicted. Later rounds show venue &amp; date placeholders.</p>
 <div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> &middot; <a href="r32.html" class="nav-link">Round of 32</a> &middot; <a href="trends.html" class="nav-link">Trends</a> &middot; <a href="bracket.html" class="nav-link active">Bracket</a></div>
+<div class="legend">
+<div class="legend-item"><div class="leg-box leg-predicted"></div>Favored (model)</div>
+<div class="legend-item"><div class="leg-box leg-opponent"></div>Underdog</div>
+<div class="legend-item"><div class="leg-box leg-empty"></div>TBD (future rounds)</div>
+</div>
 
-<div class="champion-card" id="champion"></div>
+<div class="bracket-wrapper">
+<!-- LEFT SIDE -->
+<div class="round r32-col">
+<div class="round-label">Round of 32</div>
+<div class="matchup">
+<div class="matchup-info">Foxborough · June 29</div>
+<div class="matchup-team winner"><span class="flag">🇩🇪</span><span class="team-name">Germany</span><span class="prob">84%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:84%"></div><div class="prob-fill-b" style="width:16%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇵🇾</span><span class="team-name">Paraguay</span><span class="prob">16%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">East Rutherford · June 30</div>
+<div class="matchup-team winner"><span class="flag">🇫🇷</span><span class="team-name">France</span><span class="prob">73%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:73%"></div><div class="prob-fill-b" style="width:27%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇸🇪</span><span class="team-name">Sweden</span><span class="prob">27%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Inglewood · June 28</div>
+<div class="matchup-team loser"><span class="flag">🇿🇦</span><span class="team-name">South Africa</span><span class="prob">21%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:21%"></div><div class="prob-fill-b" style="width:79%"></div></div>
+<div class="matchup-team winner"><span class="flag">🇨🇦</span><span class="team-name">Canada</span><span class="prob">79%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Guadalupe · June 29</div>
+<div class="matchup-team winner"><span class="flag">🇳🇱</span><span class="team-name">Netherlands</span><span class="prob">62%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:62%"></div><div class="prob-fill-b" style="width:38%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇲🇦</span><span class="team-name">Morocco</span><span class="prob">38%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Toronto · July 2</div>
+<div class="matchup-team winner"><span class="flag">🇵🇹</span><span class="team-name">Portugal</span><span class="prob">61%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:61%"></div><div class="prob-fill-b" style="width:39%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇭🇷</span><span class="team-name">Croatia</span><span class="prob">39%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Inglewood · July 2</div>
+<div class="matchup-team winner"><span class="flag">🇪🇸</span><span class="team-name">Spain</span><span class="prob">BYE</span></div>
+<div class="matchup-team loser"><span class="flag">❓</span><span class="team-name">TBD</span><span class="prob">—</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Santa Clara · July 1</div>
+<div class="matchup-team winner"><span class="flag">🇺🇸</span><span class="team-name">USA</span><span class="prob">69%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:69%"></div><div class="prob-fill-b" style="width:31%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇧🇦</span><span class="team-name">Bosnia</span><span class="prob">31%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Seattle · July 1</div>
+<div class="matchup-team winner"><span class="flag">🇧🇪</span><span class="team-name">Belgium</span><span class="prob">52%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:52%"></div><div class="prob-fill-b" style="width:48%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇸🇳</span><span class="team-name">Senegal</span><span class="prob">48%</span></div>
+</div>
+</div>
 
-<div class="analysis" id="analysis"></div>
+<div class="round r16-col">
+<div class="round-label">Round of 16</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Philadelphia · July 4</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Houston · July 4</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Arlington · July 6</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Seattle · July 6</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-<script>
-const results = {
-  "73": {
-    "team_a": "South Africa",
-    "team_b": "Canada",
-    "winner": "Canada",
-    "prob_a": 0.213,
-    "prob_b": 0.787,
-    "dim_adv": {
-      "finishing": -0.869950968947,
-      "creation": -0.8958230958230957,
-      "control": -0.14638986035667326,
-      "defense": -0.06297613001523628,
-      "physicality": -0.1889796586642679,
-      "pressing": -0.2922958791911952
-    },
-    "date": "June 28",
-    "venue": "Inglewood"
-  },
-  "74": {
-    "team_a": "Germany",
-    "team_b": "Paraguay",
-    "winner": "Germany",
-    "prob_a": 0.841,
-    "prob_b": 0.159,
-    "dim_adv": {
-      "finishing": 1.0505243088655862,
-      "creation": 0.9965977492802931,
-      "control": 0.48358009287248677,
-      "defense": 0.08418891170431225,
-      "physicality": -0.25488833446728726,
-      "pressing": 0.3762229102167183
-    },
-    "date": "June 29",
-    "venue": "Foxborough"
-  },
-  "75": {
-    "team_a": "Netherlands",
-    "team_b": "Morocco",
-    "winner": "Netherlands",
-    "prob_a": 0.624,
-    "prob_b": 0.376,
-    "dim_adv": {
-      "finishing": 0.7143216712811478,
-      "creation": 0.097091932457786,
-      "control": 0.0010620197882462165,
-      "defense": -0.1139554087530966,
-      "physicality": -0.03577233067757176,
-      "pressing": 0.057602490918526136
-    },
-    "date": "June 29",
-    "venue": "Guadalupe"
-  },
-  "76": {
-    "team_a": "Brazil",
-    "team_b": "Japan",
-    "winner": "Brazil",
-    "prob_a": 0.562,
-    "prob_b": 0.438,
-    "dim_adv": {
-      "finishing": -0.12485414235705963,
-      "creation": 0.21015533220206234,
-      "control": 0.08519336497345054,
-      "defense": 0.14094650205761305,
-      "physicality": 0.1566564368709053,
-      "pressing": 0.22787673169352543
-    },
-    "date": "June 29",
-    "venue": "Houston"
-  },
-  "77": {
-    "team_a": "France",
-    "team_b": "Sweden",
-    "winner": "France",
-    "prob_a": 0.73,
-    "prob_b": 0.27,
-    "dim_adv": {
-      "finishing": 0.07711613050422075,
-      "creation": 0.5394120153387303,
-      "control": 0.2231528125038491,
-      "defense": 0.44444444444444436,
-      "physicality": 0.2690996415935553,
-      "pressing": 0.6208203600920538
-    },
-    "date": "June 30",
-    "venue": "East Rutherford"
-  },
-  "78": {
-    "team_a": "Ivory Coast",
-    "team_b": "Norway",
-    "winner": "Norway",
-    "prob_a": 0.413,
-    "prob_b": 0.587,
-    "dim_adv": {
-      "finishing": -0.7751490671282939,
-      "creation": -0.22406374501992019,
-      "control": 0.07090588249811805,
-      "defense": 0.35767682576193227,
-      "physicality": 0.02927271366686353,
-      "pressing": 0.052037060540677825
-    },
-    "date": "June 30",
-    "venue": "Arlington"
-  },
-  "79": {
-    "team_a": "Mexico",
-    "team_b": "Ecuador",
-    "winner": "Mexico",
-    "prob_a": 0.669,
-    "prob_b": 0.331,
-    "dim_adv": {
-      "finishing": 1.3929273084479372,
-      "creation": -0.3747585318737926,
-      "control": -0.08274058702875173,
-      "defense": -0.0444234404536861,
-      "physicality": -0.07180106338843527,
-      "pressing": -0.26841171251109147
-    },
-    "date": "June 30",
-    "venue": "Mexico City"
-  },
-  "80": {
-    "team_a": "England",
-    "team_b": "DR Congo",
-    "winner": "England",
-    "prob_a": 0.659,
-    "prob_b": 0.341,
-    "dim_adv": {
-      "finishing": 0.06416850355131043,
-      "creation": 0.5590355130389203,
-      "control": 0.353790790472227,
-      "defense": 0.06495193556767988,
-      "physicality": 0.2173575237272572,
-      "pressing": 0.21647484805379558
-    },
-    "date": "July 1",
-    "venue": "Atlanta"
-  },
-  "81": {
-    "team_a": "USA",
-    "team_b": "Bosnia and Herzegovina",
-    "winner": "USA",
-    "prob_a": 0.687,
-    "prob_b": 0.313,
-    "dim_adv": {
-      "finishing": 0.24708345797188153,
-      "creation": 0.5106964041875286,
-      "control": 0.244568437685167,
-      "defense": 0.2762299940723177,
-      "physicality": -0.08575807086223665,
-      "pressing": 0.0996928892038743
-    },
-    "date": "July 1",
-    "venue": "Santa Clara"
-  },
-  "82": {
-    "team_a": "Belgium",
-    "team_b": "Senegal",
-    "winner": "Belgium",
-    "prob_a": 0.52,
-    "prob_b": 0.48,
-    "dim_adv": {
-      "finishing": -0.47164591977869985,
-      "creation": 0.1949943967127382,
-      "control": 0.014290303641258028,
-      "defense": 0.3771880293619425,
-      "physicality": 0.02035631254268029,
-      "pressing": 0.16649905017320357
-    },
-    "date": "July 1",
-    "venue": "Seattle"
-  },
-  "83": {
-    "team_a": "Portugal",
-    "team_b": "Croatia",
-    "winner": "Portugal",
-    "prob_a": 0.611,
-    "prob_b": 0.389,
-    "dim_adv": {
-      "finishing": -0.132090132090132,
-      "creation": 0.43776572350095294,
-      "control": 0.13963924329080504,
-      "defense": 0.3061806656101427,
-      "physicality": -0.15488016668590812,
-      "pressing": 0.2138501151917604
-    },
-    "date": "July 2",
-    "venue": "Toronto"
-  },
-  "84": {
-    "team_a": "Spain",
-    "team_b": "TBD",
-    "winner": "Spain",
-    "prob_a": 0.5,
-    "prob_b": 0.5,
-    "dim_adv": {},
-    "date": "July 2",
-    "venue": "Inglewood"
-  },
-  "85": {
-    "team_a": "Switzerland",
-    "team_b": "TBD",
-    "winner": "Switzerland",
-    "prob_a": 0.5,
-    "prob_b": 0.5,
-    "dim_adv": {},
-    "date": "July 2",
-    "venue": "Vancouver"
-  },
-  "86": {
-    "team_a": "Argentina",
-    "team_b": "Cape Verde",
-    "winner": "Argentina",
-    "prob_a": 0.773,
-    "prob_b": 0.227,
-    "dim_adv": {
-      "finishing": 1.1967213114754098,
-      "creation": 0.1341880341880342,
-      "control": 0.37010208258394206,
-      "defense": 0.016497761018147605,
-      "physicality": -0.20235506581297488,
-      "pressing": 0.20904836193447732
-    },
-    "date": "July 3",
-    "venue": "Miami Gardens"
-  },
-  "87": {
-    "team_a": "Colombia",
-    "team_b": "Ghana",
-    "winner": "Colombia",
-    "prob_a": 0.627,
-    "prob_b": 0.373,
-    "dim_adv": {
-      "finishing": -0.1788727640904489,
-      "creation": 0.744326297413109,
-      "control": 0.3369772598360233,
-      "defense": 0.03546099290780134,
-      "physicality": -0.1674528798391669,
-      "pressing": 0.3860779890428619
-    },
-    "date": "July 3",
-    "venue": "Kansas City"
-  },
-  "88": {
-    "team_a": "Australia",
-    "team_b": "Egypt",
-    "winner": "Egypt",
-    "prob_a": 0.353,
-    "prob_b": 0.647,
-    "dim_adv": {
-      "finishing": -0.1521126760563379,
-      "creation": -0.4906903938045807,
-      "control": -0.22453700712097907,
-      "defense": -0.11388087116242447,
-      "physicality": 0.04191228069077253,
-      "pressing": -0.18806980984631422
-    },
-    "date": "July 3",
-    "venue": "Arlington"
-  },
-  "89": {
-    "team_a": "Germany",
-    "team_b": "France",
-    "winner": "Germany",
-    "prob_a": 0.555,
-    "prob_b": 0.445,
-    "dim_adv": {
-      "finishing": 0.05303678357570581,
-      "creation": 0.24619911721432078,
-      "control": 0.0673276655887956,
-      "defense": 0.030507626906726863,
-      "physicality": 0.05473718419254567,
-      "pressing": -0.00892393898516138
-    },
-    "date": "July 4",
-    "venue": "Philadelphia"
-  },
-  "90": {
-    "team_a": "Canada",
-    "team_b": "Netherlands",
-    "winner": "Netherlands",
-    "prob_a": 0.462,
-    "prob_b": 0.538,
-    "dim_adv": {
-      "finishing": -0.5479031305375074,
-      "creation": 0.2744114241605558,
-      "control": -0.0647426507586855,
-      "defense": 0.16987179487179488,
-      "physicality": 0.07250902547329066,
-      "pressing": 0.12152078645031385
-    },
-    "date": "July 4",
-    "venue": "Houston"
-  },
-  "91": {
-    "team_a": "Brazil",
-    "team_b": "Norway",
-    "winner": "Brazil",
-    "prob_a": 0.594,
-    "prob_b": 0.406,
-    "dim_adv": {
-      "finishing": -0.11523237062014374,
-      "creation": 0.1926961926961927,
-      "control": 0.1268437638544399,
-      "defense": 0.3721858079224849,
-      "physicality": 0.12292896486815609,
-      "pressing": 0.026488363122026296
-    },
-    "date": "July 5",
-    "venue": "East Rutherford"
-  },
-  "92": {
-    "team_a": "Mexico",
-    "team_b": "England",
-    "winner": "Mexico",
-    "prob_a": 0.508,
-    "prob_b": 0.492,
-    "dim_adv": {
-      "finishing": 0.4844452436612119,
-      "creation": -0.4297623491352495,
-      "control": -0.18435849378088268,
-      "defense": 0.040433925049309684,
-      "physicality": -0.19835351558985148,
-      "pressing": -0.09330727894479737
-    },
-    "date": "July 5",
-    "venue": "Mexico City"
-  },
-  "93": {
-    "team_a": "Portugal",
-    "team_b": "Spain",
-    "winner": "Spain",
-    "prob_a": 0.409,
-    "prob_b": 0.591,
-    "dim_adv": {
-      "finishing": 0.14834673815907076,
-      "creation": -0.24599156118143464,
-      "control": -0.09158687804112385,
-      "defense": -0.27786982248520714,
-      "physicality": -0.09716251678991412,
-      "pressing": -0.30767637004040194
-    },
-    "date": "July 6",
-    "venue": "Arlington"
-  },
-  "94": {
-    "team_a": "USA",
-    "team_b": "Belgium",
-    "winner": "USA",
-    "prob_a": 0.539,
-    "prob_b": 0.461,
-    "dim_adv": {
-      "finishing": 0.5182701977874622,
-      "creation": -0.34734844701887546,
-      "control": -2.199857009292395e-05,
-      "defense": -0.09192546583850937,
-      "physicality": 0.11805823128158141,
-      "pressing": -0.08675061887848458
-    },
-    "date": "July 6",
-    "venue": "Seattle"
-  },
-  "95": {
-    "team_a": "Argentina",
-    "team_b": "Egypt",
-    "winner": "Argentina",
-    "prob_a": 0.564,
-    "prob_b": 0.436,
-    "dim_adv": {
-      "finishing": 0.5904059040590407,
-      "creation": -0.408540471637986,
-      "control": 0.10435893482522406,
-      "defense": 0.06019744762822063,
-      "physicality": -0.375000519283872,
-      "pressing": -0.17054263565891473
-    },
-    "date": "July 7",
-    "venue": "Atlanta"
-  },
-  "96": {
-    "team_a": "Switzerland",
-    "team_b": "Colombia",
-    "winner": "Switzerland",
-    "prob_a": 0.664,
-    "prob_b": 0.336,
-    "dim_adv": {
-      "finishing": 0.842805061119451,
-      "creation": 0.11222707423580781,
-      "control": 0.016825108575554543,
-      "defense": -0.11195795006570304,
-      "physicality": 0.14494468266741242,
-      "pressing": 0.16846011131725408
-    },
-    "date": "July 7",
-    "venue": "Vancouver"
-  },
-  "97": {
-    "team_a": "Germany",
-    "team_b": "Netherlands",
-    "winner": "Germany",
-    "prob_a": 0.558,
-    "prob_b": 0.442,
-    "dim_adv": {
-      "finishing": -0.1161695447409734,
-      "creation": 0.2459788152216556,
-      "control": 0.04460352422907478,
-      "defense": 0.16938284798290146,
-      "physicality": -0.004020229002834295,
-      "pressing": 0.18991097922848676
-    },
-    "date": "July 9",
-    "venue": "Foxborough"
-  },
-  "98": {
-    "team_a": "Spain",
-    "team_b": "USA",
-    "winner": "USA",
-    "prob_a": 0.496,
-    "prob_b": 0.504,
-    "dim_adv": {
-      "finishing": -0.5778997940974606,
-      "creation": 0.2507399577167019,
-      "control": 0.1588715965127229,
-      "defense": 0.22468793342579757,
-      "physicality": -0.16454836107439164,
-      "pressing": 0.2247078797563168
-    },
-    "date": "July 10",
-    "venue": "Inglewood"
-  },
-  "99": {
-    "team_a": "Brazil",
-    "team_b": "Mexico",
-    "winner": "Brazil",
-    "prob_a": 0.542,
-    "prob_b": 0.458,
-    "dim_adv": {
-      "finishing": -0.07198560287942413,
-      "creation": 0.2918245804006496,
-      "control": 0.10470148811288316,
-      "defense": 0.00578313253012036,
-      "physicality": 0.15267940326040136,
-      "pressing": 0.009435165115389419
-    },
-    "date": "July 11",
-    "venue": "Miami Gardens"
-  },
-  "100": {
-    "team_a": "Argentina",
-    "team_b": "Switzerland",
-    "winner": "Switzerland",
-    "prob_a": 0.453,
-    "prob_b": 0.547,
-    "dim_adv": {
-      "finishing": 0.057444314185228586,
-      "creation": -0.638123806926643,
-      "control": 0.035797997016833366,
-      "defense": 0.1743329097839898,
-      "physicality": -0.2067094968538489,
-      "pressing": -0.21279818250662622
-    },
-    "date": "July 11",
-    "venue": "Kansas City"
-  },
-  "101": {
-    "team_a": "Germany",
-    "team_b": "USA",
-    "winner": "Germany",
-    "prob_a": 0.6,
-    "prob_b": 0.4,
-    "dim_adv": {
-      "finishing": 0.24403927068723702,
-      "creation": 0.32204421009937134,
-      "control": 0.06000469453513416,
-      "defense": 0.05569620253164563,
-      "physicality": -0.16363086416896555,
-      "pressing": 0.07639865815387954
-    },
-    "date": "July 14",
-    "venue": "Arlington"
-  },
-  "102": {
-    "team_a": "Brazil",
-    "team_b": "Switzerland",
-    "winner": "Switzerland",
-    "prob_a": 0.496,
-    "prob_b": 0.504,
-    "dim_adv": {
-      "finishing": -0.030637254901960873,
-      "creation": -0.13318632855567802,
-      "control": -0.03791521582932646,
-      "defense": 0.14702089244261016,
-      "physicality": 0.0824545860739709,
-      "pressing": -0.10645200048059605
-    },
-    "date": "July 15",
-    "venue": "Atlanta"
-  },
-  "104": {
-    "team_a": "Germany",
-    "team_b": "Switzerland",
-    "winner": "Germany",
-    "prob_a": 0.62,
-    "prob_b": 0.38,
-    "dim_adv": {
-      "finishing": 0.3662805028346068,
-      "creation": 0.16814997159628872,
-      "control": 0.046185313536599326,
-      "defense": 0.12232096184004189,
-      "physicality": -0.036477235817316454,
-      "pressing": 0.09019607843137262
-    },
-    "date": "July 19",
-    "venue": "East Rutherford"
-  }
-};
-const bracket = {
-  "r32": [
-    {
-      "match": 73,
-      "team_a": "South Africa",
-      "team_b": "Canada",
-      "date": "June 28",
-      "venue": "Inglewood"
-    },
-    {
-      "match": 74,
-      "team_a": "Germany",
-      "team_b": "Paraguay",
-      "date": "June 29",
-      "venue": "Foxborough"
-    },
-    {
-      "match": 75,
-      "team_a": "Netherlands",
-      "team_b": "Morocco",
-      "date": "June 29",
-      "venue": "Guadalupe"
-    },
-    {
-      "match": 76,
-      "team_a": "Brazil",
-      "team_b": "Japan",
-      "date": "June 29",
-      "venue": "Houston"
-    },
-    {
-      "match": 77,
-      "team_a": "France",
-      "team_b": "Sweden",
-      "date": "June 30",
-      "venue": "East Rutherford"
-    },
-    {
-      "match": 78,
-      "team_a": "Ivory Coast",
-      "team_b": "Norway",
-      "date": "June 30",
-      "venue": "Arlington"
-    },
-    {
-      "match": 79,
-      "team_a": "Mexico",
-      "team_b": "Ecuador",
-      "date": "June 30",
-      "venue": "Mexico City"
-    },
-    {
-      "match": 80,
-      "team_a": "England",
-      "team_b": "DR Congo",
-      "date": "July 1",
-      "venue": "Atlanta"
-    },
-    {
-      "match": 81,
-      "team_a": "USA",
-      "team_b": "Bosnia and Herzegovina",
-      "date": "July 1",
-      "venue": "Santa Clara"
-    },
-    {
-      "match": 82,
-      "team_a": "Belgium",
-      "team_b": "Senegal",
-      "date": "July 1",
-      "venue": "Seattle"
-    },
-    {
-      "match": 83,
-      "team_a": "Portugal",
-      "team_b": "Croatia",
-      "date": "July 2",
-      "venue": "Toronto"
-    },
-    {
-      "match": 84,
-      "team_a": "Spain",
-      "team_b": "TBD",
-      "date": "July 2",
-      "venue": "Inglewood"
-    },
-    {
-      "match": 85,
-      "team_a": "Switzerland",
-      "team_b": "TBD",
-      "date": "July 2",
-      "venue": "Vancouver"
-    },
-    {
-      "match": 86,
-      "team_a": "Argentina",
-      "team_b": "Cape Verde",
-      "date": "July 3",
-      "venue": "Miami Gardens"
-    },
-    {
-      "match": 87,
-      "team_a": "Colombia",
-      "team_b": "Ghana",
-      "date": "July 3",
-      "venue": "Kansas City"
-    },
-    {
-      "match": 88,
-      "team_a": "Australia",
-      "team_b": "Egypt",
-      "date": "July 3",
-      "venue": "Arlington"
-    }
-  ],
-  "r16": [
-    {
-      "match": 89,
-      "team_a": "W74",
-      "team_b": "W77",
-      "date": "July 4",
-      "venue": "Philadelphia"
-    },
-    {
-      "match": 90,
-      "team_a": "W73",
-      "team_b": "W75",
-      "date": "July 4",
-      "venue": "Houston"
-    },
-    {
-      "match": 91,
-      "team_a": "W76",
-      "team_b": "W78",
-      "date": "July 5",
-      "venue": "East Rutherford"
-    },
-    {
-      "match": 92,
-      "team_a": "W79",
-      "team_b": "W80",
-      "date": "July 5",
-      "venue": "Mexico City"
-    },
-    {
-      "match": 93,
-      "team_a": "W83",
-      "team_b": "W84",
-      "date": "July 6",
-      "venue": "Arlington"
-    },
-    {
-      "match": 94,
-      "team_a": "W81",
-      "team_b": "W82",
-      "date": "July 6",
-      "venue": "Seattle"
-    },
-    {
-      "match": 95,
-      "team_a": "W86",
-      "team_b": "W88",
-      "date": "July 7",
-      "venue": "Atlanta"
-    },
-    {
-      "match": 96,
-      "team_a": "W85",
-      "team_b": "W87",
-      "date": "July 7",
-      "venue": "Vancouver"
-    }
-  ],
-  "qf": [
-    {
-      "match": 97,
-      "team_a": "W89",
-      "team_b": "W90",
-      "date": "July 9",
-      "venue": "Foxborough"
-    },
-    {
-      "match": 98,
-      "team_a": "W93",
-      "team_b": "W94",
-      "date": "July 10",
-      "venue": "Inglewood"
-    },
-    {
-      "match": 99,
-      "team_a": "W91",
-      "team_b": "W92",
-      "date": "July 11",
-      "venue": "Miami Gardens"
-    },
-    {
-      "match": 100,
-      "team_a": "W95",
-      "team_b": "W96",
-      "date": "July 11",
-      "venue": "Kansas City"
-    }
-  ],
-  "sf": [
-    {
-      "match": 101,
-      "team_a": "W97",
-      "team_b": "W98",
-      "date": "July 14",
-      "venue": "Arlington"
-    },
-    {
-      "match": 102,
-      "team_a": "W99",
-      "team_b": "W100",
-      "date": "July 15",
-      "venue": "Atlanta"
-    }
-  ],
-  "final": [
-    {
-      "match": 104,
-      "team_a": "W101",
-      "team_b": "W102",
-      "date": "July 19",
-      "venue": "East Rutherford"
-    }
-  ]
-};
-const DIMS=["finishing","creation","control","defense","physicality","pressing"];
-const DIM_LABELS={"finishing":"FIN","creation":"CRE","control":"CTR","defense":"DEF","physicality":"PHY","pressing":"PRS"};
+<div class="round qf-col">
+<div class="round-label">Quarterfinals</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Foxborough · July 9</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Inglewood · July 10</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-// Show predicted champion
-const finalMatch = results[104];
-if(finalMatch) {
-    document.getElementById("champion").innerHTML=`<h2>🏆 Predicted Champion</h2><div class="team">${finalMatch.winner}</div><p style="color:var(--text-muted);font-size:.8rem;margin-top:8px">Based on group-stage performance analysis</p>`;
-}
+<div class="round sf-col">
+<div class="round-label">Semifinals</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Arlington · July 14</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-// Build analysis cards for R32
-function buildAnalysis() {
-    const container = document.getElementById("analysis");
-    let html = '<h2>Round of 32 — Match-by-Match Analysis</h2>';
+<!-- CENTER: FINAL -->
+<div class="round final-col">
+<div class="round-label">Final</div>
+<div class="trophy">🏆</div>
+<div class="matchup empty-future">
+<div class="matchup-info">East Rutherford · July 19</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-    bracket.r32.forEach(match => {
-        const r = results[match.match];
-        if (!r) return;
-        const pctA = Math.round(r.prob_a * 100);
-        const pctB = Math.round(r.prob_b * 100);
-        const dimAdv = r.dim_adv || {};
+<!-- RIGHT SIDE -->
+<div class="round sf-col">
+<div class="round-label">Semifinals</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Atlanta · July 15</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-        let barsHtml = '';
-        DIMS.forEach(dim => {
-            const adv = dimAdv[dim] || 0;
-            const aPct = Math.round(50 + adv * 50);
-            const bPct = 100 - aPct;
-            barsHtml += `<div class="ma-bar"><div class="ma-bar-label">${DIM_LABELS[dim]}</div><div class="ma-bar-track"><div class="ma-bar-a" style="width:${aPct}%"></div><div class="ma-bar-b" style="width:${bPct}%"></div></div></div>`;
-        });
+<div class="round qf-col">
+<div class="round-label">Quarterfinals</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Miami Gardens · July 11</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Kansas City · July 11</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-        html += `<div class="match-analysis">
-            <div class="ma-header">
-                <span class="ma-teams">${r.team_a} vs ${r.team_b}</span>
-                <span class="ma-prediction">${r.winner} (${Math.max(pctA,pctB)}%)</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted)">
-                <span>${r.team_a} ${pctA}%</span>
-                <span>${match.date} · ${match.venue}</span>
-                <span>${pctB}% ${r.team_b}</span>
-            </div>
-            <div class="ma-bars">${barsHtml}</div>
-        </div>`;
-    });
+<div class="round r16-col">
+<div class="round-label">Round of 16</div>
+<div class="matchup empty-future">
+<div class="matchup-info">East Rutherford · July 5</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Mexico City · July 5</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Atlanta · July 7</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+<div class="matchup empty-future">
+<div class="matchup-info">Vancouver · July 7</div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div>
+</div>
 
-    // R16 predictions
-    html += '<h2 style="margin-top:30px">Round of 16 — Predicted Matchups</h2>';
-    bracket.r16.forEach(match => {
-        const r = results[match.match];
-        if (!r || r.team_a === "TBD" || r.team_b === "TBD") return;
-        const pctA = Math.round(r.prob_a * 100);
-        const pctB = Math.round(r.prob_b * 100);
-        html += `<div class="match-analysis">
-            <div class="ma-header">
-                <span class="ma-teams">${r.team_a} vs ${r.team_b}</span>
-                <span class="ma-prediction">${r.winner} (${Math.max(pctA,pctB)}%)</span>
-            </div>
-            <div style="font-size:.7rem;color:var(--text-muted)">${match.date} · ${match.venue} · ${pctA}% - ${pctB}%</div>
-        </div>`;
-    });
+<div class="round r32-col">
+<div class="round-label">Round of 32</div>
+<div class="matchup">
+<div class="matchup-info">Houston · June 29</div>
+<div class="matchup-team winner"><span class="flag">🇧🇷</span><span class="team-name">Brazil</span><span class="prob">56%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:56%"></div><div class="prob-fill-b" style="width:44%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇯🇵</span><span class="team-name">Japan</span><span class="prob">44%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Arlington · June 30</div>
+<div class="matchup-team loser"><span class="flag">🇨🇮</span><span class="team-name">Ivory Coast</span><span class="prob">41%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:41%"></div><div class="prob-fill-b" style="width:59%"></div></div>
+<div class="matchup-team winner"><span class="flag">🇳🇴</span><span class="team-name">Norway</span><span class="prob">59%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Mexico City · June 30</div>
+<div class="matchup-team winner"><span class="flag">🇲🇽</span><span class="team-name">Mexico</span><span class="prob">67%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:67%"></div><div class="prob-fill-b" style="width:33%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇪🇨</span><span class="team-name">Ecuador</span><span class="prob">33%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Atlanta · July 1</div>
+<div class="matchup-team winner"><span class="flag">🏴‍☠️</span><span class="team-name">England</span><span class="prob">66%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:66%"></div><div class="prob-fill-b" style="width:34%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇨🇩</span><span class="team-name">DR Congo</span><span class="prob">34%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Miami Gardens · July 3</div>
+<div class="matchup-team winner"><span class="flag">🇦🇷</span><span class="team-name">Argentina</span><span class="prob">77%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:77%"></div><div class="prob-fill-b" style="width:23%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇨🇻</span><span class="team-name">Cape Verde</span><span class="prob">23%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Arlington · July 3</div>
+<div class="matchup-team loser"><span class="flag">🇦🇺</span><span class="team-name">Australia</span><span class="prob">35%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:35%"></div><div class="prob-fill-b" style="width:65%"></div></div>
+<div class="matchup-team winner"><span class="flag">🇪🇬</span><span class="team-name">Egypt</span><span class="prob">65%</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Vancouver · July 2</div>
+<div class="matchup-team winner"><span class="flag">🇨🇭</span><span class="team-name">Switzerland</span><span class="prob">BYE</span></div>
+<div class="matchup-team loser"><span class="flag">❓</span><span class="team-name">TBD</span><span class="prob">—</span></div>
+</div>
+<div class="matchup">
+<div class="matchup-info">Kansas City · July 3</div>
+<div class="matchup-team winner"><span class="flag">🇨🇴</span><span class="team-name">Colombia</span><span class="prob">63%</span></div>
+<div class="prob-bar"><div class="prob-fill-a" style="width:63%"></div><div class="prob-fill-b" style="width:37%"></div></div>
+<div class="matchup-team loser"><span class="flag">🇬🇭</span><span class="team-name">Ghana</span><span class="prob">37%</span></div>
+</div>
+</div>
+</div>
 
-    // QF, SF, Final
-    ['qf','sf','final'].forEach(round => {
-        const labels = {'qf':'Quarterfinals','sf':'Semifinals','final':'Final'};
-        html += `<h2 style="margin-top:30px">${labels[round]} — Predicted</h2>`;
-        bracket[round].forEach(match => {
-            const r = results[match.match];
-            if (!r || r.team_a === "TBD" || r.team_b === "TBD") return;
-            const pctA = Math.round(r.prob_a * 100);
-            const pctB = Math.round(r.prob_b * 100);
-            html += `<div class="match-analysis">
-                <div class="ma-header">
-                    <span class="ma-teams">${r.team_a} vs ${r.team_b}</span>
-                    <span class="ma-prediction">${r.winner} (${Math.max(pctA,pctB)}%)</span>
-                </div>
-                <div style="font-size:.7rem;color:var(--text-muted)">${match.date} · ${match.venue} · ${pctA}% - ${pctB}%</div>
-            </div>`;
-        });
-    });
-
-    container.innerHTML = html;
-}
-buildAnalysis();
-</script>
 </body></html>

@@ -575,6 +575,7 @@ def generate_html(all_team_data):
 <body>
     <h1>⚽ World Cup 2026 — Advanced Analytics</h1>
     <p class="subtitle">6 dimensions derived from 120+ ESPN match stats · xG · PPDA · Duels · Pressing zones · Group Stage (Archived)</p>
+    <p class="methodology" style="font-size:0.72rem;color:var(--text-muted);text-align:center;margin-bottom:12px">Scores are min-max normalized (0-100) across all 48 group-stage teams. 100 = best performer, 0 = weakest.</p>
     <div style="text-align:center;margin-bottom:20px;font-size:.85rem"><a href="dashboard.html" style="color:var(--wc-blue);text-decoration:none;padding:4px 10px;border-radius:4px;font-weight:600;background:rgba(42,57,141,.08)">Group Stage</a> · <a href="r32.html" style="color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:4px">Round of 32</a> · <a href="trends.html" style="color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:4px">Trends</a> · <a href="bracket.html" style="color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:4px">Bracket</a></div>
 
     <div class="legend">

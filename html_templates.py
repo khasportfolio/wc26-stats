@@ -86,6 +86,7 @@ canvas.radar{{width:180px;height:180px}}
 <body>
 <h1>⚽ World Cup 2026 — Round of 32</h1>
 <p class="subtitle">6 dimensions · Normalized against qualified knockout teams only</p>
+<p class="methodology" style="font-size:0.72rem;color:var(--text-muted);text-align:center;margin-bottom:12px">Scores are min-max normalized (0-100) across the 32 qualified knockout teams only — a tighter, more competitive pool than the full 48.</p>
 <div class="nav">{nav_html}</div>
 <div class="legend">
 <div class="legend-item"><div class="legend-dot dot-fin"></div>Finishing</div>
