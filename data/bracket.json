@@ -1,0 +1,43 @@
+{
+  "r32": [
+    {"match": 73, "team_a": "South Africa", "team_b": "Canada", "date": "June 28", "venue": "Inglewood"},
+    {"match": 74, "team_a": "Germany", "team_b": "Paraguay", "date": "June 29", "venue": "Foxborough"},
+    {"match": 75, "team_a": "Netherlands", "team_b": "Morocco", "date": "June 29", "venue": "Guadalupe"},
+    {"match": 76, "team_a": "Brazil", "team_b": "Japan", "date": "June 29", "venue": "Houston"},
+    {"match": 77, "team_a": "France", "team_b": "Sweden", "date": "June 30", "venue": "East Rutherford"},
+    {"match": 78, "team_a": "Ivory Coast", "team_b": "Norway", "date": "June 30", "venue": "Arlington"},
+    {"match": 79, "team_a": "Mexico", "team_b": "Ecuador", "date": "June 30", "venue": "Mexico City"},
+    {"match": 80, "team_a": "England", "team_b": "DR Congo", "date": "July 1", "venue": "Atlanta"},
+    {"match": 81, "team_a": "USA", "team_b": "Bosnia and Herzegovina", "date": "July 1", "venue": "Santa Clara"},
+    {"match": 82, "team_a": "Belgium", "team_b": "Senegal", "date": "July 1", "venue": "Seattle"},
+    {"match": 83, "team_a": "Portugal", "team_b": "Croatia", "date": "July 2", "venue": "Toronto"},
+    {"match": 84, "team_a": "Spain", "team_b": "TBD", "date": "July 2", "venue": "Inglewood"},
+    {"match": 85, "team_a": "Switzerland", "team_b": "TBD", "date": "July 2", "venue": "Vancouver"},
+    {"match": 86, "team_a": "Argentina", "team_b": "Cape Verde", "date": "July 3", "venue": "Miami Gardens"},
+    {"match": 87, "team_a": "Colombia", "team_b": "Ghana", "date": "July 3", "venue": "Kansas City"},
+    {"match": 88, "team_a": "Australia", "team_b": "Egypt", "date": "July 3", "venue": "Arlington"}
+  ],
+  "r16": [
+    {"match": 89, "team_a": "W74", "team_b": "W77", "date": "July 4", "venue": "Philadelphia"},
+    {"match": 90, "team_a": "W73", "team_b": "W75", "date": "July 4", "venue": "Houston"},
+    {"match": 91, "team_a": "W76", "team_b": "W78", "date": "July 5", "venue": "East Rutherford"},
+    {"match": 92, "team_a": "W79", "team_b": "W80", "date": "July 5", "venue": "Mexico City"},
+    {"match": 93, "team_a": "W83", "team_b": "W84", "date": "July 6", "venue": "Arlington"},
+    {"match": 94, "team_a": "W81", "team_b": "W82", "date": "July 6", "venue": "Seattle"},
+    {"match": 95, "team_a": "W86", "team_b": "W88", "date": "July 7", "venue": "Atlanta"},
+    {"match": 96, "team_a": "W85", "team_b": "W87", "date": "July 7", "venue": "Vancouver"}
+  ],
+  "qf": [
+    {"match": 97, "team_a": "W89", "team_b": "W90", "date": "July 9", "venue": "Foxborough"},
+    {"match": 98, "team_a": "W93", "team_b": "W94", "date": "July 10", "venue": "Inglewood"},
+    {"match": 99, "team_a": "W91", "team_b": "W92", "date": "July 11", "venue": "Miami Gardens"},
+    {"match": 100, "team_a": "W95", "team_b": "W96", "date": "July 11", "venue": "Kansas City"}
+  ],
+  "sf": [
+    {"match": 101, "team_a": "W97", "team_b": "W98", "date": "July 14", "venue": "Arlington"},
+    {"match": 102, "team_a": "W99", "team_b": "W100", "date": "July 15", "venue": "Atlanta"}
+  ],
+  "final": [
+    {"match": 104, "team_a": "W101", "team_b": "W102", "date": "July 19", "venue": "East Rutherford"}
+  ]
+}

@@ -1,6 +1,5 @@
-# World Cup 2026 — Round of 32 Qualified Teams
-# Add team names as they qualify (one per line, matching CSV filenames)
-# Lines starting with # are comments
+# World Cup 2026 — Round of 32 Qualified Teams (All 32 confirmed)
+# Matches from Wikipedia bracket (2026 FIFA World Cup knockout stage)
 South Africa
 Canada
 Brazil
@@ -14,12 +13,20 @@ Norway
 France
 Sweden
 Mexico
+Ecuador
+England
+DR Congo
 Belgium
+Senegal
 USA
 Bosnia and Herzegovina
 Spain
+Portugal
+Croatia
 Switzerland
 Australia
 Egypt
 Argentina
 Cape Verde
+Colombia
+Ghana

@@ -16,6 +16,7 @@ jobs:
       - run: python compute_ratings.py
       - run: python build_dashboard.py
       - run: python build_r32_dashboard.py
+      - run: python build_bracket.py
       - name: Commit & push
         run: |
           git config user.name "github-actions[bot]"

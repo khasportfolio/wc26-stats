@@ -91,7 +91,10 @@ def main():
     # Step 3: Build R32 dashboard + trends
     run_step("Building R32 dashboard + trends", [sys.executable, "build_r32_dashboard.py"])
 
-    # Step 4: Done
+    # Step 4: Build bracket predictions
+    run_step("Building bracket predictions", [sys.executable, "build_bracket.py"])
+
+    # Step 5: Done
     print("\n" + "=" * 60)
     print("  ✓ Pipeline complete!")
     print(f"    Output: {PUBLIC_DIR}")
