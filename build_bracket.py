@@ -37,17 +37,17 @@ from build_r32_dashboard import (
     read_team_matches, compute_match_score, safe_mean, parse_float, DIMS
 )
 
-# Country flag emojis
+# Country codes for display (consistent, no emoji rendering issues)
 FLAGS = {
-    "South Africa": "🇿🇦", "Canada": "🇨🇦", "Germany": "🇩🇪", "Paraguay": "🇵🇾",
-    "Netherlands": "🇳🇱", "Morocco": "🇲🇦", "Brazil": "🇧🇷", "Japan": "🇯🇵",
-    "France": "🇫🇷", "Sweden": "🇸🇪", "Ivory Coast": "🇨🇮", "Norway": "🇳🇴",
-    "Mexico": "🇲🇽", "Ecuador": "🇪🇨", "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "DR Congo": "🇨🇩",
-    "USA": "🇺🇸", "Bosnia and Herzegovina": "🇧🇦", "Belgium": "🇧🇪", "Senegal": "🇸🇳",
-    "Portugal": "🇵🇹", "Croatia": "🇭🇷", "Spain": "🇪🇸", "TBD": "❓",
-    "Switzerland": "🇨🇭", "Argentina": "🇦🇷", "Cape Verde": "🇨🇻",
-    "Colombia": "🇨🇴", "Ghana": "🇬🇭", "Australia": "🇦🇺", "Egypt": "🇪🇬",
-    "Austria": "🇦🇹", "Algeria": "🇩🇿",
+    "South Africa": "RSA", "Canada": "CAN", "Germany": "GER", "Paraguay": "PAR",
+    "Netherlands": "NED", "Morocco": "MAR", "Brazil": "BRA", "Japan": "JPN",
+    "France": "FRA", "Sweden": "SWE", "Ivory Coast": "CIV", "Norway": "NOR",
+    "Mexico": "MEX", "Ecuador": "ECU", "England": "ENG", "DR Congo": "COD",
+    "USA": "USA", "Bosnia and Herzegovina": "BIH", "Belgium": "BEL", "Senegal": "SEN",
+    "Portugal": "POR", "Croatia": "CRO", "Spain": "ESP", "TBD": "TBD",
+    "Switzerland": "SUI", "Argentina": "ARG", "Cape Verde": "CPV",
+    "Colombia": "COL", "Ghana": "GHA", "Australia": "AUS", "Egypt": "EGY",
+    "Austria": "AUT", "Algeria": "ALG",
 }
 
 
@@ -61,6 +61,12 @@ def compute_team_raw_scores(team_name):
         per_match = [compute_match_score(m, dim) for m in matches]
         scores[dim] = safe_mean(per_match)
     scores["matches"] = len(matches)
+    # Stats for goals prediction
+    scores["goals_avg"] = safe_mean([parse_float(m.get("Goals")) for m in matches])
+    scores["xg_avg"] = safe_mean([parse_float(m.get("xG")) for m in matches])
+    scores["xgc_avg"] = safe_mean([parse_float(m.get("xG conceded")) for m in matches])
+    scores["goals_conceded_avg"] = safe_mean([parse_float(m.get("Goals conceded")) for m in matches])
+    scores["sot_avg"] = safe_mean([parse_float(m.get("Shots on target")) for m in matches])
     return scores
 
 
@@ -89,6 +95,58 @@ def compute_win_probability(team_a_scores, team_b_scores):
     return round(prob_a, 3), round(prob_b, 1)
 
 
+def predict_match_goals(scores_a, scores_b):
+    """
+    Predict total goals in a match using xG-based model.
+
+    Logic:
+    - Team A's expected goals = average of (A's xG, A's goals_avg, B's xGC)
+    - Team B's expected goals = average of (B's xG, B's goals_avg, A's xGC)
+    - Apply a knockout discount (0.85) since knockout games are tighter
+    - Total = team_a_expected + team_b_expected
+
+    Returns dict with predicted totals and over/under probabilities.
+    """
+    if scores_a is None or scores_b is None:
+        return {"total": 2.5, "over_1_5": 0.5, "over_2_5": 0.5, "over_3_5": 0.5}
+
+    KNOCKOUT_FACTOR = 0.85  # Games are tighter in knockouts
+
+    # Team A expected goals: blend of their attacking output vs B's defensive record
+    a_exp = (scores_a["xg_avg"] + scores_a["goals_avg"] + scores_b["xgc_avg"]) / 3
+    # Team B expected goals: blend of their attacking output vs A's defensive record
+    b_exp = (scores_b["xg_avg"] + scores_b["goals_avg"] + scores_a["xgc_avg"]) / 3
+
+    # Apply knockout discount
+    a_exp *= KNOCKOUT_FACTOR
+    b_exp *= KNOCKOUT_FACTOR
+
+    total_exp = a_exp + b_exp
+
+    # Use Poisson-approximation for over/under probabilities
+    # P(total <= k) approximated using the CDF
+    import math
+    def poisson_cdf(lam, k):
+        """P(X <= k) for Poisson distribution with mean lam."""
+        total = 0
+        for i in range(k + 1):
+            total += (lam ** i) * math.exp(-lam) / math.factorial(i)
+        return total
+
+    over_1_5 = 1 - poisson_cdf(total_exp, 1)
+    over_2_5 = 1 - poisson_cdf(total_exp, 2)
+    over_3_5 = 1 - poisson_cdf(total_exp, 3)
+
+    return {
+        "total": round(total_exp, 2),
+        "a_exp": round(a_exp, 2),
+        "b_exp": round(b_exp, 2),
+        "over_1_5": round(over_1_5, 2),
+        "over_2_5": round(over_2_5, 2),
+        "over_3_5": round(over_3_5, 2),
+    }
+
+
 def predict_r32(bracket, all_scores):
     """Predict R32 results only. Returns dict of match_num -> result."""
     results = {}
@@ -102,6 +160,7 @@ def predict_r32(bracket, all_scores):
                 "team_a": team_a, "team_b": team_b,
                 "winner": team_a if team_b == "TBD" else (team_b if team_a == "TBD" else "TBD"),
                 "prob_a": 0.5, "prob_b": 0.5,
+                "goals": {"total": 0, "over_1_5": 0, "over_2_5": 0, "over_3_5": 0},
                 "date": match["date"], "venue": match["venue"],
             }
             continue
@@ -110,11 +169,13 @@ def predict_r32(bracket, all_scores):
         scores_b = all_scores.get(team_b)
         prob_a, prob_b = compute_win_probability(scores_a, scores_b)
         winner = team_a if prob_a >= 0.5 else team_b
+        goals = predict_match_goals(scores_a, scores_b)
 
         results[match_num] = {
             "team_a": team_a, "team_b": team_b,
             "winner": winner,
             "prob_a": prob_a, "prob_b": round(1 - prob_a, 3),
+            "goals": goals,
             "date": match["date"], "venue": match["venue"],
         }
 
@@ -168,8 +229,9 @@ def generate_bracket_html(results, bracket):
         prob_a = r["prob_a"]
         prob_b = r["prob_b"]
         winner = r["winner"]
-        flag_a = FLAGS.get(team_a, "🏳️")
-        flag_b = FLAGS.get(team_b, "🏳️")
+        goals = r.get("goals", {})
+        flag_a = FLAGS.get(team_a, "???")
+        flag_b = FLAGS.get(team_b, "???")
 
         pct_a = round(prob_a * 100)
         pct_b = 100 - pct_a
@@ -180,6 +242,13 @@ def generate_bracket_html(results, bracket):
         # Short names for display
         short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
         short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
+
+        # Goals prediction line
+        total = goals.get("total", 0)
+        o15 = goals.get("over_1_5", 0)
+        o25 = goals.get("over_2_5", 0)
+        o35 = goals.get("over_3_5", 0)
+        goals_html = f'<div class="goals-line">⚽ {total:.1f} exp | O1.5 {o15:.0%} | O2.5 {o25:.0%} | O3.5 {o35:.0%}</div>' if total > 0 else ''
 
         if team_b == "TBD":
             return f'''<div class="matchup">
@@ -192,6 +261,7 @@ def generate_bracket_html(results, bracket):
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
+{goals_html}
 </div>'''
 
     # Build empty slot HTML for later rounds
@@ -266,13 +336,14 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .matchup:hover{{transform:translateY(-1px);box-shadow:0 3px 10px var(--hover-shadow)}}
 .matchup-info{{text-align:center;font-size:.56rem;color:var(--text-muted);padding:3px 6px;background:var(--bar-bg);border-bottom:1px solid var(--card-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .matchup-team{{display:flex;align-items:center;padding:5px 8px;font-size:.74rem;gap:5px}}
-.matchup-team .flag{{font-size:.85rem;flex-shrink:0}}
+.matchup-team .flag{{font-size:.65rem;flex-shrink:0;font-weight:700;color:var(--text-muted);min-width:28px}}
 .matchup-team .team-name{{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .matchup-team .prob{{margin-left:auto;font-size:.62rem;font-weight:600;opacity:.7;flex-shrink:0}}
 .matchup-team.winner{{font-weight:700;color:var(--win-green)}}
 .matchup-team.winner .prob{{opacity:1}}
 .matchup-team.loser{{color:var(--lose-gray)}}
 .matchup-team.tbd{{color:var(--text-muted);font-style:italic}}
+.goals-line{{font-size:.56rem;color:var(--text-muted);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}}
 
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
