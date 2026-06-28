@@ -11,8 +11,8 @@
     {"match": 81, "team_a": "USA", "team_b": "Bosnia and Herzegovina", "date": "July 1", "venue": "Santa Clara"},
     {"match": 82, "team_a": "Belgium", "team_b": "Senegal", "date": "July 1", "venue": "Seattle"},
     {"match": 83, "team_a": "Portugal", "team_b": "Croatia", "date": "July 2", "venue": "Toronto"},
-    {"match": 84, "team_a": "Spain", "team_b": "TBD", "date": "July 2", "venue": "Inglewood"},
-    {"match": 85, "team_a": "Switzerland", "team_b": "TBD", "date": "July 2", "venue": "Vancouver"},
+    {"match": 84, "team_a": "Spain", "team_b": "Austria", "date": "July 2", "venue": "Inglewood"},
+    {"match": 85, "team_a": "Switzerland", "team_b": "Algeria", "date": "July 2", "venue": "Vancouver"},
     {"match": 86, "team_a": "Argentina", "team_b": "Cape Verde", "date": "July 3", "venue": "Miami Gardens"},
     {"match": 87, "team_a": "Colombia", "team_b": "Ghana", "date": "July 3", "venue": "Kansas City"},
     {"match": 88, "team_a": "Australia", "team_b": "Egypt", "date": "July 3", "venue": "Arlington"}

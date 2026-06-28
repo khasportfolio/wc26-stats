@@ -42,11 +42,12 @@ FLAGS = {
     "South Africa": "🇿🇦", "Canada": "🇨🇦", "Germany": "🇩🇪", "Paraguay": "🇵🇾",
     "Netherlands": "🇳🇱", "Morocco": "🇲🇦", "Brazil": "🇧🇷", "Japan": "🇯🇵",
     "France": "🇫🇷", "Sweden": "🇸🇪", "Ivory Coast": "🇨🇮", "Norway": "🇳🇴",
-    "Mexico": "🇲🇽", "Ecuador": "🇪🇨", "England": "🏴\u200d☠️", "DR Congo": "🇨🇩",
+    "Mexico": "🇲🇽", "Ecuador": "🇪🇨", "England": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "DR Congo": "🇨🇩",
     "USA": "🇺🇸", "Bosnia and Herzegovina": "🇧🇦", "Belgium": "🇧🇪", "Senegal": "🇸🇳",
     "Portugal": "🇵🇹", "Croatia": "🇭🇷", "Spain": "🇪🇸", "TBD": "❓",
     "Switzerland": "🇨🇭", "Argentina": "🇦🇷", "Cape Verde": "🇨🇻",
     "Colombia": "🇨🇴", "Ghana": "🇬🇭", "Australia": "🇦🇺", "Egypt": "🇪🇬",
+    "Austria": "🇦🇹", "Algeria": "🇩🇿",
 }
 
 
@@ -190,7 +191,6 @@ def generate_bracket_html(results, bracket):
         return f'''<div class="matchup">
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:{pct_a}%"></div><div class="prob-fill-b" style="width:{pct_b}%"></div></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
 </div>'''
 
@@ -274,11 +274,6 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .matchup-team.loser{{color:var(--lose-gray)}}
 .matchup-team.tbd{{color:var(--text-muted);font-style:italic}}
 
-/* Probability bar between teams */
-.prob-bar{{display:flex;height:4px;margin:0 8px;border-radius:2px;overflow:hidden}}
-.prob-fill-a{{background:var(--wc-blue);height:100%}}
-.prob-fill-b{{background:var(--wc-red);height:100%}}
-
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
 
@@ -297,8 +292,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .legend{{display:flex;justify-content:center;gap:16px;margin:16px 0;flex-wrap:wrap;font-size:.72rem;color:var(--text-secondary)}}
 .legend-item{{display:flex;align-items:center;gap:4px}}
 .leg-box{{width:12px;height:12px;border-radius:2px}}
-.leg-predicted{{background:var(--wc-blue)}}
-.leg-opponent{{background:var(--wc-red)}}
+.leg-winner{{background:var(--win-green)}}
 .leg-empty{{background:var(--bar-bg);border:1px dashed var(--card-border)}}
 
 /* Trophy */
@@ -311,8 +305,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 <p class="methodology">Only Round of 32 matchups are predicted. Later rounds show venue &amp; date placeholders.</p>
 <div class="nav">{nav_html}</div>
 <div class="legend">
-<div class="legend-item"><div class="leg-box leg-predicted"></div>Favored (model)</div>
-<div class="legend-item"><div class="leg-box leg-opponent"></div>Underdog</div>
+<div class="legend-item"><div class="leg-box leg-winner"></div>Predicted winner</div>
 <div class="legend-item"><div class="leg-box leg-empty"></div>TBD (future rounds)</div>
 </div>
 

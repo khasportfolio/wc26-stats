@@ -1,5 +1,4 @@
 # World Cup 2026 — Round of 32 Qualified Teams (All 32 confirmed)
-# Matches from Wikipedia bracket (2026 FIFA World Cup knockout stage)
 South Africa
 Canada
 Brazil
@@ -21,9 +20,11 @@ Senegal
 USA
 Bosnia and Herzegovina
 Spain
+Austria
 Portugal
 Croatia
 Switzerland
+Algeria
 Australia
 Egypt
 Argentina

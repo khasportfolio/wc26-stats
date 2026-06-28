@@ -48,11 +48,6 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 .matchup-team.loser{color:var(--lose-gray)}
 .matchup-team.tbd{color:var(--text-muted);font-style:italic}
 
-/* Probability bar between teams */
-.prob-bar{display:flex;height:4px;margin:0 8px;border-radius:2px;overflow:hidden}
-.prob-fill-a{background:var(--wc-blue);height:100%}
-.prob-fill-b{background:var(--wc-red);height:100%}
-
 /* Empty future matchups */
 .empty-future{opacity:.6;border-style:dashed}
 
@@ -71,8 +66,7 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 .legend{display:flex;justify-content:center;gap:16px;margin:16px 0;flex-wrap:wrap;font-size:.72rem;color:var(--text-secondary)}
 .legend-item{display:flex;align-items:center;gap:4px}
 .leg-box{width:12px;height:12px;border-radius:2px}
-.leg-predicted{background:var(--wc-blue)}
-.leg-opponent{background:var(--wc-red)}
+.leg-winner{background:var(--win-green)}
 .leg-empty{background:var(--bar-bg);border:1px dashed var(--card-border)}
 
 /* Trophy */
@@ -85,8 +79,7 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <p class="methodology">Only Round of 32 matchups are predicted. Later rounds show venue &amp; date placeholders.</p>
 <div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> &middot; <a href="r32.html" class="nav-link">Round of 32</a> &middot; <a href="trends.html" class="nav-link">Trends</a> &middot; <a href="bracket.html" class="nav-link active">Bracket</a></div>
 <div class="legend">
-<div class="legend-item"><div class="leg-box leg-predicted"></div>Favored (model)</div>
-<div class="legend-item"><div class="leg-box leg-opponent"></div>Underdog</div>
+<div class="legend-item"><div class="leg-box leg-winner"></div>Predicted winner</div>
 <div class="legend-item"><div class="leg-box leg-empty"></div>TBD (future rounds)</div>
 </div>
 
@@ -97,48 +90,41 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="matchup">
 <div class="matchup-info">Foxborough · June 29</div>
 <div class="matchup-team winner"><span class="flag">🇩🇪</span><span class="team-name">Germany</span><span class="prob">84%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:84%"></div><div class="prob-fill-b" style="width:16%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇵🇾</span><span class="team-name">Paraguay</span><span class="prob">16%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">East Rutherford · June 30</div>
 <div class="matchup-team winner"><span class="flag">🇫🇷</span><span class="team-name">France</span><span class="prob">73%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:73%"></div><div class="prob-fill-b" style="width:27%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇸🇪</span><span class="team-name">Sweden</span><span class="prob">27%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Inglewood · June 28</div>
 <div class="matchup-team loser"><span class="flag">🇿🇦</span><span class="team-name">South Africa</span><span class="prob">21%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:21%"></div><div class="prob-fill-b" style="width:79%"></div></div>
 <div class="matchup-team winner"><span class="flag">🇨🇦</span><span class="team-name">Canada</span><span class="prob">79%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Guadalupe · June 29</div>
 <div class="matchup-team winner"><span class="flag">🇳🇱</span><span class="team-name">Netherlands</span><span class="prob">62%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:62%"></div><div class="prob-fill-b" style="width:38%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇲🇦</span><span class="team-name">Morocco</span><span class="prob">38%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Toronto · July 2</div>
 <div class="matchup-team winner"><span class="flag">🇵🇹</span><span class="team-name">Portugal</span><span class="prob">61%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:61%"></div><div class="prob-fill-b" style="width:39%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇭🇷</span><span class="team-name">Croatia</span><span class="prob">39%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Inglewood · July 2</div>
-<div class="matchup-team winner"><span class="flag">🇪🇸</span><span class="team-name">Spain</span><span class="prob">BYE</span></div>
-<div class="matchup-team loser"><span class="flag">❓</span><span class="team-name">TBD</span><span class="prob">—</span></div>
+<div class="matchup-team winner"><span class="flag">🇪🇸</span><span class="team-name">Spain</span><span class="prob">70%</span></div>
+<div class="matchup-team loser"><span class="flag">🇦🇹</span><span class="team-name">Austria</span><span class="prob">30%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Santa Clara · July 1</div>
 <div class="matchup-team winner"><span class="flag">🇺🇸</span><span class="team-name">USA</span><span class="prob">69%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:69%"></div><div class="prob-fill-b" style="width:31%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇧🇦</span><span class="team-name">Bosnia</span><span class="prob">31%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Seattle · July 1</div>
 <div class="matchup-team winner"><span class="flag">🇧🇪</span><span class="team-name">Belgium</span><span class="prob">52%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:52%"></div><div class="prob-fill-b" style="width:48%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇸🇳</span><span class="team-name">Senegal</span><span class="prob">48%</span></div>
 </div>
 </div>
@@ -254,48 +240,41 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="matchup">
 <div class="matchup-info">Houston · June 29</div>
 <div class="matchup-team winner"><span class="flag">🇧🇷</span><span class="team-name">Brazil</span><span class="prob">56%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:56%"></div><div class="prob-fill-b" style="width:44%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇯🇵</span><span class="team-name">Japan</span><span class="prob">44%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Arlington · June 30</div>
 <div class="matchup-team loser"><span class="flag">🇨🇮</span><span class="team-name">Ivory Coast</span><span class="prob">41%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:41%"></div><div class="prob-fill-b" style="width:59%"></div></div>
 <div class="matchup-team winner"><span class="flag">🇳🇴</span><span class="team-name">Norway</span><span class="prob">59%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Mexico City · June 30</div>
 <div class="matchup-team winner"><span class="flag">🇲🇽</span><span class="team-name">Mexico</span><span class="prob">67%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:67%"></div><div class="prob-fill-b" style="width:33%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇪🇨</span><span class="team-name">Ecuador</span><span class="prob">33%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Atlanta · July 1</div>
-<div class="matchup-team winner"><span class="flag">🏴‍☠️</span><span class="team-name">England</span><span class="prob">66%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:66%"></div><div class="prob-fill-b" style="width:34%"></div></div>
+<div class="matchup-team winner"><span class="flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</span><span class="team-name">England</span><span class="prob">66%</span></div>
 <div class="matchup-team loser"><span class="flag">🇨🇩</span><span class="team-name">DR Congo</span><span class="prob">34%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Miami Gardens · July 3</div>
 <div class="matchup-team winner"><span class="flag">🇦🇷</span><span class="team-name">Argentina</span><span class="prob">77%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:77%"></div><div class="prob-fill-b" style="width:23%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇨🇻</span><span class="team-name">Cape Verde</span><span class="prob">23%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Arlington · July 3</div>
 <div class="matchup-team loser"><span class="flag">🇦🇺</span><span class="team-name">Australia</span><span class="prob">35%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:35%"></div><div class="prob-fill-b" style="width:65%"></div></div>
 <div class="matchup-team winner"><span class="flag">🇪🇬</span><span class="team-name">Egypt</span><span class="prob">65%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Vancouver · July 2</div>
-<div class="matchup-team winner"><span class="flag">🇨🇭</span><span class="team-name">Switzerland</span><span class="prob">BYE</span></div>
-<div class="matchup-team loser"><span class="flag">❓</span><span class="team-name">TBD</span><span class="prob">—</span></div>
+<div class="matchup-team winner"><span class="flag">🇨🇭</span><span class="team-name">Switzerland</span><span class="prob">61%</span></div>
+<div class="matchup-team loser"><span class="flag">🇩🇿</span><span class="team-name">Algeria</span><span class="prob">39%</span></div>
 </div>
 <div class="matchup">
 <div class="matchup-info">Kansas City · July 3</div>
 <div class="matchup-team winner"><span class="flag">🇨🇴</span><span class="team-name">Colombia</span><span class="prob">63%</span></div>
-<div class="prob-bar"><div class="prob-fill-a" style="width:63%"></div><div class="prob-fill-b" style="width:37%"></div></div>
 <div class="matchup-team loser"><span class="flag">🇬🇭</span><span class="team-name">Ghana</span><span class="prob">37%</span></div>
 </div>
 </div>
