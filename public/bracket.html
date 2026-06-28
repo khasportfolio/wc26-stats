@@ -9,13 +9,13 @@
 :root {
     --wc-green:#3CAC3B;--wc-blue:#2A398D;--wc-red:#E61D25;
     --bg:#FAFAFA;--card-bg:#FFF;--card-border:#E2E4E2;
-    --text-primary:#2D2D2D;--text-secondary:#5F6368;--text-muted:#8A8F94;
+    --text-primary:#1A1A1A;--text-secondary:#3D3D3D;--text-muted:#666;
     --bar-bg:#ECEEED;--hover-shadow:rgba(42,57,141,.08);
     --win-green:#2D8A2C;--lose-gray:#999;
 }
 @media(prefers-color-scheme:dark){:root{
     --bg:#0F1318;--card-bg:#1A1F27;--card-border:#2D333B;
-    --text-primary:#E6EDF3;--text-secondary:#A8B1BA;--text-muted:#6E7681;
+    --text-primary:#FFFFFF;--text-secondary:#D4D4D4;--text-muted:#A0A0A0;
     --bar-bg:#2D333B;--hover-shadow:rgba(88,166,255,.1);
     --win-green:#56D364;--lose-gray:#555;
 }}
@@ -38,16 +38,16 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 /* Matchup cards */
 .matchup{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;margin:4px 0;width:195px;overflow:hidden;transition:transform .15s,box-shadow .15s}
 .matchup:hover{transform:translateY(-1px);box-shadow:0 3px 10px var(--hover-shadow)}
-.matchup-info{text-align:center;font-size:.56rem;color:var(--text-muted);padding:3px 6px;background:var(--bar-bg);border-bottom:1px solid var(--card-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.matchup-info{text-align:center;font-size:.58rem;color:var(--text-primary);padding:3px 6px;background:var(--bar-bg);border-bottom:1px solid var(--card-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .matchup-team{display:flex;align-items:center;padding:5px 8px;font-size:.74rem;gap:5px}
-.matchup-team .flag{font-size:.65rem;flex-shrink:0;font-weight:700;color:var(--text-muted);min-width:28px}
+.matchup-team .flag{font-size:.65rem;flex-shrink:0;font-weight:700;color:var(--text-secondary);min-width:28px}
 .matchup-team .team-name{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .matchup-team .prob{margin-left:auto;font-size:.62rem;font-weight:600;opacity:.7;flex-shrink:0}
 .matchup-team.winner{font-weight:700;color:var(--win-green)}
 .matchup-team.winner .prob{opacity:1}
 .matchup-team.loser{color:var(--lose-gray)}
 .matchup-team.tbd{color:var(--text-muted);font-style:italic}
-.goals-line{font-size:.56rem;color:var(--text-muted);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}
+.goals-line{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}
 
 /* Empty future matchups */
 .empty-future{opacity:.6;border-style:dashed}
