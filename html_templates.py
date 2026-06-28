@@ -224,8 +224,8 @@ const trendsData={js_data};
 const DIMS=["finishing","creation","control","defense","physicality","pressing"];
 const COLORS=["#E61D25","#2A398D","#3CAC3B","#5B7EC2","#E67E22","#8E44AD"];
 const DIM_LABELS=["Finishing","Creation","Control","Defense","Physical","Pressing"];
-const SHORT_NAMES={"Bosnia and Herzegovina":"Bosnia","Czech Republic":"Czechia","South Africa":"S. Africa","South Korea":"S. Korea","New Zealand":"N. Zealand","Saudi Arabia":"S. Arabia","Ivory Coast":"Iv. Coast","Cape Verde":"C. Verde","United States":"USA"};
-function shortName(n){return SHORT_NAMES[n]||n.substring(0,12)}
+const SHORT_NAMES={"Bosnia and Herzegovina":"Bosnia","Czech Republic":"Czechia","South Africa":"S.Africa","South Korea":"S.Korea","New Zealand":"N.Zealand","Saudi Arabia":"S.Arabia","Ivory Coast":"Iv.Coast","Cape Verde":"C.Verde","United States":"USA","Switzerland":"Swiss","Netherlands":"Netherl.","Australia":"Australia","DR Congo":"DR Congo"};
+function shortName(n){return SHORT_NAMES[n]||n.substring(0,9)}
 function setupCanvas(canvas){
 const dpr=window.devicePixelRatio||1;
 const rect=canvas.getBoundingClientRect();
@@ -237,7 +237,7 @@ const rect=canvas.getBoundingClientRect();
 canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;
 const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
 const w=rect.width,h=rect.height;
-const pad={top:10,bottom:32,left:5,right:5},cW=w-pad.left-pad.right,cH=h-pad.top-pad.bottom;
+const pad={top:10,bottom:32,left:35,right:35},cW=w-pad.left-pad.right,cH=h-pad.top-pad.bottom;
 if(!trend.length)return;
 const isDark=window.matchMedia("(prefers-color-scheme:dark)").matches;
 ctx.strokeStyle=isDark?"rgba(100,110,120,.3)":"rgba(209,212,209,.5)";ctx.lineWidth=.5;
