@@ -204,12 +204,13 @@ def write_r32_html(all_team_data):
     print(f"  ✓ R32 Dashboard: {filepath}")
 
 
-def write_trends_html(all_matches, global_mins, global_maxs):
+def write_trends_html(all_matches, global_mins, global_maxs, team_rankings=None):
     """Generate trends.html — per-match dimension evolution."""
     from html_templates import trends_html
 
-    all_trends = {}
-    for team_name, matches in sorted(all_matches.items()):
+    # Build trends data as an ordered list (by ranking) instead of a dict
+    all_trends_list = []
+    for team_name, matches in all_matches.items():
         trend = []
         for i, m in enumerate(matches):
             entry = {
@@ -226,9 +227,13 @@ def write_trends_html(all_matches, global_mins, global_maxs):
                 spread = mx - mn if mx != mn else 1
                 entry[dim] = round((raw - mn) / spread * 100, 1)
             trend.append(entry)
-        all_trends[team_name] = trend
+        rank = team_rankings.get(team_name, 99) if team_rankings else 99
+        all_trends_list.append({"name": team_name, "rank": rank, "trend": trend})
 
-    js_data = json.dumps(all_trends, indent=2)
+    # Sort by rank
+    all_trends_list.sort(key=lambda x: x["rank"])
+
+    js_data = json.dumps(all_trends_list, indent=2)
     nav = _nav_html("trends.html")
 
     filepath = os.path.join(PUBLIC_DIR, "trends.html")
@@ -297,7 +302,9 @@ def main():
 
     # Generate trends page
     print("\n[6] Generating trends page...")
-    write_trends_html(all_matches, global_mins, global_maxs)
+    # Build ranking lookup from sorted data
+    team_rankings = {t["team"]: i + 1 for i, t in enumerate(sorted_data)}
+    write_trends_html(all_matches, global_mins, global_maxs, team_rankings)
 
     print("\n" + "=" * 60)
     print("  Done!")

@@ -185,7 +185,7 @@ h1{{text-align:center;font-size:1.8rem;color:var(--wc-blue);margin-bottom:4px}}
 .card-header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}}
 .team-name{{font-weight:600;font-size:1rem}}
 .match-count{{font-size:.7rem;color:var(--text-muted)}}
-canvas.trend-chart{{width:100%;height:160px;display:block}}
+canvas.trend-chart{{width:100%;height:180px;display:block}}
 .legend{{display:flex;justify-content:center;gap:16px;margin-bottom:16px;flex-wrap:wrap}}
 .legend-item{{display:flex;align-items:center;gap:5px;font-size:.72rem;color:var(--text-secondary)}}
 .legend-dot{{width:10px;height:10px;border-radius:2px}}
@@ -226,10 +226,19 @@ const COLORS=["#E61D25","#2A398D","#3CAC3B","#5B7EC2","#E67E22","#8E44AD"];
 const DIM_LABELS=["Finishing","Creation","Control","Defense","Physical","Pressing"];
 const SHORT_NAMES={"Bosnia and Herzegovina":"Bosnia","Czech Republic":"Czechia","South Africa":"S. Africa","South Korea":"S. Korea","New Zealand":"N. Zealand","Saudi Arabia":"S. Arabia","Ivory Coast":"Iv. Coast","Cape Verde":"C. Verde","United States":"USA"};
 function shortName(n){return SHORT_NAMES[n]||n.substring(0,12)}
+function setupCanvas(canvas){
+const dpr=window.devicePixelRatio||1;
+const rect=canvas.getBoundingClientRect();
+canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;
+const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);return ctx}
 function drawTrendChart(canvas,trend,highlight){
-const ctx=canvas.getContext("2d"),w=canvas.width,h=canvas.height;
+const dpr=window.devicePixelRatio||1;
+const rect=canvas.getBoundingClientRect();
+canvas.width=rect.width*dpr;canvas.height=rect.height*dpr;
+const ctx=canvas.getContext("2d");ctx.scale(dpr,dpr);
+const w=rect.width,h=rect.height;
 const pad={top:10,bottom:32,left:5,right:5},cW=w-pad.left-pad.right,cH=h-pad.top-pad.bottom;
-ctx.clearRect(0,0,w,h);if(!trend.length)return;
+if(!trend.length)return;
 const isDark=window.matchMedia("(prefers-color-scheme:dark)").matches;
 ctx.strokeStyle=isDark?"rgba(100,110,120,.3)":"rgba(209,212,209,.5)";ctx.lineWidth=.5;
 for(let p=0;p<=100;p+=25){const y=pad.top+cH*(1-p/100);ctx.beginPath();ctx.moveTo(pad.left,y);ctx.lineTo(w-pad.right,y);ctx.stroke()}
@@ -240,22 +249,22 @@ ctx.globalAlpha=on?1:.15;ctx.strokeStyle=COLORS[di];ctx.lineWidth=on?2.5:1;
 ctx.beginPath();trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2),y=pad.top+cH*(1-pt[dim]/100);pi===0?ctx.moveTo(x,y):ctx.lineTo(x,y)});ctx.stroke();
 if(on){trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2),y=pad.top+cH*(1-pt[dim]/100);ctx.beginPath();ctx.arc(x,y,3,0,Math.PI*2);ctx.fillStyle=COLORS[di];ctx.fill()})}
 });ctx.globalAlpha=1;
-ctx.font="9px system-ui";ctx.fillStyle=isDark?"#6E7681":"#8A8F94";ctx.textAlign="center";
+ctx.font="10px system-ui";ctx.fillStyle=isDark?"#A0A0A0":"#666";ctx.textAlign="center";
 trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2);
 const opp=shortName(pt.opponent||"");
 ctx.fillText(`vs ${opp}`,x,h-5);
 ctx.fillText(`${pt.goals}-${pt.conceded}`,x,h-16)})}
-function createCard(name,trend){
+function createCard(name,rank,trend){
 const card=document.createElement("div");card.className="card";
-card.innerHTML=`<div class="card-header"><span class="team-name">${name}</span><span class="match-count">${trend.length} matches</span></div><canvas class="trend-chart" width="420" height="160"></canvas>`;
+card.innerHTML=`<div class="card-header"><span class="team-name">#${rank} ${name}</span><span class="match-count">${trend.length} matches</span></div><canvas class="trend-chart"></canvas>`;
 return card}
 function render(){
 const filter=document.getElementById("filter").value.toLowerCase();
 const highlight=document.getElementById("highlight").value;
 const grid=document.getElementById("grid");grid.innerHTML="";
-Object.keys(trendsData).sort().filter(n=>n.toLowerCase().includes(filter)).forEach(name=>{
-const card=createCard(name,trendsData[name]);grid.appendChild(card);
-drawTrendChart(card.querySelector("canvas"),trendsData[name],highlight)})}
+trendsData.filter(t=>t.name.toLowerCase().includes(filter)).forEach(t=>{
+const card=createCard(t.name,t.rank,t.trend);grid.appendChild(card);
+drawTrendChart(card.querySelector("canvas"),t.trend,highlight)})}
 render();window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>render());
 </script>
 </body></html>'''
