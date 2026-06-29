@@ -278,18 +278,28 @@ def generate_bracket_html(results, bracket):
         for m in bracket[rnd]:
             bracket_lookup[m["match"]] = m
 
-    # Generate left R32 matchups
-    left_r32_html = "\n".join(r32_matchup_html(n) for n in left_r32_nums)
-    right_r32_html = "\n".join(r32_matchup_html(n) for n in right_r32_nums)
-
-    # Generate empty slots
-    left_r16_html = "\n".join(empty_slot_html(bracket_lookup[n]) for n in left_r16)
-    right_r16_html = "\n".join(empty_slot_html(bracket_lookup[n]) for n in right_r16)
-    left_qf_html = "\n".join(empty_slot_html(bracket_lookup[n]) for n in left_qf)
-    right_qf_html = "\n".join(empty_slot_html(bracket_lookup[n]) for n in right_qf)
-    left_sf_html = "\n".join(empty_slot_html(bracket_lookup[n]) for n in left_sf)
-    right_sf_html = "\n".join(empty_slot_html(bracket_lookup[n]) for n in right_sf)
+    # Generate individual matchup HTML strings
+    l_r32 = [r32_matchup_html(n) for n in left_r32_nums]
+    r_r32 = [r32_matchup_html(n) for n in right_r32_nums]
+    l_r16 = [empty_slot_html(bracket_lookup[n]) for n in left_r16]
+    r_r16 = [empty_slot_html(bracket_lookup[n]) for n in right_r16]
+    l_qf = [empty_slot_html(bracket_lookup[n]) for n in left_qf]
+    r_qf = [empty_slot_html(bracket_lookup[n]) for n in right_qf]
+    l_sf = [empty_slot_html(bracket_lookup[n]) for n in left_sf]
+    r_sf = [empty_slot_html(bracket_lookup[n]) for n in right_sf]
     final_html = empty_slot_html(bracket_lookup[104])
+
+    # Assign individual slots for template
+    l_r32_0, l_r32_1, l_r32_2, l_r32_3 = l_r32[0], l_r32[1], l_r32[2], l_r32[3]
+    l_r32_4, l_r32_5, l_r32_6, l_r32_7 = l_r32[4], l_r32[5], l_r32[6], l_r32[7]
+    r_r32_0, r_r32_1, r_r32_2, r_r32_3 = r_r32[0], r_r32[1], r_r32[2], r_r32[3]
+    r_r32_4, r_r32_5, r_r32_6, r_r32_7 = r_r32[4], r_r32[5], r_r32[6], r_r32[7]
+    l_r16_0, l_r16_1, l_r16_2, l_r16_3 = l_r16[0], l_r16[1], l_r16[2], l_r16[3]
+    r_r16_0, r_r16_1, r_r16_2, r_r16_3 = r_r16[0], r_r16[1], r_r16[2], r_r16[3]
+    l_qf_0, l_qf_1 = l_qf[0], l_qf[1]
+    r_qf_0, r_qf_1 = r_qf[0], r_qf[1]
+    l_sf_0 = l_sf[0]
+    r_sf_0 = r_sf[0]
 
     filepath = os.path.join(PUBLIC_DIR, "bracket.html")
     os.makedirs(PUBLIC_DIR, exist_ok=True)
@@ -327,13 +337,13 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 @media(prefers-color-scheme:dark){{h1{{color:#79B8FF}}.nav-link.active{{color:#79B8FF;background:rgba(88,166,255,.12)}}}}
 
 /* Bracket layout */
-.bracket-wrapper{{display:flex;align-items:flex-start;justify-content:center;gap:6px;overflow-x:auto;padding:10px 0;min-width:max-content}}
 .bracket-scroll{{overflow-x:auto;padding-bottom:20px}}
-.round{{display:flex;flex-direction:column;justify-content:space-around;min-height:100%}}
+.bracket-wrapper{{display:flex;align-items:stretch;justify-content:center;gap:8px;padding:10px 0;min-width:max-content}}
+.round{{display:flex;flex-direction:column;justify-content:space-around}}
 .round-label{{text-align:center;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;white-space:nowrap}}
 
 /* Matchup cards */
-.matchup{{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;margin:4px 0;width:195px;overflow:hidden;transition:transform .15s,box-shadow .15s}}
+.matchup{{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;width:195px;overflow:hidden;transition:transform .15s,box-shadow .15s}}
 .matchup:hover{{transform:translateY(-1px);box-shadow:0 3px 10px var(--hover-shadow)}}
 .matchup-info{{text-align:center;font-size:.58rem;color:var(--text-primary);padding:3px 6px;background:var(--bar-bg);border-bottom:1px solid var(--card-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}}
 .matchup-team{{display:flex;align-items:center;padding:5px 8px;font-size:.74rem;gap:5px}}
@@ -349,15 +359,10 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
 
-/* Round spacing for bracket feel */
-.round.r32-col .matchup{{margin:3px 0}}
-.round.r16-col .matchup{{margin:22px 0}}
-.round.qf-col .matchup{{margin:60px 0}}
-.round.sf-col .matchup{{margin:140px 0}}
-.round.final-col .matchup{{margin:0}}
+/* Bracket pair grouping — each pair stacks 2 matchups and centers them */
+.bracket-pair{{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}}
+.bracket-group{{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}}
 .round.final-col{{justify-content:center}}
-
-/* Connector lines (CSS-only) */
 .round.r16-col,.round.qf-col,.round.sf-col,.round.final-col{{padding-top:20px}}
 
 /* Legend */
@@ -383,53 +388,85 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 
 <div class="bracket-scroll">
 <div class="bracket-wrapper">
-<!-- LEFT SIDE -->
-<div class="round r32-col">
+<!-- LEFT SIDE: R32 → R16 → QF → SF -->
+<div class="round">
 <div class="round-label">Round of 32</div>
-{left_r32_html}
+<div class="bracket-group">
+<div class="bracket-pair">{l_r32_0}{l_r32_1}</div>
+<div class="bracket-pair">{l_r32_2}{l_r32_3}</div>
+<div class="bracket-pair">{l_r32_4}{l_r32_5}</div>
+<div class="bracket-pair">{l_r32_6}{l_r32_7}</div>
+</div>
 </div>
 
-<div class="round r16-col">
+<div class="round">
 <div class="round-label">Round of 16</div>
-{left_r16_html}
+<div class="bracket-group">
+<div class="bracket-pair">{l_r16_0}</div>
+<div class="bracket-pair">{l_r16_1}</div>
+<div class="bracket-pair">{l_r16_2}</div>
+<div class="bracket-pair">{l_r16_3}</div>
+</div>
 </div>
 
-<div class="round qf-col">
+<div class="round">
 <div class="round-label">Quarterfinals</div>
-{left_qf_html}
+<div class="bracket-group">
+<div class="bracket-pair">{l_qf_0}</div>
+<div class="bracket-pair">{l_qf_1}</div>
+</div>
 </div>
 
-<div class="round sf-col">
+<div class="round">
 <div class="round-label">Semifinals</div>
-{left_sf_html}
+<div class="bracket-group">
+<div class="bracket-pair">{l_sf_0}</div>
+</div>
 </div>
 
 <!-- CENTER: FINAL -->
 <div class="round final-col">
 <div class="round-label">Final</div>
+<div class="bracket-group">
 <div class="trophy">🏆</div>
 {final_html}
 </div>
+</div>
 
-<!-- RIGHT SIDE -->
-<div class="round sf-col">
+<!-- RIGHT SIDE: SF → QF → R16 → R32 -->
+<div class="round">
 <div class="round-label">Semifinals</div>
-{right_sf_html}
+<div class="bracket-group">
+<div class="bracket-pair">{r_sf_0}</div>
+</div>
 </div>
 
-<div class="round qf-col">
+<div class="round">
 <div class="round-label">Quarterfinals</div>
-{right_qf_html}
+<div class="bracket-group">
+<div class="bracket-pair">{r_qf_0}</div>
+<div class="bracket-pair">{r_qf_1}</div>
+</div>
 </div>
 
-<div class="round r16-col">
+<div class="round">
 <div class="round-label">Round of 16</div>
-{right_r16_html}
+<div class="bracket-group">
+<div class="bracket-pair">{r_r16_0}</div>
+<div class="bracket-pair">{r_r16_1}</div>
+<div class="bracket-pair">{r_r16_2}</div>
+<div class="bracket-pair">{r_r16_3}</div>
+</div>
 </div>
 
-<div class="round r32-col">
+<div class="round">
 <div class="round-label">Round of 32</div>
-{right_r32_html}
+<div class="bracket-group">
+<div class="bracket-pair">{r_r32_0}{r_r32_1}</div>
+<div class="bracket-pair">{r_r32_2}{r_r32_3}</div>
+<div class="bracket-pair">{r_r32_4}{r_r32_5}</div>
+<div class="bracket-pair">{r_r32_6}{r_r32_7}</div>
+</div>
 </div>
 </div>
 </div>

@@ -31,13 +31,13 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 @media(prefers-color-scheme:dark){h1{color:#79B8FF}.nav-link.active{color:#79B8FF;background:rgba(88,166,255,.12)}}
 
 /* Bracket layout */
-.bracket-wrapper{display:flex;align-items:flex-start;justify-content:center;gap:6px;overflow-x:auto;padding:10px 0;min-width:max-content}
 .bracket-scroll{overflow-x:auto;padding-bottom:20px}
-.round{display:flex;flex-direction:column;justify-content:space-around;min-height:100%}
+.bracket-wrapper{display:flex;align-items:stretch;justify-content:center;gap:8px;padding:10px 0;min-width:max-content}
+.round{display:flex;flex-direction:column;justify-content:space-around}
 .round-label{text-align:center;font-size:.68rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;white-space:nowrap}
 
 /* Matchup cards */
-.matchup{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;margin:4px 0;width:195px;overflow:hidden;transition:transform .15s,box-shadow .15s}
+.matchup{background:var(--card-bg);border:1px solid var(--card-border);border-radius:8px;width:195px;overflow:hidden;transition:transform .15s,box-shadow .15s}
 .matchup:hover{transform:translateY(-1px);box-shadow:0 3px 10px var(--hover-shadow)}
 .matchup-info{text-align:center;font-size:.58rem;color:var(--text-primary);padding:3px 6px;background:var(--bar-bg);border-bottom:1px solid var(--card-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .matchup-team{display:flex;align-items:center;padding:5px 8px;font-size:.74rem;gap:5px}
@@ -53,15 +53,10 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 /* Empty future matchups */
 .empty-future{opacity:.6;border-style:dashed}
 
-/* Round spacing for bracket feel */
-.round.r32-col .matchup{margin:3px 0}
-.round.r16-col .matchup{margin:22px 0}
-.round.qf-col .matchup{margin:60px 0}
-.round.sf-col .matchup{margin:140px 0}
-.round.final-col .matchup{margin:0}
+/* Bracket pair grouping — each pair stacks 2 matchups and centers them */
+.bracket-pair{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}
+.bracket-group{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}
 .round.final-col{justify-content:center}
-
-/* Connector lines (CSS-only) */
 .round.r16-col,.round.qf-col,.round.sf-col,.round.final-col{padding-top:20px}
 
 /* Legend */
@@ -87,109 +82,114 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 
 <div class="bracket-scroll">
 <div class="bracket-wrapper">
-<!-- LEFT SIDE -->
-<div class="round r32-col">
+<!-- LEFT SIDE: R32 → R16 → QF → SF -->
+<div class="round">
 <div class="round-label">Round of 32</div>
-<div class="matchup">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Foxborough · June 29</div>
 <div class="matchup-team winner"><span class="flag">GER</span><span class="team-name">Germany</span><span class="prob">84%</span></div>
 <div class="matchup-team loser"><span class="flag">PAR</span><span class="team-name">Paraguay</span><span class="prob">16%</span></div>
 <div class="goals-line">⚽ 2.5 exp | O1.5 72% | O2.5 47% | O3.5 25%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">East Rutherford · June 30</div>
 <div class="matchup-team winner"><span class="flag">FRA</span><span class="team-name">France</span><span class="prob">73%</span></div>
 <div class="matchup-team loser"><span class="flag">SWE</span><span class="team-name">Sweden</span><span class="prob">27%</span></div>
 <div class="goals-line">⚽ 3.2 exp | O1.5 83% | O2.5 62% | O3.5 40%</div>
-</div>
-<div class="matchup">
+</div></div>
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Inglewood · June 28</div>
 <div class="matchup-team loser"><span class="flag">RSA</span><span class="team-name">South Africa</span><span class="prob">21%</span></div>
 <div class="matchup-team winner"><span class="flag">CAN</span><span class="team-name">Canada</span><span class="prob">79%</span></div>
 <div class="goals-line">⚽ 2.4 exp | O1.5 70% | O2.5 44% | O3.5 23%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Guadalupe · June 29</div>
 <div class="matchup-team winner"><span class="flag">NED</span><span class="team-name">Netherlands</span><span class="prob">62%</span></div>
 <div class="matchup-team loser"><span class="flag">MAR</span><span class="team-name">Morocco</span><span class="prob">38%</span></div>
 <div class="goals-line">⚽ 3.0 exp | O1.5 80% | O2.5 58% | O3.5 36%</div>
-</div>
-<div class="matchup">
+</div></div>
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Toronto · July 2</div>
 <div class="matchup-team winner"><span class="flag">POR</span><span class="team-name">Portugal</span><span class="prob">61%</span></div>
 <div class="matchup-team loser"><span class="flag">CRO</span><span class="team-name">Croatia</span><span class="prob">39%</span></div>
 <div class="goals-line">⚽ 2.4 exp | O1.5 69% | O2.5 42% | O3.5 22%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Inglewood · July 2</div>
 <div class="matchup-team winner"><span class="flag">ESP</span><span class="team-name">Spain</span><span class="prob">70%</span></div>
 <div class="matchup-team loser"><span class="flag">AUT</span><span class="team-name">Austria</span><span class="prob">30%</span></div>
 <div class="goals-line">⚽ 2.4 exp | O1.5 68% | O2.5 42% | O3.5 21%</div>
-</div>
-<div class="matchup">
+</div></div>
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Santa Clara · July 1</div>
 <div class="matchup-team winner"><span class="flag">USA</span><span class="team-name">USA</span><span class="prob">69%</span></div>
 <div class="matchup-team loser"><span class="flag">BIH</span><span class="team-name">Bosnia</span><span class="prob">31%</span></div>
 <div class="goals-line">⚽ 2.6 exp | O1.5 73% | O2.5 48% | O3.5 26%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Seattle · July 1</div>
 <div class="matchup-team winner"><span class="flag">BEL</span><span class="team-name">Belgium</span><span class="prob">52%</span></div>
 <div class="matchup-team loser"><span class="flag">SEN</span><span class="team-name">Senegal</span><span class="prob">48%</span></div>
 <div class="goals-line">⚽ 3.0 exp | O1.5 81% | O2.5 59% | O3.5 36%</div>
+</div></div>
 </div>
 </div>
 
-<div class="round r16-col">
+<div class="round">
 <div class="round-label">Round of 16</div>
-<div class="matchup empty-future">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Philadelphia · July 4</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Houston · July 4</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Arlington · July 6</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Seattle · July 6</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div></div>
 </div>
 </div>
 
-<div class="round qf-col">
+<div class="round">
 <div class="round-label">Quarterfinals</div>
-<div class="matchup empty-future">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Foxborough · July 9</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Inglewood · July 10</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div></div>
 </div>
 </div>
 
-<div class="round sf-col">
+<div class="round">
 <div class="round-label">Semifinals</div>
-<div class="matchup empty-future">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Arlington · July 14</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div></div>
 </div>
 </div>
 
 <!-- CENTER: FINAL -->
 <div class="round final-col">
 <div class="round-label">Final</div>
+<div class="bracket-group">
 <div class="trophy">🏆</div>
 <div class="matchup empty-future">
 <div class="matchup-info">East Rutherford · July 19</div>
@@ -197,104 +197,109 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 </div>
 </div>
+</div>
 
-<!-- RIGHT SIDE -->
-<div class="round sf-col">
+<!-- RIGHT SIDE: SF → QF → R16 → R32 -->
+<div class="round">
 <div class="round-label">Semifinals</div>
-<div class="matchup empty-future">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Atlanta · July 15</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div></div>
 </div>
 </div>
 
-<div class="round qf-col">
+<div class="round">
 <div class="round-label">Quarterfinals</div>
-<div class="matchup empty-future">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Miami Gardens · July 11</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Kansas City · July 11</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div></div>
 </div>
 </div>
 
-<div class="round r16-col">
+<div class="round">
 <div class="round-label">Round of 16</div>
-<div class="matchup empty-future">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">East Rutherford · July 5</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Mexico City · July 5</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Atlanta · July 7</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
-</div>
-<div class="matchup empty-future">
+</div></div>
+<div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Vancouver · July 7</div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+</div></div>
 </div>
 </div>
 
-<div class="round r32-col">
+<div class="round">
 <div class="round-label">Round of 32</div>
-<div class="matchup">
+<div class="bracket-group">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Houston · June 29</div>
 <div class="matchup-team winner"><span class="flag">BRA</span><span class="team-name">Brazil</span><span class="prob">56%</span></div>
 <div class="matchup-team loser"><span class="flag">JPN</span><span class="team-name">Japan</span><span class="prob">44%</span></div>
 <div class="goals-line">⚽ 2.8 exp | O1.5 76% | O2.5 52% | O3.5 30%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Arlington · June 30</div>
 <div class="matchup-team loser"><span class="flag">CIV</span><span class="team-name">Ivory Coast</span><span class="prob">41%</span></div>
 <div class="matchup-team winner"><span class="flag">NOR</span><span class="team-name">Norway</span><span class="prob">59%</span></div>
 <div class="goals-line">⚽ 2.8 exp | O1.5 77% | O2.5 54% | O3.5 31%</div>
-</div>
-<div class="matchup">
+</div></div>
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Mexico City · June 30</div>
 <div class="matchup-team winner"><span class="flag">MEX</span><span class="team-name">Mexico</span><span class="prob">67%</span></div>
 <div class="matchup-team loser"><span class="flag">ECU</span><span class="team-name">Ecuador</span><span class="prob">33%</span></div>
 <div class="goals-line">⚽ 2.0 exp | O1.5 59% | O2.5 32% | O3.5 14%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Atlanta · July 1</div>
 <div class="matchup-team winner"><span class="flag">ENG</span><span class="team-name">England</span><span class="prob">66%</span></div>
 <div class="matchup-team loser"><span class="flag">COD</span><span class="team-name">DR Congo</span><span class="prob">34%</span></div>
 <div class="goals-line">⚽ 2.2 exp | O1.5 64% | O2.5 37% | O3.5 17%</div>
-</div>
-<div class="matchup">
+</div></div>
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Miami Gardens · July 3</div>
 <div class="matchup-team winner"><span class="flag">ARG</span><span class="team-name">Argentina</span><span class="prob">77%</span></div>
 <div class="matchup-team loser"><span class="flag">CPV</span><span class="team-name">Cape Verde</span><span class="prob">23%</span></div>
 <div class="goals-line">⚽ 2.3 exp | O1.5 68% | O2.5 41% | O3.5 21%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Arlington · July 3</div>
 <div class="matchup-team loser"><span class="flag">AUS</span><span class="team-name">Australia</span><span class="prob">35%</span></div>
 <div class="matchup-team winner"><span class="flag">EGY</span><span class="team-name">Egypt</span><span class="prob">65%</span></div>
 <div class="goals-line">⚽ 1.9 exp | O1.5 57% | O2.5 30% | O3.5 13%</div>
-</div>
-<div class="matchup">
+</div></div>
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Vancouver · July 2</div>
 <div class="matchup-team winner"><span class="flag">SUI</span><span class="team-name">Switzerland</span><span class="prob">61%</span></div>
 <div class="matchup-team loser"><span class="flag">ALG</span><span class="team-name">Algeria</span><span class="prob">39%</span></div>
 <div class="goals-line">⚽ 2.7 exp | O1.5 74% | O2.5 50% | O3.5 28%</div>
-</div>
-<div class="matchup">
+</div><div class="matchup">
 <div class="matchup-info">Kansas City · July 3</div>
 <div class="matchup-team winner"><span class="flag">COL</span><span class="team-name">Colombia</span><span class="prob">63%</span></div>
 <div class="matchup-team loser"><span class="flag">GHA</span><span class="team-name">Ghana</span><span class="prob">37%</span></div>
 <div class="goals-line">⚽ 1.6 exp | O1.5 49% | O2.5 23% | O3.5 8%</div>
+</div></div>
 </div>
 </div>
 </div>
