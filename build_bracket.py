@@ -360,9 +360,33 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .empty-future{{opacity:.6;border-style:dashed}}
 
 /* Bracket pair grouping — each pair stacks 2 matchups and centers them */
-.bracket-pair{{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}}
+.bracket-pair{{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1;position:relative}}
 .bracket-group{{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}}
 .round.final-col{{justify-content:center}}
+
+/* Connector lines for LEFT side R32 pairs */
+.left-side .bracket-pair{{padding-right:16px}}
+.left-side .bracket-pair::after{{
+    content:'';position:absolute;right:0;top:25%;bottom:25%;
+    border-right:2px solid var(--card-border);
+}}
+.left-side .bracket-pair .matchup{{position:relative}}
+.left-side .bracket-pair .matchup::after{{
+    content:'';position:absolute;right:-16px;top:50%;
+    width:16px;height:0;border-top:2px solid var(--card-border);
+}}
+
+/* Connector lines for RIGHT side R32 pairs */
+.right-side .bracket-pair{{padding-left:16px}}
+.right-side .bracket-pair::before{{
+    content:'';position:absolute;left:0;top:25%;bottom:25%;
+    border-left:2px solid var(--card-border);
+}}
+.right-side .bracket-pair .matchup{{position:relative}}
+.right-side .bracket-pair .matchup::before{{
+    content:'';position:absolute;left:-16px;top:50%;
+    width:16px;height:0;border-top:2px solid var(--card-border);
+}}
 .round.r16-col,.round.qf-col,.round.sf-col,.round.final-col{{padding-top:20px}}
 
 /* Legend */
@@ -389,7 +413,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 <div class="bracket-scroll">
 <div class="bracket-wrapper">
 <!-- LEFT SIDE: R32 → R16 → QF → SF -->
-<div class="round">
+<div class="round left-side">
 <div class="round-label">Round of 32</div>
 <div class="bracket-group">
 <div class="bracket-pair">{l_r32_0}{l_r32_1}</div>
@@ -399,7 +423,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 
-<div class="round">
+<div class="round left-side">
 <div class="round-label">Round of 16</div>
 <div class="bracket-group">
 <div class="bracket-pair">{l_r16_0}</div>
@@ -409,7 +433,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 
-<div class="round">
+<div class="round left-side">
 <div class="round-label">Quarterfinals</div>
 <div class="bracket-group">
 <div class="bracket-pair">{l_qf_0}</div>
@@ -417,7 +441,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 
-<div class="round">
+<div class="round left-side">
 <div class="round-label">Semifinals</div>
 <div class="bracket-group">
 <div class="bracket-pair">{l_sf_0}</div>
@@ -434,14 +458,14 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 
 <!-- RIGHT SIDE: SF → QF → R16 → R32 -->
-<div class="round">
+<div class="round right-side">
 <div class="round-label">Semifinals</div>
 <div class="bracket-group">
 <div class="bracket-pair">{r_sf_0}</div>
 </div>
 </div>
 
-<div class="round">
+<div class="round right-side">
 <div class="round-label">Quarterfinals</div>
 <div class="bracket-group">
 <div class="bracket-pair">{r_qf_0}</div>
@@ -449,7 +473,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 
-<div class="round">
+<div class="round right-side">
 <div class="round-label">Round of 16</div>
 <div class="bracket-group">
 <div class="bracket-pair">{r_r16_0}</div>
@@ -459,7 +483,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 
-<div class="round">
+<div class="round right-side">
 <div class="round-label">Round of 32</div>
 <div class="bracket-group">
 <div class="bracket-pair">{r_r32_0}{r_r32_1}</div>
