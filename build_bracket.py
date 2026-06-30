@@ -257,8 +257,8 @@ def generate_bracket_html(results, bracket, all_scores):
         flag_a = FLAGS.get(team_a, "???")
         flag_b = FLAGS.get(team_b, "???")
 
-        cls_a = "winner" if winner == team_a else "loser"
-        cls_b = "winner" if winner == team_b else "loser"
+        cls_a = "predicted-winner" if winner == team_a else "loser"
+        cls_b = "predicted-winner" if winner == team_b else "loser"
 
         short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
         short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
