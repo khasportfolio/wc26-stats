@@ -34,7 +34,7 @@ DIM_WEIGHTS = {
 import sys
 sys.path.insert(0, SCRIPT_DIR)
 from build_r32_dashboard import (
-    read_team_matches, compute_match_score, safe_mean, parse_float, DIMS
+    read_team_matches, compute_match_score, safe_mean, weighted_mean, parse_float, DIMS
 )
 
 # Country codes for display (consistent, no emoji rendering issues)
@@ -52,21 +52,21 @@ FLAGS = {
 
 
 def compute_team_raw_scores(team_name):
-    """Compute average raw dimension scores for a team (unnormalized)."""
+    """Compute recency-weighted raw dimension scores for a team."""
     matches = read_team_matches(team_name)
     if not matches:
         return None
     scores = {}
     for dim in DIMS:
         per_match = [compute_match_score(m, dim) for m in matches]
-        scores[dim] = safe_mean(per_match)
+        scores[dim] = weighted_mean(per_match)
     scores["matches"] = len(matches)
-    # Stats for goals prediction
-    scores["goals_avg"] = safe_mean([parse_float(m.get("Goals")) for m in matches])
-    scores["xg_avg"] = safe_mean([parse_float(m.get("xG")) for m in matches])
-    scores["xgc_avg"] = safe_mean([parse_float(m.get("xG conceded")) for m in matches])
-    scores["goals_conceded_avg"] = safe_mean([parse_float(m.get("Goals conceded")) for m in matches])
-    scores["sot_avg"] = safe_mean([parse_float(m.get("Shots on target")) for m in matches])
+    # Stats for goals prediction (also recency-weighted)
+    scores["goals_avg"] = weighted_mean([parse_float(m.get("Goals")) for m in matches])
+    scores["xg_avg"] = weighted_mean([parse_float(m.get("xG")) for m in matches])
+    scores["xgc_avg"] = weighted_mean([parse_float(m.get("xG conceded")) for m in matches])
+    scores["goals_conceded_avg"] = weighted_mean([parse_float(m.get("Goals conceded")) for m in matches])
+    scores["sot_avg"] = weighted_mean([parse_float(m.get("Shots on target")) for m in matches])
     return scores
 
 

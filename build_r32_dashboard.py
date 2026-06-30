@@ -41,6 +41,25 @@ def safe_mean(values):
     return mean(cleaned) if cleaned else 0
 
 
+def weighted_mean(values, decay=1.5):
+    """
+    Recency-weighted mean. More recent values (later in the list) get higher weight.
+
+    Uses exponential weighting: weight_i = decay^i (where i=0 is oldest).
+    For 3 matches with decay=1.5: weights ≈ [1.0, 1.5, 2.25] → normalized [0.21, 0.32, 0.47]
+    This means the most recent match counts ~2.25x more than the oldest.
+    """
+    cleaned = [v for v in values if v is not None]
+    if not cleaned:
+        return 0
+    n = len(cleaned)
+    if n == 1:
+        return cleaned[0]
+    weights = [decay ** i for i in range(n)]
+    total_weight = sum(weights)
+    return sum(v * w for v, w in zip(cleaned, weights)) / total_weight
+
+
 def read_qualified_teams():
     filepath = os.path.join(DATA_DIR, "qualified_r32.txt")
     teams = []
@@ -105,22 +124,23 @@ def compute_team_dimensions(team_name, matches):
         for dim in DIMS:
             per_match_scores[dim].append(compute_match_score(m, dim))
 
-    avg_scores = {f"_{dim}_score": safe_mean(per_match_scores[dim]) for dim in DIMS}
+    # Use recency-weighted mean: most recent match counts ~2.25x more than oldest
+    avg_scores = {f"_{dim}_score": weighted_mean(per_match_scores[dim]) for dim in DIMS}
 
     return {
         "team": team_name,
         "matches": len(matches),
         "_matches": matches,
-        "avg_goals": round(safe_mean([parse_float(m.get("Goals")) for m in matches]), 2),
-        "avg_xg": round(safe_mean([parse_float(m.get("xG")) for m in matches]), 2),
-        "avg_xa": round(safe_mean([parse_float(m.get("xA")) for m in matches]), 2),
-        "avg_possession": round(safe_mean([parse_float(m.get("Possession")) for m in matches]), 1),
-        "avg_pass_acc": round(safe_mean([parse_float(m.get("Pass Accuracy")) for m in matches]), 1),
-        "avg_xg_conceded": round(safe_mean([parse_float(m.get("xG conceded")) for m in matches]), 2),
-        "avg_tackles": round(safe_mean([parse_float(m.get("Tackles won")) for m in matches]), 1),
-        "avg_ppda": round(safe_mean([parse_float(m.get("PPDA")) for m in matches]), 1),
-        "avg_recoveries": round(safe_mean([parse_float(m.get("Ball recoveries")) for m in matches]), 1),
-        "avg_duels_won": round(safe_mean([parse_float(m.get("Duels won")) for m in matches]), 1),
+        "avg_goals": round(weighted_mean([parse_float(m.get("Goals")) for m in matches]), 2),
+        "avg_xg": round(weighted_mean([parse_float(m.get("xG")) for m in matches]), 2),
+        "avg_xa": round(weighted_mean([parse_float(m.get("xA")) for m in matches]), 2),
+        "avg_possession": round(weighted_mean([parse_float(m.get("Possession")) for m in matches]), 1),
+        "avg_pass_acc": round(weighted_mean([parse_float(m.get("Pass Accuracy")) for m in matches]), 1),
+        "avg_xg_conceded": round(weighted_mean([parse_float(m.get("xG conceded")) for m in matches]), 2),
+        "avg_tackles": round(weighted_mean([parse_float(m.get("Tackles won")) for m in matches]), 1),
+        "avg_ppda": round(weighted_mean([parse_float(m.get("PPDA")) for m in matches]), 1),
+        "avg_recoveries": round(weighted_mean([parse_float(m.get("Ball recoveries")) for m in matches]), 1),
+        "avg_duels_won": round(weighted_mean([parse_float(m.get("Duels won")) for m in matches]), 1),
         **avg_scores,
     }
 
