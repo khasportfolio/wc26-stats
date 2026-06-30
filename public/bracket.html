@@ -51,6 +51,8 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 .matchup-team.predicted-winner{font-weight:700;color:#E89B2D}
 .matchup-team.predicted-winner .prob{opacity:1}
 .matchup-team.loser{color:var(--lose-gray)}
+.matchup-team.tossup{font-weight:600;color:var(--text-primary)}
+.matchup-team.tossup .prob{opacity:.8}
 .matchup-team.tbd{color:var(--text-muted);font-style:italic}
 .goals-line{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}
 
@@ -97,6 +99,7 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 .leg-box{width:12px;height:12px;border-radius:2px}
 .leg-winner{background:var(--win-green)}
 .leg-predicted{background:#E89B2D}
+.leg-tossup{background:var(--text-primary)}
 .leg-empty{background:var(--bar-bg);border:1px dashed var(--card-border)}
 
 /* Trophy */
@@ -111,6 +114,7 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="legend">
 <div class="legend-item"><div class="leg-box leg-winner"></div>Actual winner</div>
 <div class="legend-item"><div class="leg-box leg-predicted"></div>Predicted winner</div>
+<div class="legend-item"><div class="leg-box leg-tossup"></div>Toss-up (≤52%)</div>
 <div class="legend-item"><div class="leg-box leg-empty"></div>TBD (future rounds)</div>
 </div>
 
@@ -155,8 +159,8 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="matchup-team loser"><span class="flag">BIH</span><span class="team-name">Bosnia</span><span class="prob">38%</span></div>
 </div><div class="matchup">
 <div class="matchup-info">Seattle · July 1</div>
-<div class="matchup-team predicted-winner"><span class="flag">BEL</span><span class="team-name">Belgium</span><span class="prob">50%</span></div>
-<div class="matchup-team loser"><span class="flag">SEN</span><span class="team-name">Senegal</span><span class="prob">50%</span></div>
+<div class="matchup-team tossup"><span class="flag">BEL</span><span class="team-name">Belgium</span><span class="prob">50%</span></div>
+<div class="matchup-team tossup"><span class="flag">SEN</span><span class="team-name">Senegal</span><span class="prob">50%</span></div>
 </div></div>
 </div>
 </div>
@@ -291,8 +295,8 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="score-line">FT: 2-1</div>
 </div><div class="matchup">
 <div class="matchup-info">Arlington · June 30</div>
-<div class="matchup-team predicted-winner"><span class="flag">CIV</span><span class="team-name">Ivory Coast</span><span class="prob">50%</span></div>
-<div class="matchup-team loser"><span class="flag">NOR</span><span class="team-name">Norway</span><span class="prob">50%</span></div>
+<div class="matchup-team tossup"><span class="flag">CIV</span><span class="team-name">Ivory Coast</span><span class="prob">50%</span></div>
+<div class="matchup-team tossup"><span class="flag">NOR</span><span class="team-name">Norway</span><span class="prob">50%</span></div>
 </div></div>
 <div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Mexico City · June 30</div>
@@ -318,8 +322,8 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="matchup-team loser"><span class="flag">ALG</span><span class="team-name">Algeria</span><span class="prob">43%</span></div>
 </div><div class="matchup">
 <div class="matchup-info">Kansas City · July 3</div>
-<div class="matchup-team loser"><span class="flag">COL</span><span class="team-name">Colombia</span><span class="prob">48%</span></div>
-<div class="matchup-team predicted-winner"><span class="flag">GHA</span><span class="team-name">Ghana</span><span class="prob">52%</span></div>
+<div class="matchup-team tossup"><span class="flag">COL</span><span class="team-name">Colombia</span><span class="prob">48%</span></div>
+<div class="matchup-team tossup"><span class="flag">GHA</span><span class="team-name">Ghana</span><span class="prob">52%</span></div>
 </div></div>
 </div>
 </div>

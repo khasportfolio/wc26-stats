@@ -280,13 +280,14 @@ def generate_bracket_html(results, bracket, all_scores):
                 pred_winner = team_a
 
             # Color logic: orange = predicted winner, green = actual winner
+            # If prediction was a toss-up (<= 52%), don't show orange
+            is_tossup = abs(orig_pct_a - 50) <= 2
+
             def get_cls(team):
-                if team == actual_winner and team == pred_winner:
-                    return "actual-winner"  # green (correct prediction)
-                elif team == actual_winner:
-                    return "actual-winner"  # green (upset)
-                elif team == pred_winner:
-                    return "predicted-winner"  # orange (wrong prediction)
+                if team == actual_winner:
+                    return "actual-winner"  # green
+                elif team == pred_winner and not is_tossup:
+                    return "predicted-winner"  # orange (clear prediction was wrong)
                 else:
                     return "loser"
 
@@ -307,6 +308,11 @@ def generate_bracket_html(results, bracket, all_scores):
         prob_b = r["prob_b"]
         pct_a = round(prob_a * 100)
         pct_b = 100 - pct_a
+
+        # If within 52/48 range, treat as toss-up — no highlight
+        if abs(pct_a - 50) <= 2:
+            cls_a = "tossup"
+            cls_b = "tossup"
 
         if team_b == "TBD":
             return f'''<div class="matchup">
@@ -437,6 +443,8 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .matchup-team.predicted-winner{{font-weight:700;color:#E89B2D}}
 .matchup-team.predicted-winner .prob{{opacity:1}}
 .matchup-team.loser{{color:var(--lose-gray)}}
+.matchup-team.tossup{{font-weight:600;color:var(--text-primary)}}
+.matchup-team.tossup .prob{{opacity:.8}}
 .matchup-team.tbd{{color:var(--text-muted);font-style:italic}}
 .goals-line{{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}}
 
@@ -483,6 +491,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .leg-box{{width:12px;height:12px;border-radius:2px}}
 .leg-winner{{background:var(--win-green)}}
 .leg-predicted{{background:#E89B2D}}
+.leg-tossup{{background:var(--text-primary)}}
 .leg-empty{{background:var(--bar-bg);border:1px dashed var(--card-border)}}
 
 /* Trophy */
@@ -497,6 +506,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 <div class="legend">
 <div class="legend-item"><div class="leg-box leg-winner"></div>Actual winner</div>
 <div class="legend-item"><div class="leg-box leg-predicted"></div>Predicted winner</div>
+<div class="legend-item"><div class="leg-box leg-tossup"></div>Toss-up (≤52%)</div>
 <div class="legend-item"><div class="leg-box leg-empty"></div>TBD (future rounds)</div>
 </div>
 
