@@ -323,16 +323,16 @@ def generate_bracket_html(results, bracket, all_scores):
 
     # Build empty slot HTML for later rounds
     def empty_slot_html(match_info):
-        """Show future round slot, filling in team names from completed R32 matches."""
+        """Show future round slot, filling in team names ONLY from completed R32 matches."""
         team_a_ref = match_info.get("team_a", "")
         team_b_ref = match_info.get("team_b", "")
 
-        # Resolve W## references to actual winners from R32 results
+        # Resolve W## references ONLY if that match is actually completed
         def resolve(ref):
             if ref.startswith("W"):
                 match_num = int(ref[1:])
                 r = results.get(match_num)
-                if r and r.get("winner") and r["winner"] != "TBD":
+                if r and r.get("completed") and r.get("winner") and r["winner"] != "TBD":
                     return r["winner"]
             return None
 
