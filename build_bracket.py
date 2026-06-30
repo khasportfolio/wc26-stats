@@ -209,7 +209,7 @@ def predict_r32(bracket, all_scores, actual_results=None):
     return results
 
 
-def generate_bracket_html(results, bracket):
+def generate_bracket_html(results, bracket, all_scores):
     """Generate bracket.html with traditional sports bracket layout."""
 
     nav_html = ' &middot; '.join([
@@ -263,14 +263,28 @@ def generate_bracket_html(results, bracket):
         short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
         short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
 
-        # Completed match — show actual score
+        # Completed match — show actual score AND original prediction
         if r.get("completed"):
             score = r.get("score", "")
+            # Recalculate what the prediction was (from scores)
+            scores_a = all_scores.get(team_a)
+            scores_b = all_scores.get(team_b)
+            if scores_a and scores_b:
+                orig_prob_a, orig_prob_b = compute_win_probability(scores_a, scores_b)
+                orig_pct_a = round(orig_prob_a * 100)
+                orig_pct_b = 100 - orig_pct_a
+                pred_winner = team_a if orig_prob_a >= 0.5 else team_b
+                pred_cls_a = "winner" if pred_winner == team_a else "loser"
+                pred_cls_b = "winner" if pred_winner == team_b else "loser"
+            else:
+                orig_pct_a, orig_pct_b = 50, 50
+                pred_cls_a, pred_cls_b = "loser", "loser"
+
             return f'''<div class="matchup completed">
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
-<div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob"></span></div>
-<div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob"></span></div>
-<div class="score-line">FT: {score}</div>
+<div class="matchup-team {pred_cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{orig_pct_a}%</span></div>
+<div class="matchup-team {pred_cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{orig_pct_b}%</span></div>
+<div class="score-line">FT: {score} — {winner} advances</div>
 </div>'''
 
         # Prediction for upcoming match
@@ -600,7 +614,7 @@ def main():
 
     # Generate HTML
     print("\n[5] Generating bracket page...")
-    generate_bracket_html(results, bracket)
+    generate_bracket_html(results, bracket, all_scores)
 
     print("\n" + "=" * 60)
     print("  Done!")
