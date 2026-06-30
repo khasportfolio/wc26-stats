@@ -263,24 +263,35 @@ def generate_bracket_html(results, bracket, all_scores):
         short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
         short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
 
-        # Completed match — show prediction AND actual result
+        # Completed match — orange for predicted winner, green for actual winner
         if r.get("completed"):
             score = r.get("score", "")
             actual_winner = r["winner"]
-            # Recalculate what the prediction was (from scores)
+            # Recalculate what the prediction was
             scores_a = all_scores.get(team_a)
             scores_b = all_scores.get(team_b)
             if scores_a and scores_b:
                 orig_prob_a, orig_prob_b = compute_win_probability(scores_a, scores_b)
                 orig_pct_a = round(orig_prob_a * 100)
                 orig_pct_b = 100 - orig_pct_a
+                pred_winner = team_a if orig_prob_a >= 0.5 else team_b
             else:
                 orig_pct_a, orig_pct_b = 50, 50
+                pred_winner = team_a
 
-            # Highlight the actual winner (not the prediction)
-            cls_a = "winner" if actual_winner == team_a else "loser"
-            cls_b = "winner" if actual_winner == team_b else "loser"
-            # Add ✓ next to advancing team name
+            # Color logic: orange = predicted winner, green = actual winner
+            def get_cls(team):
+                if team == actual_winner and team == pred_winner:
+                    return "actual-winner"  # green (correct prediction)
+                elif team == actual_winner:
+                    return "actual-winner"  # green (upset)
+                elif team == pred_winner:
+                    return "predicted-winner"  # orange (wrong prediction)
+                else:
+                    return "loser"
+
+            cls_a = get_cls(team_a)
+            cls_b = get_cls(team_b)
             adv_a = " ✓" if actual_winner == team_a else ""
             adv_b = " ✓" if actual_winner == team_b else ""
 
@@ -294,15 +305,8 @@ def generate_bracket_html(results, bracket, all_scores):
         # Prediction for upcoming match
         prob_a = r["prob_a"]
         prob_b = r["prob_b"]
-        goals = r.get("goals", {})
         pct_a = round(prob_a * 100)
         pct_b = 100 - pct_a
-
-        total = goals.get("total", 0) if goals else 0
-        o15 = goals.get("over_1_5", 0) if goals else 0
-        o25 = goals.get("over_2_5", 0) if goals else 0
-        o35 = goals.get("over_3_5", 0) if goals else 0
-        goals_html = f'<div class="goals-line">\u26bd {total:.1f} exp | O1.5 {o15:.0%} | O2.5 {o25:.0%} | O3.5 {o35:.0%}</div>' if total > 0 else ''
 
         if team_b == "TBD":
             return f'''<div class="matchup">
@@ -315,7 +319,6 @@ def generate_bracket_html(results, bracket, all_scores):
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
-{goals_html}
 </div>'''
 
     # Build empty slot HTML for later rounds
@@ -429,6 +432,10 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .matchup-team .prob{{margin-left:auto;font-size:.62rem;font-weight:600;opacity:.7;flex-shrink:0}}
 .matchup-team.winner{{font-weight:700;color:var(--win-green)}}
 .matchup-team.winner .prob{{opacity:1}}
+.matchup-team.actual-winner{{font-weight:700;color:var(--win-green)}}
+.matchup-team.actual-winner .prob{{opacity:1}}
+.matchup-team.predicted-winner{{font-weight:700;color:#E89B2D}}
+.matchup-team.predicted-winner .prob{{opacity:1}}
 .matchup-team.loser{{color:var(--lose-gray)}}
 .matchup-team.tbd{{color:var(--text-muted);font-style:italic}}
 .goals-line{{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}}
@@ -475,6 +482,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .legend-item{{display:flex;align-items:center;gap:4px}}
 .leg-box{{width:12px;height:12px;border-radius:2px}}
 .leg-winner{{background:var(--win-green)}}
+.leg-predicted{{background:#E89B2D}}
 .leg-empty{{background:var(--bar-bg);border:1px dashed var(--card-border)}}
 
 /* Trophy */
@@ -487,7 +495,8 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 <p class="methodology">Only Round of 32 matchups are predicted. Later rounds show venue &amp; date placeholders.</p>
 <div class="nav">{nav_html}</div>
 <div class="legend">
-<div class="legend-item"><div class="leg-box leg-winner"></div>Predicted winner</div>
+<div class="legend-item"><div class="leg-box leg-winner"></div>Actual winner</div>
+<div class="legend-item"><div class="leg-box leg-predicted"></div>Predicted winner</div>
 <div class="legend-item"><div class="leg-box leg-empty"></div>TBD (future rounds)</div>
 </div>
 
