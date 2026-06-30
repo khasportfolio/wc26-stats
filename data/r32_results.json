@@ -1,0 +1,9 @@
+{
+  "description": "Round of 32 actual results (updated as matches complete)",
+  "completed": [
+    {"match": 73, "team_a": "South Africa", "team_b": "Canada", "score_a": 0, "score_b": 1, "winner": "Canada", "extra_time": false, "penalties": false},
+    {"match": 74, "team_a": "Germany", "team_b": "Paraguay", "score_a": 1, "score_b": 1, "winner": "Paraguay", "extra_time": true, "penalties": true, "pen_a": 3, "pen_b": 4},
+    {"match": 76, "team_a": "Brazil", "team_b": "Japan", "score_a": 2, "score_b": 1, "winner": "Brazil", "extra_time": false, "penalties": false}
+  ],
+  "upcoming": [75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88]
+}

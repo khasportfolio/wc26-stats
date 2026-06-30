@@ -147,13 +147,38 @@ def predict_match_goals(scores_a, scores_b):
     }
 
 
-def predict_r32(bracket, all_scores):
-    """Predict R32 results only. Returns dict of match_num -> result."""
+def predict_r32(bracket, all_scores, actual_results=None):
+    """Predict R32 results. Uses actual results for completed matches."""
     results = {}
+    # Index actual results by match number
+    completed = {}
+    if actual_results:
+        for r in actual_results.get("completed", []):
+            completed[r["match"]] = r
+
     for match in bracket["r32"]:
         match_num = match["match"]
         team_a = match["team_a"]
         team_b = match["team_b"]
+
+        # If match has actual result, use it
+        if match_num in completed:
+            actual = completed[match_num]
+            score_str = f"{actual['score_a']}-{actual['score_b']}"
+            if actual.get("penalties"):
+                score_str += f" (pen {actual['pen_a']}-{actual['pen_b']})"
+            elif actual.get("extra_time"):
+                score_str += " (AET)"
+            results[match_num] = {
+                "team_a": team_a, "team_b": team_b,
+                "winner": actual["winner"],
+                "score": score_str,
+                "completed": True,
+                "prob_a": None, "prob_b": None,
+                "goals": None,
+                "date": match["date"], "venue": match["venue"],
+            }
+            continue
 
         if team_a == "TBD" or team_b == "TBD":
             results[match_num] = {
@@ -161,6 +186,7 @@ def predict_r32(bracket, all_scores):
                 "winner": team_a if team_b == "TBD" else (team_b if team_a == "TBD" else "TBD"),
                 "prob_a": 0.5, "prob_b": 0.5,
                 "goals": {"total": 0, "over_1_5": 0, "over_2_5": 0, "over_3_5": 0},
+                "completed": False,
                 "date": match["date"], "venue": match["venue"],
             }
             continue
@@ -176,6 +202,7 @@ def predict_r32(bracket, all_scores):
             "winner": winner,
             "prob_a": prob_a, "prob_b": round(1 - prob_a, 3),
             "goals": goals,
+            "completed": False,
             "date": match["date"], "venue": match["venue"],
         }
 
@@ -226,29 +253,38 @@ def generate_bracket_html(results, bracket):
 
         team_a = r["team_a"]
         team_b = r["team_b"]
-        prob_a = r["prob_a"]
-        prob_b = r["prob_b"]
         winner = r["winner"]
-        goals = r.get("goals", {})
         flag_a = FLAGS.get(team_a, "???")
         flag_b = FLAGS.get(team_b, "???")
-
-        pct_a = round(prob_a * 100)
-        pct_b = 100 - pct_a
 
         cls_a = "winner" if winner == team_a else "loser"
         cls_b = "winner" if winner == team_b else "loser"
 
-        # Short names for display
         short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
         short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
 
-        # Goals prediction line
-        total = goals.get("total", 0)
-        o15 = goals.get("over_1_5", 0)
-        o25 = goals.get("over_2_5", 0)
-        o35 = goals.get("over_3_5", 0)
-        goals_html = f'<div class="goals-line">⚽ {total:.1f} exp | O1.5 {o15:.0%} | O2.5 {o25:.0%} | O3.5 {o35:.0%}</div>' if total > 0 else ''
+        # Completed match — show actual score
+        if r.get("completed"):
+            score = r.get("score", "")
+            return f'''<div class="matchup completed">
+<div class="matchup-info">{r["venue"]} · {r["date"]}</div>
+<div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob"></span></div>
+<div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob"></span></div>
+<div class="score-line">FT: {score}</div>
+</div>'''
+
+        # Prediction for upcoming match
+        prob_a = r["prob_a"]
+        prob_b = r["prob_b"]
+        goals = r.get("goals", {})
+        pct_a = round(prob_a * 100)
+        pct_b = 100 - pct_a
+
+        total = goals.get("total", 0) if goals else 0
+        o15 = goals.get("over_1_5", 0) if goals else 0
+        o25 = goals.get("over_2_5", 0) if goals else 0
+        o35 = goals.get("over_3_5", 0) if goals else 0
+        goals_html = f'<div class="goals-line">\u26bd {total:.1f} exp | O1.5 {o15:.0%} | O2.5 {o25:.0%} | O3.5 {o35:.0%}</div>' if total > 0 else ''
 
         if team_b == "TBD":
             return f'''<div class="matchup">
@@ -358,6 +394,10 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
+
+/* Completed matches */
+.matchup.completed{{border-color:var(--win-green);border-left:3px solid var(--win-green)}}
+.score-line{{font-size:.6rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border);font-weight:600}}
 
 /* Bracket pair grouping — each pair stacks 2 matchups and centers them */
 .bracket-pair{{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1;position:relative}}
@@ -530,22 +570,36 @@ def main():
             all_scores[team] = scores
             print(f"    {team:30s} — {scores['matches']} matches")
 
-    # Predict R32 only
-    print(f"\n[3] Predicting R32 matchups ({len(all_scores)} teams)...")
-    results = predict_r32(bracket, all_scores)
+    # Load actual R32 results
+    print("\n[3] Loading R32 results...")
+    r32_results_path = os.path.join(DATA_DIR, "r32_results.json")
+    actual_results = None
+    if os.path.exists(r32_results_path):
+        with open(r32_results_path, "r", encoding="utf-8") as f:
+            actual_results = json.load(f)
+        completed_count = len(actual_results.get("completed", []))
+        print(f"    {completed_count} matches completed, {len(actual_results.get('upcoming', []))} upcoming")
+    else:
+        print("    No results file found — all predictions")
 
-    # Print R32 predictions
-    print("\n    Round of 32 Predictions:")
+    # Predict R32 (uses actual results for completed matches)
+    print(f"\n[4] Predicting R32 matchups ({len(all_scores)} teams)...")
+    results = predict_r32(bracket, all_scores, actual_results)
+
+    # Print R32 results/predictions
+    print("\n    Round of 32:")
     for match in bracket["r32"]:
         r = results[match["match"]]
-        if r["team_b"] == "TBD":
+        if r.get("completed"):
+            print(f"    M{match['match']}: {r['team_a']:20s} vs {r['team_b']:20s} → {r['winner']} (FINAL: {r['score']})")
+        elif r["team_b"] == "TBD":
             print(f"    M{match['match']}: {r['team_a']:20s} vs {'TBD':20s} → {r['winner']} (BYE)")
         else:
             prob = max(r["prob_a"], r["prob_b"])
             print(f"    M{match['match']}: {r['team_a']:20s} vs {r['team_b']:20s} → {r['winner']} ({prob:.0%})")
 
     # Generate HTML
-    print("\n[4] Generating bracket page...")
+    print("\n[5] Generating bracket page...")
     generate_bracket_html(results, bracket)
 
     print("\n" + "=" * 60)

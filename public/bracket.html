@@ -53,6 +53,10 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 /* Empty future matchups */
 .empty-future{opacity:.6;border-style:dashed}
 
+/* Completed matches */
+.matchup.completed{border-color:var(--win-green);border-left:3px solid var(--win-green)}
+.score-line{font-size:.6rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border);font-weight:600}
+
 /* Bracket pair grouping — each pair stacks 2 matchups and centers them */
 .bracket-pair{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1;position:relative}
 .bracket-group{display:flex;flex-direction:column;justify-content:center;gap:8px;flex:1}
@@ -110,22 +114,22 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="round left-side">
 <div class="round-label">Round of 32</div>
 <div class="bracket-group">
-<div class="bracket-pair"><div class="matchup">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Foxborough · June 29</div>
-<div class="matchup-team winner"><span class="flag">GER</span><span class="team-name">Germany</span><span class="prob">82%</span></div>
-<div class="matchup-team loser"><span class="flag">PAR</span><span class="team-name">Paraguay</span><span class="prob">18%</span></div>
-<div class="goals-line">⚽ 2.1 exp | O1.5 63% | O2.5 36% | O3.5 17%</div>
+<div class="matchup-team loser"><span class="flag">GER</span><span class="team-name">Germany</span><span class="prob"></span></div>
+<div class="matchup-team winner"><span class="flag">PAR</span><span class="team-name">Paraguay</span><span class="prob"></span></div>
+<div class="score-line">FT: 1-1 (pen 3-4)</div>
 </div><div class="matchup">
 <div class="matchup-info">East Rutherford · June 30</div>
 <div class="matchup-team winner"><span class="flag">FRA</span><span class="team-name">France</span><span class="prob">75%</span></div>
 <div class="matchup-team loser"><span class="flag">SWE</span><span class="team-name">Sweden</span><span class="prob">25%</span></div>
 <div class="goals-line">⚽ 3.1 exp | O1.5 81% | O2.5 60% | O3.5 37%</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Inglewood · June 28</div>
-<div class="matchup-team loser"><span class="flag">RSA</span><span class="team-name">South Africa</span><span class="prob">23%</span></div>
-<div class="matchup-team winner"><span class="flag">CAN</span><span class="team-name">Canada</span><span class="prob">77%</span></div>
-<div class="goals-line">⚽ 2.5 exp | O1.5 71% | O2.5 45% | O3.5 24%</div>
+<div class="matchup-team loser"><span class="flag">RSA</span><span class="team-name">South Africa</span><span class="prob"></span></div>
+<div class="matchup-team winner"><span class="flag">CAN</span><span class="team-name">Canada</span><span class="prob"></span></div>
+<div class="score-line">FT: 0-1</div>
 </div><div class="matchup">
 <div class="matchup-info">Guadalupe · June 29</div>
 <div class="matchup-team winner"><span class="flag">NED</span><span class="team-name">Netherlands</span><span class="prob">60%</span></div>
@@ -280,11 +284,11 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="round right-side">
 <div class="round-label">Round of 32</div>
 <div class="bracket-group">
-<div class="bracket-pair"><div class="matchup">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Houston · June 29</div>
-<div class="matchup-team winner"><span class="flag">BRA</span><span class="team-name">Brazil</span><span class="prob">58%</span></div>
-<div class="matchup-team loser"><span class="flag">JPN</span><span class="team-name">Japan</span><span class="prob">42%</span></div>
-<div class="goals-line">⚽ 2.9 exp | O1.5 79% | O2.5 56% | O3.5 34%</div>
+<div class="matchup-team winner"><span class="flag">BRA</span><span class="team-name">Brazil</span><span class="prob"></span></div>
+<div class="matchup-team loser"><span class="flag">JPN</span><span class="team-name">Japan</span><span class="prob"></span></div>
+<div class="score-line">FT: 2-1</div>
 </div><div class="matchup">
 <div class="matchup-info">Arlington · June 30</div>
 <div class="matchup-team winner"><span class="flag">CIV</span><span class="team-name">Ivory Coast</span><span class="prob">50%</span></div>
