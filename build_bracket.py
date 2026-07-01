@@ -230,6 +230,56 @@ def predict_r32(bracket, all_scores, actual_results=None, frozen_predictions=Non
     return results
 
 
+def build_tooltip_html(team_a, team_b, all_scores):
+    """Build a tooltip div showing per-dimension breakdown for a matchup."""
+    scores_a = all_scores.get(team_a)
+    scores_b = all_scores.get(team_b)
+    if not scores_a or not scores_b:
+        return ""
+
+    DIM_LABELS = {
+        "finishing": "Finishing", "defense": "Defense", "control": "Control",
+        "creation": "Creation", "pressing": "Pressing", "physicality": "Physicality",
+    }
+    DIM_ORDER = ["finishing", "defense", "control", "creation", "pressing", "physicality"]
+
+    short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
+    short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
+
+    lines = []
+    a_wins = 0
+    b_wins = 0
+    for dim in DIM_ORDER:
+        weight_pct = int(DIM_WEIGHTS[dim] * 100)
+        val_a = scores_a[dim]
+        val_b = scores_b[dim]
+        diff = abs(val_a - val_b)
+        avg_mag = (abs(val_a) + abs(val_b)) / 2
+        # Consider it "even" if relative difference < 5%
+        if avg_mag > 0 and diff / avg_mag < 0.05:
+            edge = "Even"
+        elif val_a > val_b:
+            edge = short_a
+            a_wins += 1
+        else:
+            edge = short_b
+            b_wins += 1
+        lines.append(
+            f'{DIM_LABELS[dim]} ({weight_pct}%): {short_a} {val_a:.1f} vs {short_b} {val_b:.1f} → {edge}'
+        )
+
+    # Summary line
+    if a_wins > b_wins:
+        summary = f"Key: {short_a} dominates {a_wins}/6 dimensions"
+    elif b_wins > a_wins:
+        summary = f"Key: {short_b} dominates {b_wins}/6 dimensions"
+    else:
+        summary = "Key: Teams evenly matched across dimensions"
+
+    tooltip_content = "<br>".join(lines) + f"<br><br>{summary}"
+    return f'<div class="tooltip">{tooltip_content}</div>'
+
+
 def generate_bracket_html(results, bracket, all_scores):
     """Generate bracket.html with traditional sports bracket layout."""
 
@@ -342,10 +392,12 @@ def generate_bracket_html(results, bracket, all_scores):
 <div class="matchup-team loser"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">—</span></div>
 </div>'''
 
-        return f'''<div class="matchup">
+        tooltip = build_tooltip_html(team_a, team_b, all_scores)
+        return f'''<div class="matchup has-tooltip">
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
+{tooltip}
 </div>'''
 
     # Build empty slot HTML for later rounds
@@ -390,10 +442,12 @@ def generate_bracket_html(results, bracket, all_scores):
                 flag_b = FLAGS.get(team_b, "???")
                 short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
                 short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
-                return f'''<div class="matchup">
+                tooltip = build_tooltip_html(team_a, team_b, all_scores)
+                return f'''<div class="matchup has-tooltip">
 <div class="matchup-info">{match_info["venue"]} · {match_info["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
+{tooltip}
 </div>'''
 
         # Default: show known teams without prediction
@@ -499,6 +553,12 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .matchup-team.tossup .prob{{opacity:.8}}
 .matchup-team.tbd{{color:var(--text-muted);font-style:italic}}
 .goals-line{{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}}
+
+/* Tooltip */
+.matchup.has-tooltip{{position:relative}}
+.matchup .tooltip{{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#e8e8e8;font-size:.65rem;line-height:1.4;padding:8px 10px;border-radius:6px;max-width:280px;width:max-content;z-index:100;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.3);white-space:nowrap;margin-bottom:4px}}
+.matchup.has-tooltip:hover .tooltip{{display:block}}
+.matchup .tooltip::after{{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#1a1a1a}}
 
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
