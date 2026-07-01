@@ -1,0 +1,6 @@
+# Teams eliminated from the tournament
+# Add teams as they are knocked out (one per line)
+# These will be greyed out on the trends page and ranked last
+Germany
+South Africa
+Japan

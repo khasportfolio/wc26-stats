@@ -182,6 +182,9 @@ h1{{text-align:center;font-size:1.8rem;color:var(--wc-blue);margin-bottom:4px}}
 .grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(440px,1fr));gap:16px;max-width:1600px;margin:0 auto}}
 .card{{background:var(--card-bg);border:1px solid var(--card-border);border-radius:10px;padding:18px;transition:all .2s;border-top:3px solid var(--wc-green)}}
 .card:hover{{border-color:var(--wc-blue);box-shadow:0 4px 12px var(--hover-shadow)}}
+.card.eliminated{{opacity:.45;border-top-color:var(--card-border)}}
+.card.eliminated:hover{{opacity:.7}}
+.elim-badge{{font-size:.55rem;background:var(--wc-red);color:#fff;padding:1px 5px;border-radius:3px;margin-left:6px;vertical-align:middle}}
 .card-header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}}
 .team-name{{font-weight:600;font-size:1rem}}
 .match-count{{font-size:.7rem;color:var(--text-muted)}}
@@ -254,16 +257,17 @@ trend.forEach((pt,pi)=>{const x=pad.left+(n>1?pi*xStep:cW/2);
 const opp=shortName(pt.opponent||"");
 ctx.fillText(`vs ${opp}`,x,h-5);
 ctx.fillText(`${pt.goals}-${pt.conceded}`,x,h-16)})}
-function createCard(name,rank,trend){
-const card=document.createElement("div");card.className="card";
-card.innerHTML=`<div class="card-header"><span class="team-name">#${rank} ${name}</span><span class="match-count">${trend.length} matches</span></div><canvas class="trend-chart"></canvas>`;
+function createCard(name,rank,trend,eliminated){
+const card=document.createElement("div");card.className="card"+(eliminated?" eliminated":"");
+const status=eliminated?"ELIMINATED":"";
+card.innerHTML=`<div class="card-header"><span class="team-name">#${rank} ${name}${eliminated?' <span class="elim-badge">OUT</span>':''}</span><span class="match-count">${trend.length} matches</span></div><canvas class="trend-chart"></canvas>`;
 return card}
 function render(){
 const filter=document.getElementById("filter").value.toLowerCase();
 const highlight=document.getElementById("highlight").value;
 const grid=document.getElementById("grid");grid.innerHTML="";
 trendsData.filter(t=>t.name.toLowerCase().includes(filter)).forEach(t=>{
-const card=createCard(t.name,t.rank,t.trend);grid.appendChild(card);
+const card=createCard(t.name,t.rank,t.trend,t.eliminated);grid.appendChild(card);
 drawTrendChart(card.querySelector("canvas"),t.trend,highlight)})}
 render();window.matchMedia("(prefers-color-scheme:dark)").addEventListener("change",()=>render());
 </script>

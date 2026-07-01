@@ -1,0 +1,114 @@
+{
+  "73": {
+    "team_a": "South Africa",
+    "team_b": "Canada",
+    "prob_a": 22,
+    "prob_b": 78,
+    "predicted_winner": "Canada"
+  },
+  "74": {
+    "team_a": "Germany",
+    "team_b": "Paraguay",
+    "prob_a": 78,
+    "prob_b": 22,
+    "predicted_winner": "Germany"
+  },
+  "75": {
+    "team_a": "Netherlands",
+    "team_b": "Morocco",
+    "prob_a": 60,
+    "prob_b": 40,
+    "predicted_winner": "Netherlands"
+  },
+  "76": {
+    "team_a": "Brazil",
+    "team_b": "Japan",
+    "prob_a": 72,
+    "prob_b": 28,
+    "predicted_winner": "Brazil"
+  },
+  "77": {
+    "team_a": "France",
+    "team_b": "Sweden",
+    "prob_a": 75,
+    "prob_b": 25,
+    "predicted_winner": "France"
+  },
+  "78": {
+    "team_a": "Ivory Coast",
+    "team_b": "Norway",
+    "prob_a": 50,
+    "prob_b": 50,
+    "predicted_winner": "Ivory Coast"
+  },
+  "79": {
+    "team_a": "Mexico",
+    "team_b": "Ecuador",
+    "prob_a": 60,
+    "prob_b": 40,
+    "predicted_winner": "Mexico"
+  },
+  "80": {
+    "team_a": "England",
+    "team_b": "DR Congo",
+    "prob_a": 61,
+    "prob_b": 39,
+    "predicted_winner": "England"
+  },
+  "81": {
+    "team_a": "USA",
+    "team_b": "Bosnia and Herzegovina",
+    "prob_a": 62,
+    "prob_b": 38,
+    "predicted_winner": "USA"
+  },
+  "82": {
+    "team_a": "Belgium",
+    "team_b": "Senegal",
+    "prob_a": 50,
+    "prob_b": 50,
+    "predicted_winner": "Belgium"
+  },
+  "83": {
+    "team_a": "Portugal",
+    "team_b": "Croatia",
+    "prob_a": 54,
+    "prob_b": 46,
+    "predicted_winner": "Portugal"
+  },
+  "84": {
+    "team_a": "Spain",
+    "team_b": "Austria",
+    "prob_a": 70,
+    "prob_b": 30,
+    "predicted_winner": "Spain"
+  },
+  "85": {
+    "team_a": "Switzerland",
+    "team_b": "Algeria",
+    "prob_a": 57,
+    "prob_b": 43,
+    "predicted_winner": "Switzerland"
+  },
+  "86": {
+    "team_a": "Argentina",
+    "team_b": "Cape Verde",
+    "prob_a": 76,
+    "prob_b": 24,
+    "predicted_winner": "Argentina"
+  },
+  "87": {
+    "team_a": "Colombia",
+    "team_b": "Ghana",
+    "prob_a": 48,
+    "prob_b": 52,
+    "predicted_winner": "Ghana"
+  },
+  "88": {
+    "team_a": "Australia",
+    "team_b": "Egypt",
+    "prob_a": 32,
+    "prob_b": 68,
+    "predicted_winner": "Egypt"
+  }
+}

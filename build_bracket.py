@@ -147,14 +147,24 @@ def predict_match_goals(scores_a, scores_b):
     }
 
 
-def predict_r32(bracket, all_scores, actual_results=None):
-    """Predict R32 results. Uses actual results for completed matches."""
+def predict_r32(bracket, all_scores, actual_results=None, frozen_predictions=None):
+    """
+    Build R32 results using:
+    - Frozen predictions (from r32_predictions_frozen.json) for the odds
+    - Actual results for completed matches
+    This ensures predictions don't change as new match data comes in.
+    """
     results = {}
     # Index actual results by match number
     completed = {}
     if actual_results:
         for r in actual_results.get("completed", []):
             completed[r["match"]] = r
+
+    # Index frozen predictions by match number
+    frozen = {}
+    if frozen_predictions:
+        frozen = {int(k): v for k, v in frozen_predictions.items()}
 
     for match in bracket["r32"]:
         match_num = match["match"]
@@ -175,17 +185,30 @@ def predict_r32(bracket, all_scores, actual_results=None):
                 "score": score_str,
                 "completed": True,
                 "prob_a": None, "prob_b": None,
-                "goals": None,
                 "date": match["date"], "venue": match["venue"],
             }
             continue
 
+        # Use frozen predictions if available (don't recompute)
+        if match_num in frozen:
+            fp = frozen[match_num]
+            prob_a = fp["prob_a"] / 100.0
+            winner = fp.get("predicted_winner", team_a if prob_a >= 0.5 else team_b)
+            results[match_num] = {
+                "team_a": team_a, "team_b": team_b,
+                "winner": winner,
+                "prob_a": prob_a, "prob_b": round(1 - prob_a, 3),
+                "completed": False,
+                "date": match["date"], "venue": match["venue"],
+            }
+            continue
+
+        # Fallback: compute live (shouldn't happen if frozen file exists)
         if team_a == "TBD" or team_b == "TBD":
             results[match_num] = {
                 "team_a": team_a, "team_b": team_b,
-                "winner": team_a if team_b == "TBD" else (team_b if team_a == "TBD" else "TBD"),
+                "winner": team_a if team_b == "TBD" else "TBD",
                 "prob_a": 0.5, "prob_b": 0.5,
-                "goals": {"total": 0, "over_1_5": 0, "over_2_5": 0, "over_3_5": 0},
                 "completed": False,
                 "date": match["date"], "venue": match["venue"],
             }
@@ -195,13 +218,11 @@ def predict_r32(bracket, all_scores, actual_results=None):
         scores_b = all_scores.get(team_b)
         prob_a, prob_b = compute_win_probability(scores_a, scores_b)
         winner = team_a if prob_a >= 0.5 else team_b
-        goals = predict_match_goals(scores_a, scores_b)
 
         results[match_num] = {
             "team_a": team_a, "team_b": team_b,
             "winner": winner,
             "prob_a": prob_a, "prob_b": round(1 - prob_a, 3),
-            "goals": goals,
             "completed": False,
             "date": match["date"], "venue": match["venue"],
         }
@@ -267,17 +288,16 @@ def generate_bracket_html(results, bracket, all_scores):
         if r.get("completed"):
             score = r.get("score", "")
             actual_winner = r["winner"]
-            # Recalculate what the prediction was
-            scores_a = all_scores.get(team_a)
-            scores_b = all_scores.get(team_b)
-            if scores_a and scores_b:
-                orig_prob_a, orig_prob_b = compute_win_probability(scores_a, scores_b)
-                orig_pct_a = round(orig_prob_a * 100)
-                orig_pct_b = 100 - orig_pct_a
-                pred_winner = team_a if orig_prob_a >= 0.5 else team_b
-            else:
-                orig_pct_a, orig_pct_b = 50, 50
-                pred_winner = team_a
+            # Use frozen predictions for the original odds
+            frozen = {}
+            frozen_path_local = os.path.join(DATA_DIR, "r32_predictions_frozen.json")
+            if os.path.exists(frozen_path_local):
+                with open(frozen_path_local, "r", encoding="utf-8") as ff:
+                    frozen = json.load(ff)
+            fp = frozen.get(str(match_num), {})
+            orig_pct_a = fp.get("prob_a", 50)
+            orig_pct_b = fp.get("prob_b", 50)
+            pred_winner = fp.get("predicted_winner", team_a)
 
             # Color logic: orange = predicted winner, green = actual winner
             # If prediction was a toss-up (<= 52%), don't show orange
@@ -642,9 +662,20 @@ def main():
     else:
         print("    No results file found — all predictions")
 
-    # Predict R32 (uses actual results for completed matches)
-    print(f"\n[4] Predicting R32 matchups ({len(all_scores)} teams)...")
-    results = predict_r32(bracket, all_scores, actual_results)
+    # Load frozen predictions (so odds don't change with new data)
+    print("\n[3b] Loading frozen predictions...")
+    frozen_path = os.path.join(DATA_DIR, "r32_predictions_frozen.json")
+    frozen_predictions = None
+    if os.path.exists(frozen_path):
+        with open(frozen_path, "r", encoding="utf-8") as f:
+            frozen_predictions = json.load(f)
+        print(f"    Loaded {len(frozen_predictions)} frozen R32 predictions")
+    else:
+        print("    No frozen file — will compute live")
+
+    # Predict R32 (uses frozen predictions + actual results for completed)
+    print(f"\n[4] Building R32 bracket ({len(all_scores)} teams)...")
+    results = predict_r32(bracket, all_scores, actual_results, frozen_predictions)
 
     # Print R32 results/predictions
     print("\n    Round of 32:")

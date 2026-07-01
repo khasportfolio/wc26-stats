@@ -74,6 +74,32 @@ def read_qualified_teams():
     return teams
 
 
+def read_eliminated_teams():
+    """Read list of eliminated teams."""
+    filepath = os.path.join(DATA_DIR, "eliminated.txt")
+    teams = []
+    if not os.path.exists(filepath):
+        return teams
+    with open(filepath, "r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if line and not line.startswith("#"):
+                teams.append(line)
+    return teams
+
+
+def read_all_team_files():
+    """Get all team CSV files in the data directory (all 48)."""
+    skip = {"team_ratings.csv", "qualifier_features.csv", "goalscorers.csv",
+            "results.csv", "shootouts.csv", "team_rankings_2026.csv",
+            "team_trends_2026.csv"}
+    teams = []
+    for f in sorted(os.listdir(DATA_DIR)):
+        if f.endswith(".csv") and f not in skip:
+            teams.append(f.replace(".csv", ""))
+    return teams
+
+
 def read_team_matches(team_name):
     filepath = os.path.join(DATA_DIR, f"{team_name}.csv")
     if not os.path.exists(filepath):
@@ -225,12 +251,18 @@ def write_r32_html(all_team_data):
 
 
 def write_trends_html(all_matches, global_mins, global_maxs, team_rankings=None):
-    """Generate trends.html — per-match dimension evolution."""
+    """Generate trends.html — per-match dimension evolution for ALL 48 teams."""
     from html_templates import trends_html
 
-    # Build trends data as an ordered list (by ranking) instead of a dict
+    eliminated = set(read_eliminated_teams())
+
+    # Build trends data for ALL teams with match data
+    all_teams = read_all_team_files()
     all_trends_list = []
-    for team_name, matches in all_matches.items():
+    for team_name in all_teams:
+        matches = read_team_matches(team_name)
+        if not matches:
+            continue
         trend = []
         for i, m in enumerate(matches):
             entry = {
@@ -247,11 +279,22 @@ def write_trends_html(all_matches, global_mins, global_maxs, team_rankings=None)
                 spread = mx - mn if mx != mn else 1
                 entry[dim] = round((raw - mn) / spread * 100, 1)
             trend.append(entry)
-        rank = team_rankings.get(team_name, 99) if team_rankings else 99
-        all_trends_list.append({"name": team_name, "rank": rank, "trend": trend})
 
-    # Sort by rank
-    all_trends_list.sort(key=lambda x: x["rank"])
+        is_eliminated = team_name in eliminated
+        rank = team_rankings.get(team_name, 99) if team_rankings else 99
+        # Eliminated teams get rank 900+ so they sort to the bottom
+        sort_rank = rank + 900 if is_eliminated else rank
+
+        all_trends_list.append({
+            "name": team_name,
+            "rank": rank,
+            "sortRank": sort_rank,
+            "eliminated": is_eliminated,
+            "trend": trend,
+        })
+
+    # Sort: alive teams by rank first, then eliminated teams by rank
+    all_trends_list.sort(key=lambda x: x["sortRank"])
 
     js_data = json.dumps(all_trends_list, indent=2)
     nav = _nav_html("trends.html")
@@ -309,21 +352,29 @@ def main():
     print("\n[4] Generating R32 dashboard...")
     write_r32_html(all_data)
 
-    # Compute global min/max for trend normalization
-    print("\n[5] Computing trends (global normalization)...")
+    # Compute global min/max for trend normalization (across ALL 48 teams)
+    print("\n[5] Computing trends (global normalization across all 48 teams)...")
+    all_48_teams = read_all_team_files()
     all_raw = {dim: [] for dim in DIMS}
-    for matches in all_matches.values():
+    for team_name in all_48_teams:
+        matches = read_team_matches(team_name)
         for m in matches:
             for dim in DIMS:
                 all_raw[dim].append(compute_match_score(m, dim))
 
-    global_mins = {dim: min(scores) for dim, scores in all_raw.items()}
-    global_maxs = {dim: max(scores) for dim, scores in all_raw.items()}
+    global_mins = {dim: min(scores) if scores else 0 for dim, scores in all_raw.items()}
+    global_maxs = {dim: max(scores) if scores else 1 for dim, scores in all_raw.items()}
 
-    # Generate trends page
+    # Generate trends page (all 48 teams, eliminated greyed out)
     print("\n[6] Generating trends page...")
-    # Build ranking lookup from sorted data
+    # Build ranking from R32 sorted data, plus add non-R32 teams at end
     team_rankings = {t["team"]: i + 1 for i, t in enumerate(sorted_data)}
+    # Add remaining teams not in R32 (eliminated in group stage) with ranks after R32 teams
+    next_rank = len(sorted_data) + 1
+    for team_name in all_48_teams:
+        if team_name not in team_rankings:
+            team_rankings[team_name] = next_rank
+            next_rank += 1
     write_trends_html(all_matches, global_mins, global_maxs, team_rankings)
 
     print("\n" + "=" * 60)
