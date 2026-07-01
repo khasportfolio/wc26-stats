@@ -367,11 +367,13 @@ def generate_bracket_html(results, bracket, all_scores):
             adv_a = " ✓" if actual_winner == team_a else ""
             adv_b = " ✓" if actual_winner == team_b else ""
 
-            return f'''<div class="matchup completed">
+            tooltip = build_tooltip_html(team_a, team_b, all_scores)
+            return f'''<div class="matchup completed has-tooltip">
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}{adv_a}</span><span class="prob">{orig_pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}{adv_b}</span><span class="prob">{orig_pct_b}%</span></div>
 <div class="score-line">FT: {score}</div>
+{tooltip}
 </div>'''
 
         # Prediction for upcoming match
