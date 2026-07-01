@@ -56,9 +56,7 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 .matchup-team.tbd{color:var(--text-muted);font-style:italic}
 .goals-line{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}
 
-/* Tooltip */
-.matchup.has-tooltip{position:relative;overflow:visible;cursor:pointer}
-.matchup .tooltip{display:none;position:fixed;background:#1a1a1a;color:#e8e8e8;font-size:.63rem;line-height:1.5;padding:10px 12px;border-radius:6px;max-width:320px;width:max-content;z-index:9999;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.5);white-space:nowrap}
+/* Tooltip - removed, see predictions page instead */
 
 /* Empty future matchups */
 .empty-future{opacity:.6;border-style:dashed}
@@ -114,7 +112,7 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <h1>⚽ World Cup 2026 — Tournament Bracket</h1>
 <p class="subtitle">R32 predictions based on 6-dimension performance model · R16→Final shown as empty slots</p>
 <p class="methodology">Only Round of 32 matchups are predicted. Later rounds show venue &amp; date placeholders.</p>
-<div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> &middot; <a href="r32.html" class="nav-link">Round of 32</a> &middot; <a href="r16.html" class="nav-link">Round of 16</a> &middot; <a href="trends.html" class="nav-link">Trends</a> &middot; <a href="bracket.html" class="nav-link active">Bracket</a></div>
+<div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> &middot; <a href="r32.html" class="nav-link">Round of 32</a> &middot; <a href="r16.html" class="nav-link">Round of 16</a> &middot; <a href="trends.html" class="nav-link">Trends</a> &middot; <a href="bracket.html" class="nav-link active">Bracket</a> &middot; <a href="predictions.html" class="nav-link">Predictions</a></div>
 <div class="legend">
 <div class="legend-item"><div class="leg-box leg-winner"></div>Actual winner</div>
 <div class="legend-item"><div class="leg-box leg-predicted"></div>Predicted winner</div>
@@ -128,53 +126,45 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="round left-side">
 <div class="round-label">Round of 32</div>
 <div class="bracket-group">
-<div class="bracket-pair"><div class="matchup completed has-tooltip">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Foxborough · June 29</div>
 <div class="matchup-team predicted-winner"><span class="flag">GER</span><span class="team-name">Germany</span><span class="prob">78%</span></div>
 <div class="matchup-team actual-winner"><span class="flag">PAR</span><span class="team-name">Paraguay ✓</span><span class="prob">22%</span></div>
 <div class="score-line">FT: 1-1 (pen 3-4)</div>
-<div class="tooltip">Finishing (25%): Germany 45.7 vs Paraguay 26.0 → Germany<br>Defense (25%): Germany 131.3 vs Paraguay 138.6 → Paraguay<br>Control (20%): Germany 173.4 vs Paraguay 94.8 → Germany<br>Creation (15%): Germany 193.1 vs Paraguay 76.0 → Germany<br>Pressing (10%): Germany 190.0 vs Paraguay 105.0 → Germany<br>Physicality (5%): Germany 153.8 vs Paraguay 182.8 → Paraguay<br><br>Key: Germany dominates 4/6 dimensions</div>
-</div><div class="matchup completed has-tooltip">
+</div><div class="matchup completed">
 <div class="matchup-info">East Rutherford · June 30</div>
 <div class="matchup-team actual-winner"><span class="flag">FRA</span><span class="team-name">France ✓</span><span class="prob">75%</span></div>
 <div class="matchup-team loser"><span class="flag">SWE</span><span class="team-name">Sweden</span><span class="prob">25%</span></div>
 <div class="score-line">FT: 3-0</div>
-<div class="tooltip">Finishing (25%): France 69.8 vs Sweden 35.2 → France<br>Defense (25%): France 130.9 vs Sweden 68.2 → France<br>Control (20%): France 152.0 vs Sweden 117.9 → France<br>Creation (15%): France 167.5 vs Sweden 86.2 → France<br>Pressing (10%): France 141.3 vs Sweden 92.2 → France<br>Physicality (5%): France 134.5 vs Sweden 112.7 → France<br><br>Key: France dominates 6/6 dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup completed has-tooltip">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Inglewood · June 28</div>
 <div class="matchup-team loser"><span class="flag">RSA</span><span class="team-name">South Africa</span><span class="prob">22%</span></div>
 <div class="matchup-team actual-winner"><span class="flag">CAN</span><span class="team-name">Canada ✓</span><span class="prob">78%</span></div>
 <div class="score-line">FT: 0-1</div>
-<div class="tooltip">Finishing (25%): South Africa 13.6 vs Canada 42.5 → Canada<br>Defense (25%): South Africa 136.7 vs Canada 142.4 → Even<br>Control (20%): South Africa 134.4 vs Canada 131.1 → Even<br>Creation (15%): South Africa 75.9 vs Canada 173.5 → Canada<br>Pressing (10%): South Africa 116.3 vs Canada 157.8 → Canada<br>Physicality (5%): South Africa 134.7 vs Canada 155.8 → Canada<br><br>Key: Canada dominates 4/6 dimensions</div>
-</div><div class="matchup completed has-tooltip">
+</div><div class="matchup completed">
 <div class="matchup-info">Guadalupe · June 29</div>
 <div class="matchup-team predicted-winner"><span class="flag">NED</span><span class="team-name">Netherlands</span><span class="prob">60%</span></div>
 <div class="matchup-team actual-winner"><span class="flag">MAR</span><span class="team-name">Morocco ✓</span><span class="prob">40%</span></div>
 <div class="score-line">FT: 1-1 (pen 2-3)</div>
-<div class="tooltip">Finishing (25%): Netherlands 72.7 vs Morocco 41.8 → Netherlands<br>Defense (25%): Netherlands 121.2 vs Morocco 136.6 → Morocco<br>Control (20%): Netherlands 135.6 vs Morocco 171.5 → Morocco<br>Creation (15%): Netherlands 127.7 vs Morocco 159.0 → Morocco<br>Pressing (10%): Netherlands 128.8 vs Morocco 132.0 → Even<br>Physicality (5%): Netherlands 145.9 vs Morocco 146.1 → Even<br><br>Key: Morocco dominates 3/6 dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Toronto · July 2</div>
 <div class="matchup-team predicted-winner"><span class="flag">POR</span><span class="team-name">Portugal</span><span class="prob">54%</span></div>
 <div class="matchup-team loser"><span class="flag">CRO</span><span class="team-name">Croatia</span><span class="prob">46%</span></div>
-<div class="tooltip">Finishing (25%): Portugal 32.4 vs Croatia 46.8 → Croatia<br>Defense (25%): Portugal 125.2 vs Croatia 98.8 → Portugal<br>Control (20%): Portugal 154.5 vs Croatia 142.6 → Portugal<br>Creation (15%): Portugal 129.3 vs Croatia 88.5 → Portugal<br>Pressing (10%): Portugal 129.8 vs Croatia 104.8 → Portugal<br>Physicality (5%): Portugal 121.3 vs Croatia 138.7 → Croatia<br><br>Key: Portugal dominates 4/6 dimensions</div>
-</div><div class="matchup has-tooltip">
+</div><div class="matchup">
 <div class="matchup-info">Inglewood · July 2</div>
 <div class="matchup-team predicted-winner"><span class="flag">ESP</span><span class="team-name">Spain</span><span class="prob">70%</span></div>
 <div class="matchup-team loser"><span class="flag">AUT</span><span class="team-name">Austria</span><span class="prob">30%</span></div>
-<div class="tooltip">Finishing (25%): Spain 37.5 vs Austria 45.6 → Austria<br>Defense (25%): Spain 158.2 vs Austria 83.8 → Spain<br>Control (20%): Spain 174.7 vs Austria 128.7 → Spain<br>Creation (15%): Spain 154.7 vs Austria 103.4 → Spain<br>Pressing (10%): Spain 179.0 vs Austria 109.6 → Spain<br>Physicality (5%): Spain 137.9 vs Austria 120.1 → Spain<br><br>Key: Spain dominates 5/6 dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Santa Clara · July 1</div>
 <div class="matchup-team predicted-winner"><span class="flag">USA</span><span class="team-name">USA</span><span class="prob">62%</span></div>
 <div class="matchup-team loser"><span class="flag">BIH</span><span class="team-name">Bosnia</span><span class="prob">38%</span></div>
-<div class="tooltip">Finishing (25%): USA 54.9 vs Bosnia 55.9 → Even<br>Defense (25%): USA 116.8 vs Bosnia 97.5 → USA<br>Control (20%): USA 148.7 vs Bosnia 124.5 → USA<br>Creation (15%): USA 136.5 vs Bosnia 85.2 → USA<br>Pressing (10%): USA 144.6 vs Bosnia 126.2 → USA<br>Physicality (5%): USA 151.8 vs Bosnia 155.6 → Even<br><br>Key: USA dominates 4/6 dimensions</div>
-</div><div class="matchup has-tooltip">
+</div><div class="matchup">
 <div class="matchup-info">Seattle · July 1</div>
 <div class="matchup-team tossup"><span class="flag">BEL</span><span class="team-name">Belgium</span><span class="prob">50%</span></div>
 <div class="matchup-team tossup"><span class="flag">SEN</span><span class="team-name">Senegal</span><span class="prob">50%</span></div>
-<div class="tooltip">Finishing (25%): Belgium 49.2 vs Senegal 72.9 → Senegal<br>Defense (25%): Belgium 145.1 vs Senegal 105.6 → Belgium<br>Control (20%): Belgium 151.8 vs Senegal 153.5 → Even<br>Creation (15%): Belgium 208.7 vs Senegal 183.0 → Belgium<br>Pressing (10%): Belgium 159.1 vs Senegal 147.9 → Belgium<br>Physicality (5%): Belgium 133.4 vs Senegal 143.3 → Senegal<br><br>Key: Belgium dominates 3/6 dimensions</div>
 </div></div>
 </div>
 </div>
@@ -182,17 +172,15 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="round left-side">
 <div class="round-label">Round of 16</div>
 <div class="bracket-group">
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Philadelphia · July 4</div>
 <div class="matchup-team loser"><span class="flag">PAR</span><span class="team-name">Paraguay</span><span class="prob">21%</span></div>
 <div class="matchup-team predicted-winner"><span class="flag">FRA</span><span class="team-name">France</span><span class="prob">79%</span></div>
-<div class="tooltip">Finishing (25%): Paraguay 26.0 vs France 69.8 → France<br>Defense (25%): Paraguay 138.6 vs France 130.9 → Paraguay<br>Control (20%): Paraguay 94.8 vs France 152.0 → France<br>Creation (15%): Paraguay 76.0 vs France 167.5 → France<br>Pressing (10%): Paraguay 105.0 vs France 141.3 → France<br>Physicality (5%): Paraguay 182.8 vs France 134.5 → Paraguay<br><br>Key: France dominates 4/6 dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Houston · July 4</div>
 <div class="matchup-team tossup"><span class="flag">CAN</span><span class="team-name">Canada</span><span class="prob">50%</span></div>
 <div class="matchup-team tossup"><span class="flag">MAR</span><span class="team-name">Morocco</span><span class="prob">50%</span></div>
-<div class="tooltip">Finishing (25%): Canada 42.5 vs Morocco 41.8 → Even<br>Defense (25%): Canada 142.4 vs Morocco 136.6 → Even<br>Control (20%): Canada 131.1 vs Morocco 171.5 → Morocco<br>Creation (15%): Canada 173.5 vs Morocco 159.0 → Canada<br>Pressing (10%): Canada 157.8 vs Morocco 132.0 → Canada<br>Physicality (5%): Canada 155.8 vs Morocco 146.1 → Canada<br><br>Key: Canada dominates 3/6 dimensions</div>
 </div></div>
 <div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Arlington · July 6</div>
@@ -278,15 +266,14 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="round right-side">
 <div class="round-label">Round of 16</div>
 <div class="bracket-group">
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">East Rutherford · July 5</div>
 <div class="matchup-team predicted-winner"><span class="flag">BRA</span><span class="team-name">Brazil</span><span class="prob">66%</span></div>
 <div class="matchup-team loser"><span class="flag">NOR</span><span class="team-name">Norway</span><span class="prob">34%</span></div>
-<div class="tooltip">Finishing (25%): Brazil 52.2 vs Norway 48.1 → Brazil<br>Defense (25%): Brazil 142.9 vs Norway 99.2 → Brazil<br>Control (20%): Brazil 160.2 vs Norway 132.5 → Brazil<br>Creation (15%): Brazil 190.2 vs Norway 125.9 → Brazil<br>Pressing (10%): Brazil 128.3 vs Norway 118.0 → Brazil<br>Physicality (5%): Brazil 138.4 vs Norway 128.0 → Brazil<br><br>Key: Brazil dominates 6/6 dimensions</div>
 </div></div>
 <div class="bracket-pair"><div class="matchup empty-future">
 <div class="matchup-info">Mexico City · July 5</div>
-<div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
+<div class="matchup-team "><span class="flag">MEX</span><span class="team-name">Mexico</span></div>
 <div class="matchup-team tbd"><span class="flag">⬜</span><span class="team-name">—</span></div>
 </div></div>
 <div class="bracket-pair"><div class="matchup empty-future">
@@ -305,90 +292,49 @@ h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
 <div class="round right-side">
 <div class="round-label">Round of 32</div>
 <div class="bracket-group">
-<div class="bracket-pair"><div class="matchup completed has-tooltip">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Houston · June 29</div>
 <div class="matchup-team actual-winner"><span class="flag">BRA</span><span class="team-name">Brazil ✓</span><span class="prob">72%</span></div>
 <div class="matchup-team loser"><span class="flag">JPN</span><span class="team-name">Japan</span><span class="prob">28%</span></div>
 <div class="score-line">FT: 2-1</div>
-<div class="tooltip">Finishing (25%): Brazil 52.2 vs Japan 47.3 → Brazil<br>Defense (25%): Brazil 142.9 vs Japan 98.3 → Brazil<br>Control (20%): Brazil 160.2 vs Japan 123.4 → Brazil<br>Creation (15%): Brazil 190.2 vs Japan 87.2 → Brazil<br>Pressing (10%): Brazil 128.3 vs Japan 96.0 → Brazil<br>Physicality (5%): Brazil 138.4 vs Japan 132.2 → Even<br><br>Key: Brazil dominates 5/6 dimensions</div>
-</div><div class="matchup completed has-tooltip">
+</div><div class="matchup completed">
 <div class="matchup-info">Arlington · June 30</div>
 <div class="matchup-team loser"><span class="flag">CIV</span><span class="team-name">Ivory Coast</span><span class="prob">50%</span></div>
 <div class="matchup-team actual-winner"><span class="flag">NOR</span><span class="team-name">Norway ✓</span><span class="prob">50%</span></div>
 <div class="score-line">FT: 1-2</div>
-<div class="tooltip">Finishing (25%): Ivory Coast 30.6 vs Norway 48.1 → Norway<br>Defense (25%): Ivory Coast 117.4 vs Norway 99.2 → Ivory Coast<br>Control (20%): Ivory Coast 137.1 vs Norway 132.5 → Even<br>Creation (15%): Ivory Coast 114.6 vs Norway 125.9 → Norway<br>Pressing (10%): Ivory Coast 126.2 vs Norway 118.0 → Ivory Coast<br>Physicality (5%): Ivory Coast 130.9 vs Norway 128.0 → Even<br><br>Key: Teams evenly matched across dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup completed">
 <div class="matchup-info">Mexico City · June 30</div>
-<div class="matchup-team predicted-winner"><span class="flag">MEX</span><span class="team-name">Mexico</span><span class="prob">60%</span></div>
+<div class="matchup-team actual-winner"><span class="flag">MEX</span><span class="team-name">Mexico ✓</span><span class="prob">60%</span></div>
 <div class="matchup-team loser"><span class="flag">ECU</span><span class="team-name">Ecuador</span><span class="prob">40%</span></div>
-<div class="tooltip">Finishing (25%): Mexico 61.1 vs Ecuador 19.7 → Mexico<br>Defense (25%): Mexico 136.1 vs Ecuador 146.0 → Ecuador<br>Control (20%): Mexico 130.2 vs Ecuador 140.9 → Ecuador<br>Creation (15%): Mexico 107.4 vs Ecuador 153.3 → Ecuador<br>Pressing (10%): Mexico 126.1 vs Ecuador 168.4 → Ecuador<br>Physicality (5%): Mexico 124.7 vs Ecuador 141.6 → Ecuador<br><br>Key: Ecuador dominates 5/6 dimensions</div>
-</div><div class="matchup has-tooltip">
+<div class="score-line">FT: 2-0</div>
+</div><div class="matchup">
 <div class="matchup-info">Atlanta · July 1</div>
 <div class="matchup-team predicted-winner"><span class="flag">ENG</span><span class="team-name">England</span><span class="prob">61%</span></div>
 <div class="matchup-team loser"><span class="flag">COD</span><span class="team-name">DR Congo</span><span class="prob">39%</span></div>
-<div class="tooltip">Finishing (25%): England 32.8 vs DR Congo 36.5 → DR Congo<br>Defense (25%): England 137.5 vs DR Congo 126.5 → England<br>Control (20%): England 162.8 vs DR Congo 119.7 → England<br>Creation (15%): England 167.0 vs DR Congo 100.0 → England<br>Pressing (10%): England 148.5 vs DR Congo 129.5 → England<br>Physicality (5%): England 164.4 vs DR Congo 130.4 → England<br><br>Key: England dominates 5/6 dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Miami Gardens · July 3</div>
 <div class="matchup-team predicted-winner"><span class="flag">ARG</span><span class="team-name">Argentina</span><span class="prob">76%</span></div>
 <div class="matchup-team loser"><span class="flag">CPV</span><span class="team-name">Cape Verde</span><span class="prob">24%</span></div>
-<div class="tooltip">Finishing (25%): Argentina 57.0 vs Cape Verde 12.0 → Argentina<br>Defense (25%): Argentina 138.4 vs Cape Verde 146.2 → Cape Verde<br>Control (20%): Argentina 165.5 vs Cape Verde 115.6 → Argentina<br>Creation (15%): Argentina 89.6 vs Cape Verde 83.0 → Argentina<br>Pressing (10%): Argentina 121.3 vs Cape Verde 108.7 → Argentina<br>Physicality (5%): Argentina 109.7 vs Cape Verde 146.0 → Cape Verde<br><br>Key: Argentina dominates 4/6 dimensions</div>
-</div><div class="matchup has-tooltip">
+</div><div class="matchup">
 <div class="matchup-info">Arlington · July 3</div>
 <div class="matchup-team loser"><span class="flag">AUS</span><span class="team-name">Australia</span><span class="prob">32%</span></div>
 <div class="matchup-team predicted-winner"><span class="flag">EGY</span><span class="team-name">Egypt</span><span class="prob">68%</span></div>
-<div class="tooltip">Finishing (25%): Australia 20.0 vs Egypt 33.1 → Egypt<br>Defense (25%): Australia 126.1 vs Egypt 127.0 → Even<br>Control (20%): Australia 121.7 vs Egypt 147.7 → Egypt<br>Creation (15%): Australia 77.5 vs Egypt 128.9 → Egypt<br>Pressing (10%): Australia 123.7 vs Egypt 136.7 → Egypt<br>Physicality (5%): Australia 177.7 vs Egypt 168.8 → Australia<br><br>Key: Egypt dominates 4/6 dimensions</div>
 </div></div>
-<div class="bracket-pair"><div class="matchup has-tooltip">
+<div class="bracket-pair"><div class="matchup">
 <div class="matchup-info">Vancouver · July 2</div>
 <div class="matchup-team predicted-winner"><span class="flag">SUI</span><span class="team-name">Switzerland</span><span class="prob">57%</span></div>
 <div class="matchup-team loser"><span class="flag">ALG</span><span class="team-name">Algeria</span><span class="prob">43%</span></div>
-<div class="tooltip">Finishing (25%): Switzerland 61.5 vs Algeria 52.8 → Switzerland<br>Defense (25%): Switzerland 112.5 vs Algeria 97.0 → Switzerland<br>Control (20%): Switzerland 149.8 vs Algeria 170.6 → Algeria<br>Creation (15%): Switzerland 138.2 vs Algeria 122.8 → Switzerland<br>Pressing (10%): Switzerland 140.6 vs Algeria 124.8 → Switzerland<br>Physicality (5%): Switzerland 145.1 vs Algeria 118.7 → Switzerland<br><br>Key: Switzerland dominates 5/6 dimensions</div>
-</div><div class="matchup has-tooltip">
+</div><div class="matchup">
 <div class="matchup-info">Kansas City · July 3</div>
 <div class="matchup-team tossup"><span class="flag">COL</span><span class="team-name">Colombia</span><span class="prob">48%</span></div>
 <div class="matchup-team tossup"><span class="flag">GHA</span><span class="team-name">Ghana</span><span class="prob">52%</span></div>
-<div class="tooltip">Finishing (25%): Colombia 9.2 vs Ghana 26.6 → Ghana<br>Defense (25%): Colombia 138.4 vs Ghana 126.1 → Colombia<br>Control (20%): Colombia 150.5 vs Ghana 110.6 → Colombia<br>Creation (15%): Colombia 143.6 vs Ghana 67.5 → Colombia<br>Pressing (10%): Colombia 121.0 vs Ghana 83.1 → Colombia<br>Physicality (5%): Colombia 116.9 vs Ghana 136.2 → Ghana<br><br>Key: Colombia dominates 4/6 dimensions</div>
 </div></div>
 </div>
 </div>
 </div>
 </div>
 <p style="text-align:center;font-size:.7rem;color:var(--text-muted);margin-top:8px">← Scroll horizontally to see full bracket →</p>
-
-<script>
-document.querySelectorAll('.matchup.has-tooltip').forEach(card => {
-    const tip = card.querySelector('.tooltip');
-    if (!tip) return;
-    card.addEventListener('mouseenter', (e) => {
-        const rect = card.getBoundingClientRect();
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        // Position to the right of the card, or left if no room
-        let left = rect.right + 8;
-        let top = rect.top;
-        // If tooltip would go off right edge, show to the left
-        if (left + 320 > vw) {
-            left = rect.left - 328;
-        }
-        // If tooltip would go off left edge, center it
-        if (left < 8) {
-            left = 8;
-        }
-        // If tooltip would go off bottom, push up
-        if (top + 180 > vh) {
-            top = vh - 190;
-        }
-        if (top < 8) top = 8;
-        tip.style.left = left + 'px';
-        tip.style.top = top + 'px';
-        tip.style.display = 'block';
-    });
-    card.addEventListener('mouseleave', () => {
-        tip.style.display = 'none';
-    });
-});
-</script>
 
 </body></html>

@@ -218,7 +218,8 @@ def normalize_dimensions(all_team_data):
 
 def _nav_html(active):
     links = [("dashboard.html", "Group Stage"), ("r32.html", "Round of 32"),
-             ("r16.html", "Round of 16"), ("trends.html", "Trends"), ("bracket.html", "Bracket")]
+             ("r16.html", "Round of 16"), ("trends.html", "Trends"),
+             ("bracket.html", "Bracket"), ("predictions.html", "Predictions")]
     parts = []
     for url, label in links:
         cls = ' class="nav-link active"' if url == active else ' class="nav-link"'

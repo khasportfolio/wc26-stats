@@ -289,6 +289,7 @@ def generate_bracket_html(results, bracket, all_scores):
         '<a href="r16.html" class="nav-link">Round of 16</a>',
         '<a href="trends.html" class="nav-link">Trends</a>',
         '<a href="bracket.html" class="nav-link active">Bracket</a>',
+        '<a href="predictions.html" class="nav-link">Predictions</a>',
     ])
 
     # Split R32 into left and right halves
@@ -367,13 +368,11 @@ def generate_bracket_html(results, bracket, all_scores):
             adv_a = " ✓" if actual_winner == team_a else ""
             adv_b = " ✓" if actual_winner == team_b else ""
 
-            tooltip = build_tooltip_html(team_a, team_b, all_scores)
-            return f'''<div class="matchup completed has-tooltip">
+            return f'''<div class="matchup completed">
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}{adv_a}</span><span class="prob">{orig_pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}{adv_b}</span><span class="prob">{orig_pct_b}%</span></div>
 <div class="score-line">FT: {score}</div>
-{tooltip}
 </div>'''
 
         # Prediction for upcoming match
@@ -394,12 +393,10 @@ def generate_bracket_html(results, bracket, all_scores):
 <div class="matchup-team loser"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">—</span></div>
 </div>'''
 
-        tooltip = build_tooltip_html(team_a, team_b, all_scores)
-        return f'''<div class="matchup has-tooltip">
+        return f'''<div class="matchup">
 <div class="matchup-info">{r["venue"]} · {r["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
-{tooltip}
 </div>'''
 
     # Build empty slot HTML for later rounds
@@ -444,12 +441,10 @@ def generate_bracket_html(results, bracket, all_scores):
                 flag_b = FLAGS.get(team_b, "???")
                 short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
                 short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
-                tooltip = build_tooltip_html(team_a, team_b, all_scores)
-                return f'''<div class="matchup has-tooltip">
+                return f'''<div class="matchup">
 <div class="matchup-info">{match_info["venue"]} · {match_info["date"]}</div>
 <div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
 <div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
-{tooltip}
 </div>'''
 
         # Default: show known teams without prediction
@@ -556,9 +551,7 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 .matchup-team.tbd{{color:var(--text-muted);font-style:italic}}
 .goals-line{{font-size:.58rem;color:var(--text-primary);text-align:center;padding:3px 6px;background:var(--bar-bg);border-top:1px solid var(--card-border)}}
 
-/* Tooltip */
-.matchup.has-tooltip{{position:relative;overflow:visible;cursor:pointer}}
-.matchup .tooltip{{display:none;position:fixed;background:#1a1a1a;color:#e8e8e8;font-size:.63rem;line-height:1.5;padding:10px 12px;border-radius:6px;max-width:320px;width:max-content;z-index:9999;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.5);white-space:nowrap}}
+/* Tooltip - removed, see predictions page instead */
 
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
@@ -707,40 +700,6 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 <p style="text-align:center;font-size:.7rem;color:var(--text-muted);margin-top:8px">← Scroll horizontally to see full bracket →</p>
-
-<script>
-document.querySelectorAll('.matchup.has-tooltip').forEach(card => {{
-    const tip = card.querySelector('.tooltip');
-    if (!tip) return;
-    card.addEventListener('mouseenter', (e) => {{
-        const rect = card.getBoundingClientRect();
-        const vw = window.innerWidth;
-        const vh = window.innerHeight;
-        // Position to the right of the card, or left if no room
-        let left = rect.right + 8;
-        let top = rect.top;
-        // If tooltip would go off right edge, show to the left
-        if (left + 320 > vw) {{
-            left = rect.left - 328;
-        }}
-        // If tooltip would go off left edge, center it
-        if (left < 8) {{
-            left = 8;
-        }}
-        // If tooltip would go off bottom, push up
-        if (top + 180 > vh) {{
-            top = vh - 190;
-        }}
-        if (top < 8) top = 8;
-        tip.style.left = left + 'px';
-        tip.style.top = top + 'px';
-        tip.style.display = 'block';
-    }});
-    card.addEventListener('mouseleave', () => {{
-        tip.style.display = 'none';
-    }});
-}});
-</script>
 
 </body></html>'''
 

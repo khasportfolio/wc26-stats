@@ -50,7 +50,7 @@ canvas.trend-chart{width:100%;height:180px;display:block}
 <body>
 <h1>⚽ World Cup 2026 — Team Trends</h1>
 <p class="subtitle">Per-match dimension scores · Normalized across all R32 team performances</p>
-<div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> · <a href="r32.html" class="nav-link">Round of 32</a> · <a href="r16.html" class="nav-link">Round of 16</a> · <a href="trends.html" class="nav-link active">Trends</a> · <a href="bracket.html" class="nav-link">Bracket</a></div>
+<div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> · <a href="r32.html" class="nav-link">Round of 32</a> · <a href="r16.html" class="nav-link">Round of 16</a> · <a href="trends.html" class="nav-link active">Trends</a> · <a href="bracket.html" class="nav-link">Bracket</a> · <a href="predictions.html" class="nav-link">Predictions</a></div>
 <div class="legend">
 <div class="legend-item"><div class="legend-dot dot-fin"></div>Finishing</div>
 <div class="legend-item"><div class="legend-dot dot-cre"></div>Creation</div>
@@ -442,53 +442,6 @@ const trendsData=[
     ]
   },
   {
-    "name": "Ecuador",
-    "rank": 10,
-    "sortRank": 10,
-    "eliminated": false,
-    "trend": [
-      {
-        "match": 1,
-        "opponent": "Ivory Coast",
-        "date": "6/14/2026",
-        "goals": 0,
-        "conceded": 1,
-        "finishing": 9.3,
-        "creation": 38.6,
-        "control": 56.5,
-        "defense": 74.8,
-        "physicality": 47.0,
-        "pressing": 62.2
-      },
-      {
-        "match": 2,
-        "opponent": "Curacao",
-        "date": "6/20/2026",
-        "goals": 0,
-        "conceded": 0,
-        "finishing": 3.0,
-        "creation": 80.2,
-        "control": 88.5,
-        "defense": 77.8,
-        "physicality": 52.1,
-        "pressing": 77.5
-      },
-      {
-        "match": 3,
-        "opponent": "Germany",
-        "date": "6/25/2026",
-        "goals": 2,
-        "conceded": 1,
-        "finishing": 45.6,
-        "creation": 42.7,
-        "control": 38.3,
-        "defense": 81.0,
-        "physicality": 54.2,
-        "pressing": 57.3
-      }
-    ]
-  },
-  {
     "name": "USA",
     "rank": 11,
     "sortRank": 11,
@@ -780,6 +733,19 @@ const trendsData=[
         "defense": 74.7,
         "physicality": 39.7,
         "pressing": 36.6
+      },
+      {
+        "match": 4,
+        "opponent": "Ecuador",
+        "date": "6/30/2026",
+        "goals": 2,
+        "conceded": 0,
+        "finishing": 39.0,
+        "creation": 39.3,
+        "control": 34.8,
+        "defense": 71.6,
+        "physicality": 58.7,
+        "pressing": 39.2
       }
     ]
   },
@@ -1490,6 +1456,66 @@ const trendsData=[
         "defense": 68.7,
         "physicality": 62.5,
         "pressing": 36.5
+      }
+    ]
+  },
+  {
+    "name": "Ecuador",
+    "rank": 10,
+    "sortRank": 910,
+    "eliminated": true,
+    "trend": [
+      {
+        "match": 1,
+        "opponent": "Ivory Coast",
+        "date": "6/14/2026",
+        "goals": 0,
+        "conceded": 1,
+        "finishing": 9.3,
+        "creation": 38.6,
+        "control": 56.5,
+        "defense": 74.8,
+        "physicality": 47.0,
+        "pressing": 62.2
+      },
+      {
+        "match": 2,
+        "opponent": "Curacao",
+        "date": "6/20/2026",
+        "goals": 0,
+        "conceded": 0,
+        "finishing": 3.0,
+        "creation": 80.2,
+        "control": 88.5,
+        "defense": 77.8,
+        "physicality": 52.1,
+        "pressing": 77.5
+      },
+      {
+        "match": 3,
+        "opponent": "Germany",
+        "date": "6/25/2026",
+        "goals": 2,
+        "conceded": 1,
+        "finishing": 45.6,
+        "creation": 42.7,
+        "control": 38.3,
+        "defense": 81.0,
+        "physicality": 54.2,
+        "pressing": 57.3
+      },
+      {
+        "match": 4,
+        "opponent": "Mexico",
+        "date": "6/30/2026",
+        "goals": 0,
+        "conceded": 2,
+        "finishing": 11.9,
+        "creation": 37.3,
+        "control": 54.3,
+        "defense": 53.5,
+        "physicality": 46.4,
+        "pressing": 28.4
       }
     ]
   },

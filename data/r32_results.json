@@ -1,12 +1,13 @@
 {
-  "description": "Round of 32 actual results (updated as matches complete)",
+  "description": "Round of 32 actual results",
   "completed": [
     {"match": 73, "team_a": "South Africa", "team_b": "Canada", "score_a": 0, "score_b": 1, "winner": "Canada", "extra_time": false, "penalties": false},
     {"match": 74, "team_a": "Germany", "team_b": "Paraguay", "score_a": 1, "score_b": 1, "winner": "Paraguay", "extra_time": true, "penalties": true, "pen_a": 3, "pen_b": 4},
     {"match": 75, "team_a": "Netherlands", "team_b": "Morocco", "score_a": 1, "score_b": 1, "winner": "Morocco", "extra_time": true, "penalties": true, "pen_a": 2, "pen_b": 3},
     {"match": 76, "team_a": "Brazil", "team_b": "Japan", "score_a": 2, "score_b": 1, "winner": "Brazil", "extra_time": false, "penalties": false},
     {"match": 77, "team_a": "France", "team_b": "Sweden", "score_a": 3, "score_b": 0, "winner": "France", "extra_time": false, "penalties": false},
-    {"match": 78, "team_a": "Ivory Coast", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false}
+    {"match": 78, "team_a": "Ivory Coast", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false},
+    {"match": 79, "team_a": "Mexico", "team_b": "Ecuador", "score_a": 2, "score_b": 0, "winner": "Mexico", "extra_time": false, "penalties": false}
   ],
-  "upcoming": [79, 80, 81, 82, 83, 84, 85, 86, 87, 88]
+  "upcoming": [80, 81, 82, 83, 84, 85, 86, 87, 88]
 }
