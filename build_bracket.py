@@ -236,6 +236,7 @@ def generate_bracket_html(results, bracket, all_scores):
     nav_html = ' &middot; '.join([
         '<a href="dashboard.html" class="nav-link">Group Stage</a>',
         '<a href="r32.html" class="nav-link">Round of 32</a>',
+        '<a href="r16.html" class="nav-link">Round of 16</a>',
         '<a href="trends.html" class="nav-link">Trends</a>',
         '<a href="bracket.html" class="nav-link active">Bracket</a>',
     ])
@@ -349,15 +350,16 @@ def generate_bracket_html(results, bracket, all_scores):
 
     # Build empty slot HTML for later rounds
     def empty_slot_html(match_info):
-        """Show future round slot, filling in team names ONLY from completed R32 matches."""
+        """Show future round slot with predictions when both teams are known."""
+        match_num = match_info.get("match", 0)
         team_a_ref = match_info.get("team_a", "")
         team_b_ref = match_info.get("team_b", "")
 
         # Resolve W## references ONLY if that match is actually completed
         def resolve(ref):
             if ref.startswith("W"):
-                match_num = int(ref[1:])
-                r = results.get(match_num)
+                mn = int(ref[1:])
+                r = results.get(mn)
                 if r and r.get("completed") and r.get("winner") and r["winner"] != "TBD":
                     return r["winner"]
             return None
@@ -365,6 +367,36 @@ def generate_bracket_html(results, bracket, all_scores):
         team_a = resolve(team_a_ref)
         team_b = resolve(team_b_ref)
 
+        # If both teams known, check for frozen R16 prediction
+        if team_a and team_b:
+            r16_frozen_path = os.path.join(DATA_DIR, "r16_predictions_frozen.json")
+            r16_pred = {}
+            if os.path.exists(r16_frozen_path):
+                with open(r16_frozen_path, "r", encoding="utf-8") as ff:
+                    r16_pred = json.load(ff)
+            pred = r16_pred.get(str(match_num))
+            if pred:
+                pct_a = pred["prob_a"]
+                pct_b = pred["prob_b"]
+                pred_winner = pred.get("predicted_winner", "")
+                is_tossup = abs(pct_a - 50) <= 2
+                if is_tossup:
+                    cls_a = "tossup"
+                    cls_b = "tossup"
+                else:
+                    cls_a = "predicted-winner" if pred_winner == team_a else "loser"
+                    cls_b = "predicted-winner" if pred_winner == team_b else "loser"
+                flag_a = FLAGS.get(team_a, "???")
+                flag_b = FLAGS.get(team_b, "???")
+                short_a = team_a.replace("Bosnia and Herzegovina", "Bosnia")
+                short_b = team_b.replace("Bosnia and Herzegovina", "Bosnia")
+                return f'''<div class="matchup">
+<div class="matchup-info">{match_info["venue"]} · {match_info["date"]}</div>
+<div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}</span><span class="prob">{pct_a}%</span></div>
+<div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}</span><span class="prob">{pct_b}%</span></div>
+</div>'''
+
+        # Default: show known teams without prediction
         flag_a = FLAGS.get(team_a, "⬜") if team_a else "⬜"
         flag_b = FLAGS.get(team_b, "⬜") if team_b else "⬜"
         name_a = team_a.replace("Bosnia and Herzegovina", "Bosnia") if team_a else "—"

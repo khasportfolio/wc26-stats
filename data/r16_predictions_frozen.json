@@ -1,0 +1,23 @@
+{
+  "89": {
+    "team_a": "Paraguay",
+    "team_b": "France",
+    "prob_a": 21,
+    "prob_b": 79,
+    "predicted_winner": "France"
+  },
+  "90": {
+    "team_a": "Canada",
+    "team_b": "Morocco",
+    "prob_a": 50,
+    "prob_b": 50,
+    "predicted_winner": "Morocco"
+  },
+  "91": {
+    "team_a": "Brazil",
+    "team_b": "Norway",
+    "prob_a": 66,
+    "prob_b": 34,
+    "predicted_winner": "Brazil"
+  }
+}
