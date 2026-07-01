@@ -23,9 +23,12 @@ h2{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;b
 .analysis-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px}
 .teams{font-weight:700;font-size:.9rem}
 .prediction{font-size:.75rem;padding:3px 8px;border-radius:6px;background:rgba(232,155,45,.15);color:#E89B2D;font-weight:600}
+.prediction.tossup-badge{background:rgba(150,150,150,.15);color:var(--text-muted)}
 .result-badge{font-size:.72rem;padding:4px 10px;border-radius:6px;margin-bottom:8px;font-weight:600}
 .result-badge.correct{background:rgba(60,172,59,.1);color:var(--wc-green)}
 .result-badge.incorrect{background:rgba(230,29,37,.1);color:var(--wc-red)}
+.result-badge.neutral{background:rgba(150,150,150,.1);color:var(--text-muted)}
+.reasoning{font-size:.72rem;color:var(--text-secondary);padding:8px 12px;background:var(--bar-bg);border-radius:6px;margin:8px 0;line-height:1.5;font-style:italic}
 .dim-table{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:8px}
 .dim-table th{text-align:left;padding:4px 8px;border-bottom:1px solid var(--card-border);color:var(--text-muted);font-weight:600}
 .dim-table td{padding:4px 8px;border-bottom:1px solid var(--card-border)}
@@ -39,15 +42,16 @@ h2{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;b
 <h1>⚽ World Cup 2026 — Prediction Logs</h1>
 <p class="subtitle">Full reasoning behind every prediction · Per-dimension breakdown</p>
 <div class="nav"><a href="dashboard.html" class="nav-link">Group Stage</a> &middot; <a href="r32.html" class="nav-link">Round of 32</a> &middot; <a href="r16.html" class="nav-link">Round of 16</a> &middot; <a href="trends.html" class="nav-link">Trends</a> &middot; <a href="bracket.html" class="nav-link">Bracket</a> &middot; <a href="predictions.html" class="nav-link active">Predictions</a></div>
-<div class="accuracy">R32 Accuracy: <strong>4/7</strong> correct predictions (4/7 completed matches)</div>
+<div class="accuracy">R32 Accuracy: <strong>4/5</strong> correct picks (2 toss-ups excluded from scoring)</div>
 <div class="content">
 <h2>Round of 32 Predictions</h2>
 <div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">RSA South Africa vs CAN Canada</span>
-<span class="prediction">Prediction: Canada (78%)</span>
+<span class="prediction">Canada (78%)</span>
 </div>
 <div class="result-badge correct">✓ Correct — FT: 0-1, Canada advances</div>
+<div class="reasoning">Canada is favored at 78% and leads 4/6 dimensions (Finishing, Creation, Physicality, Pressing). South Africa has edges in none. Both signals align — clear advantage for Canada.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>South Africa</th><th>Canada</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>13.6</td><td>42.5</td><td class="team-b">Canada</td></tr><tr><td>Defense</td><td>25%</td><td>136.7</td><td>142.4</td><td class="even">Even</td></tr><tr><td>Control</td><td>20%</td><td>134.4</td><td>131.1</td><td class="even">Even</td></tr><tr><td>Creation</td><td>15%</td><td>75.9</td><td>173.5</td><td class="team-b">Canada</td></tr><tr><td>Pressing</td><td>10%</td><td>116.3</td><td>157.8</td><td class="team-b">Canada</td></tr><tr><td>Physicality</td><td>5%</td><td>134.7</td><td>155.8</td><td class="team-b">Canada</td></tr></tbody>
@@ -58,9 +62,10 @@ South Africa leads 0/6 dimensions · Canada leads 4/6 dimensions · 2 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">GER Germany vs PAR Paraguay</span>
-<span class="prediction">Prediction: Germany (78%)</span>
+<span class="prediction">Germany (78%)</span>
 </div>
 <div class="result-badge incorrect">✗ Wrong — FT: 1-1 (pen 3-4), Paraguay advances</div>
+<div class="reasoning">Germany is favored at 78% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Paraguay has edges in Defense, Physicality. Both signals align — clear advantage for Germany.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Germany</th><th>Paraguay</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>45.7</td><td>26.0</td><td class="team-a">Germany</td></tr><tr><td>Defense</td><td>25%</td><td>131.3</td><td>138.6</td><td class="team-b">Paraguay</td></tr><tr><td>Control</td><td>20%</td><td>173.4</td><td>94.8</td><td class="team-a">Germany</td></tr><tr><td>Creation</td><td>15%</td><td>193.1</td><td>76.0</td><td class="team-a">Germany</td></tr><tr><td>Pressing</td><td>10%</td><td>190.0</td><td>105.0</td><td class="team-a">Germany</td></tr><tr><td>Physicality</td><td>5%</td><td>153.8</td><td>182.8</td><td class="team-b">Paraguay</td></tr></tbody>
@@ -71,9 +76,10 @@ Germany leads 4/6 dimensions · Paraguay leads 2/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">NED Netherlands vs MAR Morocco</span>
-<span class="prediction">Prediction: Netherlands (60%)</span>
+<span class="prediction tossup-badge">TOSS-UP (52%-48%)</span>
 </div>
-<div class="result-badge incorrect">✗ Wrong — FT: 1-1 (pen 2-3), Morocco advances</div>
+<div class="result-badge neutral">Toss-up → Morocco won — FT: 1-1 (pen 2-3), Morocco advances</div>
+<div class="reasoning">Pure coin flip. Probability is 52%-48% (within 2% margin). Netherlands leads 1 dimensions, Morocco leads 3. No meaningful edge for either side.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Netherlands</th><th>Morocco</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>72.7</td><td>41.8</td><td class="team-a">Netherlands</td></tr><tr><td>Defense</td><td>25%</td><td>121.2</td><td>136.6</td><td class="team-b">Morocco</td></tr><tr><td>Control</td><td>20%</td><td>135.6</td><td>171.5</td><td class="team-b">Morocco</td></tr><tr><td>Creation</td><td>15%</td><td>127.7</td><td>159.0</td><td class="team-b">Morocco</td></tr><tr><td>Pressing</td><td>10%</td><td>128.8</td><td>132.0</td><td class="even">Even</td></tr><tr><td>Physicality</td><td>5%</td><td>145.9</td><td>146.1</td><td class="even">Even</td></tr></tbody>
@@ -84,9 +90,10 @@ Netherlands leads 1/6 dimensions · Morocco leads 3/6 dimensions · 2 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">BRA Brazil vs JPN Japan</span>
-<span class="prediction">Prediction: Brazil (72%)</span>
+<span class="prediction">Brazil (72%)</span>
 </div>
 <div class="result-badge correct">✓ Correct — FT: 2-1, Brazil advances</div>
+<div class="reasoning">Brazil is favored at 72% and leads 5/6 dimensions (Finishing, Creation, Control, Defense, Pressing). Japan has edges in none. Both signals align — clear advantage for Brazil.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Brazil</th><th>Japan</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>52.2</td><td>47.3</td><td class="team-a">Brazil</td></tr><tr><td>Defense</td><td>25%</td><td>142.9</td><td>98.3</td><td class="team-a">Brazil</td></tr><tr><td>Control</td><td>20%</td><td>160.2</td><td>123.4</td><td class="team-a">Brazil</td></tr><tr><td>Creation</td><td>15%</td><td>190.2</td><td>87.2</td><td class="team-a">Brazil</td></tr><tr><td>Pressing</td><td>10%</td><td>128.3</td><td>96.0</td><td class="team-a">Brazil</td></tr><tr><td>Physicality</td><td>5%</td><td>138.4</td><td>132.2</td><td class="even">Even</td></tr></tbody>
@@ -97,9 +104,10 @@ Brazil leads 5/6 dimensions · Japan leads 0/6 dimensions · 1 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">FRA France vs SWE Sweden</span>
-<span class="prediction">Prediction: France (75%)</span>
+<span class="prediction">France (83%)</span>
 </div>
 <div class="result-badge correct">✓ Correct — FT: 3-0, France advances</div>
+<div class="reasoning">France is favored at 83% and leads 6/6 dimensions (Finishing, Creation, Control, Defense, Physicality, Pressing). Sweden has edges in none. Both signals align — clear advantage for France.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>France</th><th>Sweden</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>69.8</td><td>35.2</td><td class="team-a">France</td></tr><tr><td>Defense</td><td>25%</td><td>130.9</td><td>68.2</td><td class="team-a">France</td></tr><tr><td>Control</td><td>20%</td><td>152.0</td><td>117.9</td><td class="team-a">France</td></tr><tr><td>Creation</td><td>15%</td><td>167.5</td><td>86.2</td><td class="team-a">France</td></tr><tr><td>Pressing</td><td>10%</td><td>141.3</td><td>92.2</td><td class="team-a">France</td></tr><tr><td>Physicality</td><td>5%</td><td>134.5</td><td>112.7</td><td class="team-a">France</td></tr></tbody>
@@ -110,9 +118,10 @@ France leads 6/6 dimensions · Sweden leads 0/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">CIV Ivory Coast vs NOR Norway</span>
-<span class="prediction">Prediction: Ivory Coast (50%)</span>
+<span class="prediction tossup-badge">TOSS-UP (45%-55%)</span>
 </div>
-<div class="result-badge incorrect">✗ Wrong — FT: 1-2, Norway advances</div>
+<div class="result-badge neutral">Toss-up → Norway won — FT: 1-2, Norway advances</div>
+<div class="reasoning">Marginal edge. Probability is only 55% and dimension count is close (2-2). Not enough separation to make a confident call.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Ivory Coast</th><th>Norway</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>30.6</td><td>48.1</td><td class="team-b">Norway</td></tr><tr><td>Defense</td><td>25%</td><td>117.4</td><td>99.2</td><td class="team-a">Ivory Coast</td></tr><tr><td>Control</td><td>20%</td><td>137.1</td><td>132.5</td><td class="even">Even</td></tr><tr><td>Creation</td><td>15%</td><td>114.6</td><td>125.9</td><td class="team-b">Norway</td></tr><tr><td>Pressing</td><td>10%</td><td>126.2</td><td>118.0</td><td class="team-a">Ivory Coast</td></tr><tr><td>Physicality</td><td>5%</td><td>130.9</td><td>128.0</td><td class="even">Even</td></tr></tbody>
@@ -123,9 +132,10 @@ Ivory Coast leads 2/6 dimensions · Norway leads 2/6 dimensions · 2 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">MEX Mexico vs ECU Ecuador</span>
-<span class="prediction">Prediction: Mexico (60%)</span>
+<span class="prediction">Mexico (71%)</span>
 </div>
 <div class="result-badge correct">✓ Correct — FT: 2-0, Mexico advances</div>
+<div class="reasoning">Mexico is favored at 71% despite Ecuador leading more dimensions (3/6). Mexico's advantage in Finishing, Defense is large enough to overcome the spread. Moderate confidence.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Mexico</th><th>Ecuador</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>54.7</td><td>10.3</td><td class="team-a">Mexico</td></tr><tr><td>Defense</td><td>25%</td><td>133.8</td><td>123.4</td><td class="team-a">Mexico</td></tr><tr><td>Control</td><td>20%</td><td>122.9</td><td>139.0</td><td class="team-b">Ecuador</td></tr><tr><td>Creation</td><td>15%</td><td>110.8</td><td>135.3</td><td class="team-b">Ecuador</td></tr><tr><td>Pressing</td><td>10%</td><td>121.5</td><td>136.8</td><td class="team-b">Ecuador</td></tr><tr><td>Physicality</td><td>5%</td><td>138.6</td><td>135.7</td><td class="even">Even</td></tr></tbody>
@@ -136,9 +146,10 @@ Mexico leads 2/6 dimensions · Ecuador leads 3/6 dimensions · 1 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">ENG England vs COD DR Congo</span>
-<span class="prediction">Prediction: England (61%)</span>
+<span class="prediction">England (61%)</span>
 </div>
 
+<div class="reasoning">England is favored at 61% and leads 5/6 dimensions (Creation, Control, Defense, Physicality, Pressing). DR Congo has edges in Finishing. Both signals align — clear advantage for England.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>England</th><th>DR Congo</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>32.8</td><td>36.5</td><td class="team-b">DR Congo</td></tr><tr><td>Defense</td><td>25%</td><td>137.5</td><td>126.5</td><td class="team-a">England</td></tr><tr><td>Control</td><td>20%</td><td>162.8</td><td>119.7</td><td class="team-a">England</td></tr><tr><td>Creation</td><td>15%</td><td>167.0</td><td>100.0</td><td class="team-a">England</td></tr><tr><td>Pressing</td><td>10%</td><td>148.5</td><td>129.5</td><td class="team-a">England</td></tr><tr><td>Physicality</td><td>5%</td><td>164.4</td><td>130.4</td><td class="team-a">England</td></tr></tbody>
@@ -149,9 +160,10 @@ England leads 5/6 dimensions · DR Congo leads 1/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">USA USA vs BIH Bosnia and Herzegovina</span>
-<span class="prediction">Prediction: USA (62%)</span>
+<span class="prediction">USA (62%)</span>
 </div>
 
+<div class="reasoning">USA is favored at 62% and leads 4/6 dimensions (Creation, Control, Defense, Pressing). Bosnia and Herzegovina has edges in none. Both signals align — clear advantage for USA.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>USA</th><th>Bosnia and Herzegovina</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>54.9</td><td>55.9</td><td class="even">Even</td></tr><tr><td>Defense</td><td>25%</td><td>116.8</td><td>97.5</td><td class="team-a">USA</td></tr><tr><td>Control</td><td>20%</td><td>148.7</td><td>124.5</td><td class="team-a">USA</td></tr><tr><td>Creation</td><td>15%</td><td>136.5</td><td>85.2</td><td class="team-a">USA</td></tr><tr><td>Pressing</td><td>10%</td><td>144.6</td><td>126.2</td><td class="team-a">USA</td></tr><tr><td>Physicality</td><td>5%</td><td>151.8</td><td>155.6</td><td class="even">Even</td></tr></tbody>
@@ -162,9 +174,10 @@ USA leads 4/6 dimensions · Bosnia and Herzegovina leads 0/6 dimensions · 2 eve
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">BEL Belgium vs SEN Senegal</span>
-<span class="prediction">Prediction: Belgium (50%)</span>
+<span class="prediction tossup-badge">TOSS-UP (50%-50%)</span>
 </div>
 
+<div class="reasoning">Pure coin flip. Probability is 50%-50% (within 2% margin). Belgium leads 3 dimensions, Senegal leads 2. No meaningful edge for either side.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Belgium</th><th>Senegal</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>49.2</td><td>72.9</td><td class="team-b">Senegal</td></tr><tr><td>Defense</td><td>25%</td><td>145.1</td><td>105.6</td><td class="team-a">Belgium</td></tr><tr><td>Control</td><td>20%</td><td>151.8</td><td>153.5</td><td class="even">Even</td></tr><tr><td>Creation</td><td>15%</td><td>208.7</td><td>183.0</td><td class="team-a">Belgium</td></tr><tr><td>Pressing</td><td>10%</td><td>159.1</td><td>147.9</td><td class="team-a">Belgium</td></tr><tr><td>Physicality</td><td>5%</td><td>133.4</td><td>143.3</td><td class="team-b">Senegal</td></tr></tbody>
@@ -175,9 +188,10 @@ Belgium leads 3/6 dimensions · Senegal leads 2/6 dimensions · 1 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">POR Portugal vs CRO Croatia</span>
-<span class="prediction">Prediction: Portugal (54%)</span>
+<span class="prediction">Portugal (54%)</span>
 </div>
 
+<div class="reasoning">Portugal is favored at 54% and leads 4/6 dimensions (Creation, Control, Defense, Pressing). Croatia has edges in Finishing, Physicality. Both signals align — clear advantage for Portugal.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Portugal</th><th>Croatia</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>32.4</td><td>46.8</td><td class="team-b">Croatia</td></tr><tr><td>Defense</td><td>25%</td><td>125.2</td><td>98.8</td><td class="team-a">Portugal</td></tr><tr><td>Control</td><td>20%</td><td>154.5</td><td>142.6</td><td class="team-a">Portugal</td></tr><tr><td>Creation</td><td>15%</td><td>129.3</td><td>88.5</td><td class="team-a">Portugal</td></tr><tr><td>Pressing</td><td>10%</td><td>129.8</td><td>104.8</td><td class="team-a">Portugal</td></tr><tr><td>Physicality</td><td>5%</td><td>121.3</td><td>138.7</td><td class="team-b">Croatia</td></tr></tbody>
@@ -188,9 +202,10 @@ Portugal leads 4/6 dimensions · Croatia leads 2/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">ESP Spain vs AUT Austria</span>
-<span class="prediction">Prediction: Spain (70%)</span>
+<span class="prediction">Spain (70%)</span>
 </div>
 
+<div class="reasoning">Spain is favored at 70% and leads 5/6 dimensions (Creation, Control, Defense, Physicality, Pressing). Austria has edges in Finishing. Both signals align — clear advantage for Spain.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Spain</th><th>Austria</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>37.5</td><td>45.6</td><td class="team-b">Austria</td></tr><tr><td>Defense</td><td>25%</td><td>158.2</td><td>83.8</td><td class="team-a">Spain</td></tr><tr><td>Control</td><td>20%</td><td>174.7</td><td>128.7</td><td class="team-a">Spain</td></tr><tr><td>Creation</td><td>15%</td><td>154.7</td><td>103.4</td><td class="team-a">Spain</td></tr><tr><td>Pressing</td><td>10%</td><td>179.0</td><td>109.6</td><td class="team-a">Spain</td></tr><tr><td>Physicality</td><td>5%</td><td>137.9</td><td>120.1</td><td class="team-a">Spain</td></tr></tbody>
@@ -201,9 +216,10 @@ Spain leads 5/6 dimensions · Austria leads 1/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">SUI Switzerland vs ALG Algeria</span>
-<span class="prediction">Prediction: Switzerland (57%)</span>
+<span class="prediction">Switzerland (57%)</span>
 </div>
 
+<div class="reasoning">Switzerland is favored at 57% and leads 5/6 dimensions (Finishing, Creation, Defense, Physicality, Pressing). Algeria has edges in Control. Both signals align — clear advantage for Switzerland.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Switzerland</th><th>Algeria</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>61.5</td><td>52.8</td><td class="team-a">Switzerland</td></tr><tr><td>Defense</td><td>25%</td><td>112.5</td><td>97.0</td><td class="team-a">Switzerland</td></tr><tr><td>Control</td><td>20%</td><td>149.8</td><td>170.6</td><td class="team-b">Algeria</td></tr><tr><td>Creation</td><td>15%</td><td>138.2</td><td>122.8</td><td class="team-a">Switzerland</td></tr><tr><td>Pressing</td><td>10%</td><td>140.6</td><td>124.8</td><td class="team-a">Switzerland</td></tr><tr><td>Physicality</td><td>5%</td><td>145.1</td><td>118.7</td><td class="team-a">Switzerland</td></tr></tbody>
@@ -214,9 +230,10 @@ Switzerland leads 5/6 dimensions · Algeria leads 1/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">ARG Argentina vs CPV Cape Verde</span>
-<span class="prediction">Prediction: Argentina (76%)</span>
+<span class="prediction">Argentina (76%)</span>
 </div>
 
+<div class="reasoning">Argentina is favored at 76% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Cape Verde has edges in Defense, Physicality. Both signals align — clear advantage for Argentina.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Argentina</th><th>Cape Verde</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>57.0</td><td>12.0</td><td class="team-a">Argentina</td></tr><tr><td>Defense</td><td>25%</td><td>138.4</td><td>146.2</td><td class="team-b">Cape Verde</td></tr><tr><td>Control</td><td>20%</td><td>165.5</td><td>115.6</td><td class="team-a">Argentina</td></tr><tr><td>Creation</td><td>15%</td><td>89.6</td><td>83.0</td><td class="team-a">Argentina</td></tr><tr><td>Pressing</td><td>10%</td><td>121.3</td><td>108.7</td><td class="team-a">Argentina</td></tr><tr><td>Physicality</td><td>5%</td><td>109.7</td><td>146.0</td><td class="team-b">Cape Verde</td></tr></tbody>
@@ -227,9 +244,10 @@ Argentina leads 4/6 dimensions · Cape Verde leads 2/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">COL Colombia vs GHA Ghana</span>
-<span class="prediction">Prediction: Ghana (52%)</span>
+<span class="prediction tossup-badge">TOSS-UP (48%-52%)</span>
 </div>
 
+<div class="reasoning">Pure coin flip. Probability is 48%-52% (within 2% margin). Colombia leads 4 dimensions, Ghana leads 2. No meaningful edge for either side.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Colombia</th><th>Ghana</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>9.2</td><td>26.6</td><td class="team-b">Ghana</td></tr><tr><td>Defense</td><td>25%</td><td>138.4</td><td>126.1</td><td class="team-a">Colombia</td></tr><tr><td>Control</td><td>20%</td><td>150.5</td><td>110.6</td><td class="team-a">Colombia</td></tr><tr><td>Creation</td><td>15%</td><td>143.6</td><td>67.5</td><td class="team-a">Colombia</td></tr><tr><td>Pressing</td><td>10%</td><td>121.0</td><td>83.1</td><td class="team-a">Colombia</td></tr><tr><td>Physicality</td><td>5%</td><td>116.9</td><td>136.2</td><td class="team-b">Ghana</td></tr></tbody>
@@ -240,9 +258,10 @@ Colombia leads 4/6 dimensions · Ghana leads 2/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">AUS Australia vs EGY Egypt</span>
-<span class="prediction">Prediction: Egypt (68%)</span>
+<span class="prediction">Egypt (68%)</span>
 </div>
 
+<div class="reasoning">Egypt is favored at 68% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Australia has edges in Physicality. Both signals align — clear advantage for Egypt.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Australia</th><th>Egypt</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>20.0</td><td>33.1</td><td class="team-b">Egypt</td></tr><tr><td>Defense</td><td>25%</td><td>126.1</td><td>127.0</td><td class="even">Even</td></tr><tr><td>Control</td><td>20%</td><td>121.7</td><td>147.7</td><td class="team-b">Egypt</td></tr><tr><td>Creation</td><td>15%</td><td>77.5</td><td>128.9</td><td class="team-b">Egypt</td></tr><tr><td>Pressing</td><td>10%</td><td>123.7</td><td>136.7</td><td class="team-b">Egypt</td></tr><tr><td>Physicality</td><td>5%</td><td>177.7</td><td>168.8</td><td class="team-a">Australia</td></tr></tbody>
@@ -255,9 +274,10 @@ Australia leads 1/6 dimensions · Egypt leads 4/6 dimensions · 1 even
 <div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">PAR Paraguay vs FRA France</span>
-<span class="prediction">Prediction: France (79%)</span>
+<span class="prediction">France (79%)</span>
 </div>
 
+<div class="reasoning">France is favored at 79% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Paraguay has edges in Defense, Physicality. Both signals align — clear advantage for France.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Paraguay</th><th>France</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>26.0</td><td>69.8</td><td class="team-b">France</td></tr><tr><td>Defense</td><td>25%</td><td>138.6</td><td>130.9</td><td class="team-a">Paraguay</td></tr><tr><td>Control</td><td>20%</td><td>94.8</td><td>152.0</td><td class="team-b">France</td></tr><tr><td>Creation</td><td>15%</td><td>76.0</td><td>167.5</td><td class="team-b">France</td></tr><tr><td>Pressing</td><td>10%</td><td>105.0</td><td>141.3</td><td class="team-b">France</td></tr><tr><td>Physicality</td><td>5%</td><td>182.8</td><td>134.5</td><td class="team-a">Paraguay</td></tr></tbody>
@@ -268,9 +288,10 @@ Paraguay leads 2/6 dimensions · France leads 4/6 dimensions · 0 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">CAN Canada vs MAR Morocco</span>
-<span class="prediction">Prediction: Morocco (50%)</span>
+<span class="prediction tossup-badge">TOSS-UP (50%-50%)</span>
 </div>
 
+<div class="reasoning">Pure coin flip. Probability is 50%-50% (within 2% margin). Canada leads 3 dimensions, Morocco leads 1. No meaningful edge for either side.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Canada</th><th>Morocco</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>42.5</td><td>41.8</td><td class="even">Even</td></tr><tr><td>Defense</td><td>25%</td><td>142.4</td><td>136.6</td><td class="even">Even</td></tr><tr><td>Control</td><td>20%</td><td>131.1</td><td>171.5</td><td class="team-b">Morocco</td></tr><tr><td>Creation</td><td>15%</td><td>173.5</td><td>159.0</td><td class="team-a">Canada</td></tr><tr><td>Pressing</td><td>10%</td><td>157.8</td><td>132.0</td><td class="team-a">Canada</td></tr><tr><td>Physicality</td><td>5%</td><td>155.8</td><td>146.1</td><td class="team-a">Canada</td></tr></tbody>
@@ -281,9 +302,10 @@ Canada leads 3/6 dimensions · Morocco leads 1/6 dimensions · 2 even
 </div><div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">BRA Brazil vs NOR Norway</span>
-<span class="prediction">Prediction: Brazil (66%)</span>
+<span class="prediction">Brazil (66%)</span>
 </div>
 
+<div class="reasoning">Brazil is favored at 66% and leads 6/6 dimensions (Finishing, Creation, Control, Defense, Physicality, Pressing). Norway has edges in none. Both signals align — clear advantage for Brazil.</div>
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>Brazil</th><th>Norway</th><th>Edge</th></tr></thead>
 <tbody><tr><td>Finishing</td><td>25%</td><td>52.2</td><td>48.1</td><td class="team-a">Brazil</td></tr><tr><td>Defense</td><td>25%</td><td>142.9</td><td>99.2</td><td class="team-a">Brazil</td></tr><tr><td>Control</td><td>20%</td><td>160.2</td><td>132.5</td><td class="team-a">Brazil</td></tr><tr><td>Creation</td><td>15%</td><td>190.2</td><td>125.9</td><td class="team-a">Brazil</td></tr><tr><td>Pressing</td><td>10%</td><td>128.3</td><td>118.0</td><td class="team-a">Brazil</td></tr><tr><td>Physicality</td><td>5%</td><td>138.4</td><td>128.0</td><td class="team-a">Brazil</td></tr></tbody>

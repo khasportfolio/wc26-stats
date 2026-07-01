@@ -24,7 +24,7 @@ from build_bracket import (
 from build_r32_dashboard import DIMS
 
 
-def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result=None):
+def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result=None, reasoning="", is_tossup=False):
     """Build a detailed analysis block for one matchup."""
     scores_a = compute_team_raw_scores(team_a)
     scores_b = compute_team_raw_scores(team_b)
@@ -61,25 +61,39 @@ def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result
                     f'<td>{val_a:.1f}</td><td>{val_b:.1f}</td>'
                     f'<td class="{edge_cls}">{edge}</td></tr>')
 
-    pct_a = round(prob_a * 100)
+    pct_a = round(prob_a * 100) if prob_a <= 1 else prob_a
     pct_b = 100 - pct_a
+
+    # Prediction label
+    if is_tossup:
+        pred_label = f'<span class="prediction tossup-badge">TOSS-UP ({pct_a}%-{pct_b}%)</span>'
+    else:
+        pred_label = f'<span class="prediction">{predicted_winner} ({max(pct_a,pct_b)}%)</span>'
 
     # Result status
     result_html = ""
     if actual_result:
         winner = actual_result["winner"]
         score = actual_result.get("score", "")
-        correct = winner == predicted_winner
-        status_cls = "correct" if correct else "incorrect"
-        status_text = "✓ Correct" if correct else "✗ Wrong"
+        if is_tossup:
+            status_cls = "neutral"
+            status_text = f"Toss-up → {winner} won"
+        else:
+            correct = winner == predicted_winner
+            status_cls = "correct" if correct else "incorrect"
+            status_text = "✓ Correct" if correct else "✗ Wrong"
         result_html = f'<div class="result-badge {status_cls}">{status_text} — FT: {score}, {winner} advances</div>'
+
+    # Reasoning block
+    reasoning_html = f'<div class="reasoning">{reasoning}</div>' if reasoning else ''
 
     return f'''<div class="analysis-card">
 <div class="analysis-header">
 <span class="teams">{FLAGS.get(team_a,"")} {team_a} vs {FLAGS.get(team_b,"")} {team_b}</span>
-<span class="prediction">Prediction: {predicted_winner} ({max(pct_a,pct_b)}%)</span>
+{pred_label}
 </div>
 {result_html}
+{reasoning_html}
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>{team_a}</th><th>{team_b}</th><th>Edge</th></tr></thead>
 <tbody>{"".join(rows)}</tbody>
@@ -136,7 +150,9 @@ def main():
                 score_str += f" (pen {c['pen_a']}-{c['pen_b']})"
             actual = {"winner": c["winner"], "score": score_str}
 
-        html = build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual)
+        html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner, actual,
+                                    reasoning=fp.get("reasoning", ""),
+                                    is_tossup=fp.get("is_tossup", False))
         r32_analyses.append(html)
         print(f"    M{mn}: {team_a} vs {team_b}")
 
@@ -146,9 +162,10 @@ def main():
     for mn_str, fp in r16_frozen.items():
         team_a = fp["team_a"]
         team_b = fp["team_b"]
-        prob_a = fp["prob_a"] / 100.0
-        predicted_winner = fp.get("predicted_winner", team_a if prob_a >= 0.5 else team_b)
-        html = build_match_analysis(team_a, team_b, prob_a, predicted_winner)
+        predicted_winner = fp.get("predicted_winner")
+        html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner,
+                                    reasoning=fp.get("reasoning", ""),
+                                    is_tossup=fp.get("is_tossup", False))
         r16_analyses.append(html)
         print(f"    M{mn_str}: {team_a} vs {team_b}")
 
@@ -162,12 +179,18 @@ def main():
         '<a href="predictions.html" class="nav-link active">Predictions</a>',
     ])
 
-    # Count correct/incorrect
-    correct = sum(1 for mn, c in completed.items()
-                  if str(mn) in r32_frozen and
-                  c["winner"] == r32_frozen[str(mn)].get("predicted_winner"))
-    total_completed = len(completed)
-    accuracy = f"{correct}/{total_completed}" if total_completed else "—"
+    # Count correct/incorrect (toss-ups excluded from accuracy)
+    correct = 0
+    countable = 0
+    for mn, c in completed.items():
+        fp = r32_frozen.get(str(mn), {})
+        if fp.get("is_tossup"):
+            continue  # Don't count toss-ups
+        countable += 1
+        if c["winner"] == fp.get("predicted_winner"):
+            correct += 1
+    tossup_count = sum(1 for mn in completed if r32_frozen.get(str(mn), {}).get("is_tossup"))
+    accuracy = f"{correct}/{countable}" if countable else "—"
 
     filepath = os.path.join(PUBLIC_DIR, "predictions.html")
     os.makedirs(PUBLIC_DIR, exist_ok=True)
@@ -197,9 +220,12 @@ h2{{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;
 .analysis-header{{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;flex-wrap:wrap;gap:8px}}
 .teams{{font-weight:700;font-size:.9rem}}
 .prediction{{font-size:.75rem;padding:3px 8px;border-radius:6px;background:rgba(232,155,45,.15);color:#E89B2D;font-weight:600}}
+.prediction.tossup-badge{{background:rgba(150,150,150,.15);color:var(--text-muted)}}
 .result-badge{{font-size:.72rem;padding:4px 10px;border-radius:6px;margin-bottom:8px;font-weight:600}}
 .result-badge.correct{{background:rgba(60,172,59,.1);color:var(--wc-green)}}
 .result-badge.incorrect{{background:rgba(230,29,37,.1);color:var(--wc-red)}}
+.result-badge.neutral{{background:rgba(150,150,150,.1);color:var(--text-muted)}}
+.reasoning{{font-size:.72rem;color:var(--text-secondary);padding:8px 12px;background:var(--bar-bg);border-radius:6px;margin:8px 0;line-height:1.5;font-style:italic}}
 .dim-table{{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:8px}}
 .dim-table th{{text-align:left;padding:4px 8px;border-bottom:1px solid var(--card-border);color:var(--text-muted);font-weight:600}}
 .dim-table td{{padding:4px 8px;border-bottom:1px solid var(--card-border)}}
@@ -213,7 +239,7 @@ h2{{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;
 <h1>⚽ World Cup 2026 — Prediction Logs</h1>
 <p class="subtitle">Full reasoning behind every prediction · Per-dimension breakdown</p>
 <div class="nav">{nav_html}</div>
-<div class="accuracy">R32 Accuracy: <strong>{accuracy}</strong> correct predictions ({correct}/{total_completed} completed matches)</div>
+<div class="accuracy">R32 Accuracy: <strong>{accuracy}</strong> correct picks ({tossup_count} toss-ups excluded from scoring)</div>
 <div class="content">
 <h2>Round of 32 Predictions</h2>
 {"".join(r32_analyses)}

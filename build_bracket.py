@@ -95,6 +95,123 @@ def compute_win_probability(team_a_scores, team_b_scores):
     return round(prob_a, 3), round(prob_b, 1)
 
 
+def compute_prediction(team_a, team_b, scores_a, scores_b):
+    """
+    Dual-signal prediction model.
+
+    Signal 1: Weighted probability (logistic model on raw scores)
+    Signal 2: Dimension dominance (who leads more dimensions)
+
+    Decision logic:
+    - If both signals agree → confident pick
+    - If signals disagree → toss-up (regardless of raw probability)
+    - If probability within 55/45 and dimensions close → toss-up
+
+    Returns dict with prediction details and reasoning.
+    """
+    if scores_a is None or scores_b is None:
+        return {
+            "predicted_winner": None, "is_tossup": True,
+            "prob_a": 50, "prob_b": 50,
+            "reasoning": "Insufficient data",
+            "dim_edges": {}, "a_dims": 0, "b_dims": 0,
+        }
+
+    # Signal 1: Weighted probability
+    prob_a_raw, _ = compute_win_probability(scores_a, scores_b)
+    prob_a_pct = round(prob_a_raw * 100)
+    prob_b_pct = 100 - prob_a_pct
+    prob_winner = team_a if prob_a_raw >= 0.5 else team_b
+
+    # Signal 2: Dimension dominance
+    DIM_LABELS = {
+        "finishing": "Finishing", "defense": "Defense", "control": "Control",
+        "creation": "Creation", "pressing": "Pressing", "physicality": "Physicality",
+    }
+    dim_edges = {}
+    a_dims = 0
+    b_dims = 0
+    even_dims = 0
+    for dim in DIMS:
+        val_a = scores_a[dim]
+        val_b = scores_b[dim]
+        avg_mag = (abs(val_a) + abs(val_b)) / 2
+        diff = abs(val_a - val_b)
+        if avg_mag > 0 and diff / avg_mag < 0.05:
+            dim_edges[dim] = "even"
+            even_dims += 1
+        elif val_a > val_b:
+            dim_edges[dim] = team_a
+            a_dims += 1
+        else:
+            dim_edges[dim] = team_b
+            b_dims += 1
+
+    dim_winner = team_a if a_dims > b_dims else (team_b if b_dims > a_dims else None)
+
+    # Decision logic
+    prob_margin = abs(prob_a_pct - 50)
+
+    if prob_margin <= 2:
+        # Dead even probability → always toss-up
+        is_tossup = True
+        predicted_winner = None
+        reasoning = (f"Pure coin flip. Probability is {prob_a_pct}%-{prob_b_pct}% "
+                     f"(within 2% margin). {team_a} leads {a_dims} dimensions, "
+                     f"{team_b} leads {b_dims}. No meaningful edge for either side.")
+    elif prob_winner != dim_winner and dim_winner is not None:
+        # Signals disagree → toss-up only if probability isn't overwhelming
+        if prob_margin <= 15:
+            is_tossup = True
+            predicted_winner = None
+            reasoning = (f"Signals conflict. Probability favors {prob_winner} ({max(prob_a_pct,prob_b_pct)}%) "
+                         f"but {dim_winner} dominates more dimensions ({max(a_dims,b_dims)}/6). "
+                         f"{prob_winner}'s edge comes from a single large gap that inflates the "
+                         f"weighted score, but {dim_winner} controls more aspects of the game. "
+                         f"Too close to call.")
+        else:
+            # Probability is strong enough (>65%) to override dimension count
+            is_tossup = False
+            predicted_winner = prob_winner
+            dim_list_winner = [DIM_LABELS[d] for d, v in dim_edges.items() if v == predicted_winner]
+            other_team = team_b if predicted_winner == team_a else team_a
+            reasoning = (f"{predicted_winner} is favored at {max(prob_a_pct,prob_b_pct)}% "
+                         f"despite {dim_winner} leading more dimensions ({max(a_dims,b_dims)}/6). "
+                         f"{predicted_winner}'s advantage in {', '.join(dim_list_winner)} "
+                         f"is large enough to overcome the spread. Moderate confidence.")
+    elif prob_margin <= 5 and abs(a_dims - b_dims) <= 1:
+        # Marginal probability + close dimension count → toss-up
+        is_tossup = True
+        predicted_winner = None
+        reasoning = (f"Marginal edge. Probability is only {max(prob_a_pct,prob_b_pct)}% "
+                     f"and dimension count is close ({a_dims}-{b_dims}). "
+                     f"Not enough separation to make a confident call.")
+    else:
+        # Both signals agree or one is dominant → confident pick
+        is_tossup = False
+        predicted_winner = prob_winner
+        dim_list_winner = [DIM_LABELS[d] for d, v in dim_edges.items() if v == predicted_winner]
+        dim_list_loser = [DIM_LABELS[d] for d, v in dim_edges.items() if v != predicted_winner and v != "even"]
+        other_team = team_b if predicted_winner == team_a else team_a
+
+        reasoning = (f"{predicted_winner} is favored at {max(prob_a_pct,prob_b_pct)}% "
+                     f"and leads {max(a_dims,b_dims)}/6 dimensions "
+                     f"({', '.join(dim_list_winner)}). "
+                     f"{other_team} has edges in {', '.join(dim_list_loser) if dim_list_loser else 'none'}. "
+                     f"Both signals align — clear advantage for {predicted_winner}.")
+
+    return {
+        "predicted_winner": predicted_winner,
+        "is_tossup": is_tossup,
+        "prob_a": prob_a_pct,
+        "prob_b": prob_b_pct,
+        "reasoning": reasoning,
+        "dim_edges": dim_edges,
+        "a_dims": a_dims,
+        "b_dims": b_dims,
+    }
+
+
 def predict_match_goals(scores_a, scores_b):
     """
     Predict total goals in a match using xG-based model.

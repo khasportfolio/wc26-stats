@@ -4,111 +4,175 @@
     "team_b": "Canada",
     "prob_a": 22,
     "prob_b": 78,
-    "predicted_winner": "Canada"
+    "predicted_winner": "Canada",
+    "is_tossup": false,
+    "reasoning": "Canada is favored at 78% and leads 4/6 dimensions (Finishing, Creation, Physicality, Pressing). South Africa has edges in none. Both signals align \u2014 clear advantage for Canada.",
+    "a_dims": 0,
+    "b_dims": 4
   },
   "74": {
     "team_a": "Germany",
     "team_b": "Paraguay",
     "prob_a": 78,
     "prob_b": 22,
-    "predicted_winner": "Germany"
+    "predicted_winner": "Germany",
+    "is_tossup": false,
+    "reasoning": "Germany is favored at 78% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Paraguay has edges in Defense, Physicality. Both signals align \u2014 clear advantage for Germany.",
+    "a_dims": 4,
+    "b_dims": 2
   },
   "75": {
     "team_a": "Netherlands",
     "team_b": "Morocco",
-    "prob_a": 60,
-    "prob_b": 40,
-    "predicted_winner": "Netherlands"
+    "prob_a": 52,
+    "prob_b": 48,
+    "predicted_winner": null,
+    "is_tossup": true,
+    "reasoning": "Pure coin flip. Probability is 52%-48% (within 2% margin). Netherlands leads 1 dimensions, Morocco leads 3. No meaningful edge for either side.",
+    "a_dims": 1,
+    "b_dims": 3
   },
   "76": {
     "team_a": "Brazil",
     "team_b": "Japan",
     "prob_a": 72,
     "prob_b": 28,
-    "predicted_winner": "Brazil"
+    "predicted_winner": "Brazil",
+    "is_tossup": false,
+    "reasoning": "Brazil is favored at 72% and leads 5/6 dimensions (Finishing, Creation, Control, Defense, Pressing). Japan has edges in none. Both signals align \u2014 clear advantage for Brazil.",
+    "a_dims": 5,
+    "b_dims": 0
   },
   "77": {
     "team_a": "France",
     "team_b": "Sweden",
-    "prob_a": 75,
-    "prob_b": 25,
-    "predicted_winner": "France"
+    "prob_a": 83,
+    "prob_b": 17,
+    "predicted_winner": "France",
+    "is_tossup": false,
+    "reasoning": "France is favored at 83% and leads 6/6 dimensions (Finishing, Creation, Control, Defense, Physicality, Pressing). Sweden has edges in none. Both signals align \u2014 clear advantage for France.",
+    "a_dims": 6,
+    "b_dims": 0
   },
   "78": {
     "team_a": "Ivory Coast",
     "team_b": "Norway",
-    "prob_a": 50,
-    "prob_b": 50,
-    "predicted_winner": "Ivory Coast"
+    "prob_a": 45,
+    "prob_b": 55,
+    "predicted_winner": null,
+    "is_tossup": true,
+    "reasoning": "Marginal edge. Probability is only 55% and dimension count is close (2-2). Not enough separation to make a confident call.",
+    "a_dims": 2,
+    "b_dims": 2
   },
   "79": {
     "team_a": "Mexico",
     "team_b": "Ecuador",
-    "prob_a": 60,
-    "prob_b": 40,
-    "predicted_winner": "Mexico"
+    "prob_a": 71,
+    "prob_b": 29,
+    "predicted_winner": "Mexico",
+    "is_tossup": false,
+    "reasoning": "Mexico is favored at 71% despite Ecuador leading more dimensions (3/6). Mexico's advantage in Finishing, Defense is large enough to overcome the spread. Moderate confidence.",
+    "a_dims": 2,
+    "b_dims": 3
   },
   "80": {
     "team_a": "England",
     "team_b": "DR Congo",
     "prob_a": 61,
     "prob_b": 39,
-    "predicted_winner": "England"
+    "predicted_winner": "England",
+    "is_tossup": false,
+    "reasoning": "England is favored at 61% and leads 5/6 dimensions (Creation, Control, Defense, Physicality, Pressing). DR Congo has edges in Finishing. Both signals align \u2014 clear advantage for England.",
+    "a_dims": 5,
+    "b_dims": 1
   },
   "81": {
     "team_a": "USA",
     "team_b": "Bosnia and Herzegovina",
     "prob_a": 62,
     "prob_b": 38,
-    "predicted_winner": "USA"
+    "predicted_winner": "USA",
+    "is_tossup": false,
+    "reasoning": "USA is favored at 62% and leads 4/6 dimensions (Creation, Control, Defense, Pressing). Bosnia and Herzegovina has edges in none. Both signals align \u2014 clear advantage for USA.",
+    "a_dims": 4,
+    "b_dims": 0
   },
   "82": {
     "team_a": "Belgium",
     "team_b": "Senegal",
     "prob_a": 50,
     "prob_b": 50,
-    "predicted_winner": "Belgium"
+    "predicted_winner": null,
+    "is_tossup": true,
+    "reasoning": "Pure coin flip. Probability is 50%-50% (within 2% margin). Belgium leads 3 dimensions, Senegal leads 2. No meaningful edge for either side.",
+    "a_dims": 3,
+    "b_dims": 2
   },
   "83": {
     "team_a": "Portugal",
     "team_b": "Croatia",
     "prob_a": 54,
     "prob_b": 46,
-    "predicted_winner": "Portugal"
+    "predicted_winner": "Portugal",
+    "is_tossup": false,
+    "reasoning": "Portugal is favored at 54% and leads 4/6 dimensions (Creation, Control, Defense, Pressing). Croatia has edges in Finishing, Physicality. Both signals align \u2014 clear advantage for Portugal.",
+    "a_dims": 4,
+    "b_dims": 2
   },
   "84": {
     "team_a": "Spain",
     "team_b": "Austria",
     "prob_a": 70,
     "prob_b": 30,
-    "predicted_winner": "Spain"
+    "predicted_winner": "Spain",
+    "is_tossup": false,
+    "reasoning": "Spain is favored at 70% and leads 5/6 dimensions (Creation, Control, Defense, Physicality, Pressing). Austria has edges in Finishing. Both signals align \u2014 clear advantage for Spain.",
+    "a_dims": 5,
+    "b_dims": 1
   },
   "85": {
     "team_a": "Switzerland",
     "team_b": "Algeria",
     "prob_a": 57,
     "prob_b": 43,
-    "predicted_winner": "Switzerland"
+    "predicted_winner": "Switzerland",
+    "is_tossup": false,
+    "reasoning": "Switzerland is favored at 57% and leads 5/6 dimensions (Finishing, Creation, Defense, Physicality, Pressing). Algeria has edges in Control. Both signals align \u2014 clear advantage for Switzerland.",
+    "a_dims": 5,
+    "b_dims": 1
   },
   "86": {
     "team_a": "Argentina",
     "team_b": "Cape Verde",
     "prob_a": 76,
     "prob_b": 24,
-    "predicted_winner": "Argentina"
+    "predicted_winner": "Argentina",
+    "is_tossup": false,
+    "reasoning": "Argentina is favored at 76% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Cape Verde has edges in Defense, Physicality. Both signals align \u2014 clear advantage for Argentina.",
+    "a_dims": 4,
+    "b_dims": 2
   },
   "87": {
     "team_a": "Colombia",
     "team_b": "Ghana",
     "prob_a": 48,
     "prob_b": 52,
-    "predicted_winner": "Ghana"
+    "predicted_winner": null,
+    "is_tossup": true,
+    "reasoning": "Pure coin flip. Probability is 48%-52% (within 2% margin). Colombia leads 4 dimensions, Ghana leads 2. No meaningful edge for either side.",
+    "a_dims": 4,
+    "b_dims": 2
   },
   "88": {
     "team_a": "Australia",
     "team_b": "Egypt",
     "prob_a": 32,
     "prob_b": 68,
-    "predicted_winner": "Egypt"
+    "predicted_winner": "Egypt",
+    "is_tossup": false,
+    "reasoning": "Egypt is favored at 68% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Australia has edges in Physicality. Both signals align \u2014 clear advantage for Egypt.",
+    "a_dims": 1,
+    "b_dims": 4
   }
 }

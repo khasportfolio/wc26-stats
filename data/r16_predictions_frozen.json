@@ -4,20 +4,32 @@
     "team_b": "France",
     "prob_a": 21,
     "prob_b": 79,
-    "predicted_winner": "France"
+    "predicted_winner": "France",
+    "is_tossup": false,
+    "reasoning": "France is favored at 79% and leads 4/6 dimensions (Finishing, Creation, Control, Pressing). Paraguay has edges in Defense, Physicality. Both signals align \u2014 clear advantage for France.",
+    "a_dims": 2,
+    "b_dims": 4
   },
   "90": {
     "team_a": "Canada",
     "team_b": "Morocco",
     "prob_a": 50,
     "prob_b": 50,
-    "predicted_winner": "Morocco"
+    "predicted_winner": null,
+    "is_tossup": true,
+    "reasoning": "Pure coin flip. Probability is 50%-50% (within 2% margin). Canada leads 3 dimensions, Morocco leads 1. No meaningful edge for either side.",
+    "a_dims": 3,
+    "b_dims": 1
   },
   "91": {
     "team_a": "Brazil",
     "team_b": "Norway",
     "prob_a": 66,
     "prob_b": 34,
-    "predicted_winner": "Brazil"
+    "predicted_winner": "Brazil",
+    "is_tossup": false,
+    "reasoning": "Brazil is favored at 66% and leads 6/6 dimensions (Finishing, Creation, Control, Defense, Physicality, Pressing). Norway has edges in none. Both signals align \u2014 clear advantage for Brazil.",
+    "a_dims": 6,
+    "b_dims": 0
   }
 }
