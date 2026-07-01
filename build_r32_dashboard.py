@@ -101,12 +101,19 @@ def read_all_team_files():
 
 
 def read_team_matches(team_name):
+    """Read all played matches for a team."""
     filepath = os.path.join(DATA_DIR, f"{team_name}.csv")
     if not os.path.exists(filepath):
         return []
     with open(filepath, "r", encoding="utf-8") as fh:
         reader = csv.DictReader(fh)
         return [r for r in reader if r.get("Goals", "").strip()]
+
+
+def read_team_group_stage(team_name):
+    """Read only group stage matches (first 3) for a team."""
+    matches = read_team_matches(team_name)
+    return matches[:3]
 
 
 # ─── Dimension scoring (same formulas as build_dashboard.py) ─────────────────
@@ -319,10 +326,11 @@ def main():
     print(f"    {len(qualified)} teams in qualified_r32.txt")
 
     # Read all match data
-    print("\n[2] Reading match data...")
+    # Read GROUP STAGE data only (first 3 matches) for R32 page — this is frozen
+    print("\n[2] Reading group stage match data (frozen)...")
     all_matches = {}
     for team in qualified:
-        matches = read_team_matches(team)
+        matches = read_team_group_stage(team)
         if matches:
             all_matches[team] = matches
             print(f"    {team:30s} — {len(matches)} matches")
@@ -333,8 +341,8 @@ def main():
         print("\n  ERROR: No match data found. Exiting.")
         return
 
-    # Compute dimensions (normalized across R32 pool only)
-    print(f"\n[3] Computing dimensions ({len(all_matches)} teams)...")
+    # Compute dimensions (normalized across R32 pool, group stage only)
+    print(f"\n[3] Computing dimensions ({len(all_matches)} teams, group stage only)...")
     all_data = []
     for team_name, matches in all_matches.items():
         data = compute_team_dimensions(team_name, matches)
@@ -352,12 +360,12 @@ def main():
     print("\n[4] Generating R32 dashboard...")
     write_r32_html(all_data)
 
-    # Compute global min/max for trend normalization (across ALL 48 teams)
+    # Compute global min/max for trend normalization (across ALL 48 teams, ALL matches)
     print("\n[5] Computing trends (global normalization across all 48 teams)...")
     all_48_teams = read_all_team_files()
     all_raw = {dim: [] for dim in DIMS}
     for team_name in all_48_teams:
-        matches = read_team_matches(team_name)
+        matches = read_team_matches(team_name)  # ALL matches (including knockout)
         for m in matches:
             for dim in DIMS:
                 all_raw[dim].append(compute_match_score(m, dim))
@@ -365,11 +373,10 @@ def main():
     global_mins = {dim: min(scores) if scores else 0 for dim, scores in all_raw.items()}
     global_maxs = {dim: max(scores) if scores else 1 for dim, scores in all_raw.items()}
 
-    # Generate trends page (all 48 teams, eliminated greyed out)
+    # Generate trends page (all 48 teams, ALL matches shown, eliminated greyed out)
     print("\n[6] Generating trends page...")
-    # Build ranking from R32 sorted data, plus add non-R32 teams at end
+    # Build ranking from R32 sorted data (group-stage-based), plus non-R32 teams
     team_rankings = {t["team"]: i + 1 for i, t in enumerate(sorted_data)}
-    # Add remaining teams not in R32 (eliminated in group stage) with ranks after R32 teams
     next_rank = len(sorted_data) + 1
     for team_name in all_48_teams:
         if team_name not in team_rankings:

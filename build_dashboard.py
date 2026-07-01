@@ -49,7 +49,8 @@ def safe_mean(values):
 
 
 def read_all_teams():
-    """Read all team CSVs and return {team_name: [row_dicts]}."""
+    """Read all team CSVs and return {team_name: [row_dicts]}.
+    Only uses first 3 matches (group stage) — this page is frozen/archived."""
     teams = {}
     for f in sorted(os.listdir(DATA_DIR)):
         if not f.endswith(".csv") or f in SKIP_FILES:
@@ -60,7 +61,7 @@ def read_all_teams():
             reader = csv.DictReader(fh)
             rows = [r for r in reader if r.get("Goals", "").strip()]
         if rows:
-            teams[team_name] = rows
+            teams[team_name] = rows[:3]  # Group stage only (max 3 matches)
     return teams
 
 
