@@ -558,9 +558,11 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 
 /* Tooltip */
 .matchup.has-tooltip{{position:relative;overflow:visible}}
-.matchup .tooltip{{display:none;position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#1a1a1a;color:#e8e8e8;font-size:.63rem;line-height:1.5;padding:10px 12px;border-radius:6px;max-width:300px;width:max-content;z-index:9999;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.4);white-space:nowrap}}
-.matchup.has-tooltip:hover .tooltip{{display:block}}
-.matchup .tooltip::after{{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a1a}}
+.matchup .tooltip{{display:none;position:absolute;left:50%;transform:translateX(-50%);background:#1a1a1a;color:#e8e8e8;font-size:.63rem;line-height:1.5;padding:10px 12px;border-radius:6px;max-width:300px;width:max-content;z-index:9999;pointer-events:none;box-shadow:0 4px 16px rgba(0,0,0,.4);white-space:nowrap}}
+.matchup .tooltip.show-above{{bottom:calc(100% + 8px);top:auto}}
+.matchup .tooltip.show-below{{top:calc(100% + 8px);bottom:auto}}
+.matchup .tooltip.show-above::after{{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-top-color:#1a1a1a}}
+.matchup .tooltip.show-below::after{{content:'';position:absolute;bottom:100%;left:50%;transform:translateX(-50%);border:6px solid transparent;border-bottom-color:#1a1a1a}}
 
 /* Empty future matchups */
 .empty-future{{opacity:.6;border-style:dashed}}
@@ -709,6 +711,28 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 </div>
 </div>
 <p style="text-align:center;font-size:.7rem;color:var(--text-muted);margin-top:8px">← Scroll horizontally to see full bracket →</p>
+
+<script>
+document.querySelectorAll('.matchup.has-tooltip').forEach(card => {{
+    const tip = card.querySelector('.tooltip');
+    if (!tip) return;
+    card.addEventListener('mouseenter', () => {{
+        const rect = card.getBoundingClientRect();
+        const tipHeight = 180;
+        if (rect.top < tipHeight) {{
+            tip.classList.remove('show-above');
+            tip.classList.add('show-below');
+        }} else {{
+            tip.classList.remove('show-below');
+            tip.classList.add('show-above');
+        }}
+        tip.style.display = 'block';
+    }});
+    card.addEventListener('mouseleave', () => {{
+        tip.style.display = 'none';
+    }});
+}});
+</script>
 
 </body></html>'''
 
