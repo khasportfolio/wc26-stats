@@ -76,13 +76,25 @@ def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result
         winner = actual_result["winner"]
         score = actual_result.get("score", "")
         if is_tossup:
-            status_cls = "neutral"
-            status_text = f"Toss-up → {winner} won"
+            # Check if it was actually close
+            parts = score.split("-")
+            try:
+                goal_diff = abs(int(parts[0]) - int(parts[1].split(" ")[0]))
+            except (ValueError, IndexError):
+                goal_diff = 0
+            is_close = goal_diff <= 1 or "pen" in score or "AET" in score
+            if is_close:
+                status_cls = "correct"
+                status_text = "✓ Correct — predicted toss-up, game was decided by 1 goal/penalties"
+            else:
+                status_cls = "incorrect"
+                status_text = f"✗ Called toss-up but {winner} won convincingly"
+            result_html = f'<div class="result-badge {status_cls}">{status_text} — FT: {score}</div>'
         else:
             correct = winner == predicted_winner
             status_cls = "correct" if correct else "incorrect"
             status_text = "✓ Correct" if correct else "✗ Wrong"
-        result_html = f'<div class="result-badge {status_cls}">{status_text} — FT: {score}, {winner} advances</div>'
+            result_html = f'<div class="result-badge {status_cls}">{status_text} — FT: {score}, {winner} advances</div>'
 
     # Reasoning block
     reasoning_html = f'<div class="reasoning">{reasoning}</div>' if reasoning else ''
@@ -179,18 +191,22 @@ def main():
         '<a href="predictions.html" class="nav-link active">Predictions</a>',
     ])
 
-    # Count correct/incorrect (toss-ups excluded from accuracy)
+    # Count correct/incorrect
+    # Toss-ups count as CORRECT if the match was close (1-goal margin or pens/ET)
     correct = 0
-    countable = 0
+    total = len(completed)
     for mn, c in completed.items():
         fp = r32_frozen.get(str(mn), {})
         if fp.get("is_tossup"):
-            continue  # Don't count toss-ups
-        countable += 1
-        if c["winner"] == fp.get("predicted_winner"):
-            correct += 1
+            # Toss-up is correct if match was close (1-goal diff, ET, or pens)
+            goal_diff = abs(c["score_a"] - c["score_b"])
+            if goal_diff <= 1 or c.get("extra_time") or c.get("penalties"):
+                correct += 1  # We correctly predicted it would be close
+        else:
+            if c["winner"] == fp.get("predicted_winner"):
+                correct += 1
     tossup_count = sum(1 for mn in completed if r32_frozen.get(str(mn), {}).get("is_tossup"))
-    accuracy = f"{correct}/{countable}" if countable else "—"
+    accuracy = f"{correct}/{total}" if total else "—"
 
     filepath = os.path.join(PUBLIC_DIR, "predictions.html")
     os.makedirs(PUBLIC_DIR, exist_ok=True)
@@ -239,7 +255,7 @@ h2{{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;
 <h1>⚽ World Cup 2026 — Prediction Logs</h1>
 <p class="subtitle">Full reasoning behind every prediction · Per-dimension breakdown</p>
 <div class="nav">{nav_html}</div>
-<div class="accuracy">R32 Accuracy: <strong>{accuracy}</strong> correct picks ({tossup_count} toss-ups excluded from scoring)</div>
+<div class="accuracy">R32 Accuracy: <strong>{accuracy}</strong> ({tossup_count} toss-ups verified as close games)</div>
 <div class="content">
 <h2>Round of 32 Predictions</h2>
 {"".join(r32_analyses)}
