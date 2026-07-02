@@ -96,8 +96,12 @@ def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result
             status_text = "✓ Correct" if correct else "✗ Wrong"
             result_html = f'<div class="result-badge {status_cls}">{status_text} — FT: {score}, {winner} advances</div>'
 
+    # Match note (what actually happened)
+    note = actual_result.get("note", "") if actual_result else ""
+    note_html = f'<div class="match-note">📝 {note}</div>' if note else ''
+
     # Reasoning block
-    reasoning_html = f'<div class="reasoning">{reasoning}</div>' if reasoning else ''
+    reasoning_html = f'<div class="reasoning">💡 {reasoning}</div>' if reasoning else ''
 
     return f'''<div class="analysis-card">
 <div class="analysis-header">
@@ -105,6 +109,7 @@ def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result
 {pred_label}
 </div>
 {result_html}
+{note_html}
 {reasoning_html}
 <table class="dim-table">
 <thead><tr><th>Dimension</th><th>Weight</th><th>{team_a}</th><th>{team_b}</th><th>Edge</th></tr></thead>
@@ -160,7 +165,9 @@ def main():
             score_str = f"{c['score_a']}-{c['score_b']}"
             if c.get("penalties"):
                 score_str += f" (pen {c['pen_a']}-{c['pen_b']})"
-            actual = {"winner": c["winner"], "score": score_str}
+            elif c.get("extra_time"):
+                score_str += " (AET)"
+            actual = {"winner": c["winner"], "score": score_str, "note": c.get("note", "")}
 
         html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner, actual,
                                     reasoning=fp.get("reasoning", ""),
@@ -242,6 +249,7 @@ h2{{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;
 .result-badge.incorrect{{background:rgba(230,29,37,.1);color:var(--wc-red)}}
 .result-badge.neutral{{background:rgba(150,150,150,.1);color:var(--text-muted)}}
 .reasoning{{font-size:.72rem;color:var(--text-secondary);padding:8px 12px;background:var(--bar-bg);border-radius:6px;margin:8px 0;line-height:1.5;font-style:italic}}
+.match-note{{font-size:.72rem;color:var(--text-primary);padding:8px 12px;background:rgba(42,57,141,.05);border-left:3px solid var(--wc-blue);border-radius:0 6px 6px 0;margin:8px 0;line-height:1.5}}
 .dim-table{{width:100%;border-collapse:collapse;font-size:.72rem;margin-top:8px}}
 .dim-table th{{text-align:left;padding:4px 8px;border-bottom:1px solid var(--card-border);color:var(--text-muted);font-weight:600}}
 .dim-table td{{padding:4px 8px;border-bottom:1px solid var(--card-border)}}

@@ -1,16 +1,16 @@
 {
   "description": "Round of 32 actual results",
   "completed": [
-    {"match": 73, "team_a": "South Africa", "team_b": "Canada", "score_a": 0, "score_b": 1, "winner": "Canada", "extra_time": false, "penalties": false},
-    {"match": 74, "team_a": "Germany", "team_b": "Paraguay", "score_a": 1, "score_b": 1, "winner": "Paraguay", "extra_time": true, "penalties": true, "pen_a": 3, "pen_b": 4},
-    {"match": 75, "team_a": "Netherlands", "team_b": "Morocco", "score_a": 1, "score_b": 1, "winner": "Morocco", "extra_time": true, "penalties": true, "pen_a": 2, "pen_b": 3},
-    {"match": 76, "team_a": "Brazil", "team_b": "Japan", "score_a": 2, "score_b": 1, "winner": "Brazil", "extra_time": false, "penalties": false},
-    {"match": 77, "team_a": "France", "team_b": "Sweden", "score_a": 3, "score_b": 0, "winner": "France", "extra_time": false, "penalties": false},
-    {"match": 78, "team_a": "Ivory Coast", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false},
-    {"match": 79, "team_a": "Mexico", "team_b": "Ecuador", "score_a": 2, "score_b": 0, "winner": "Mexico", "extra_time": false, "penalties": false},
-    {"match": 80, "team_a": "England", "team_b": "DR Congo", "score_a": 2, "score_b": 1, "winner": "England", "extra_time": false, "penalties": false},
-    {"match": 81, "team_a": "USA", "team_b": "Bosnia and Herzegovina", "score_a": 2, "score_b": 0, "winner": "USA", "extra_time": false, "penalties": false},
-    {"match": 82, "team_a": "Belgium", "team_b": "Senegal", "score_a": 3, "score_b": 2, "winner": "Belgium", "extra_time": false, "penalties": false}
+    {"match": 73, "team_a": "South Africa", "team_b": "Canada", "score_a": 0, "score_b": 1, "winner": "Canada", "extra_time": false, "penalties": false, "note": "Canada controlled the match and got a clean sheet to advance."},
+    {"match": 74, "team_a": "Germany", "team_b": "Paraguay", "score_a": 1, "score_b": 1, "winner": "Paraguay", "extra_time": true, "penalties": true, "pen_a": 3, "pen_b": 4, "note": "Huge upset. Germany dominated possession but couldn't break through. Paraguay held firm and won the shootout 4-3."},
+    {"match": 75, "team_a": "Netherlands", "team_b": "Morocco", "score_a": 1, "score_b": 1, "winner": "Morocco", "extra_time": true, "penalties": true, "pen_a": 2, "pen_b": 3, "note": "Morocco's defensive solidity frustrated the Dutch. Ismael Saibari scored the decisive penalty as Morocco advanced 3-2 on pens."},
+    {"match": 76, "team_a": "Brazil", "team_b": "Japan", "score_a": 2, "score_b": 1, "winner": "Brazil", "extra_time": false, "penalties": false, "note": "Gabriel Martinelli scored a last-minute winner for Brazil, making World Cup history as Japan were agonizingly close to an upset."},
+    {"match": 77, "team_a": "France", "team_b": "Sweden", "score_a": 3, "score_b": 0, "winner": "France", "extra_time": false, "penalties": false, "note": "France dominated from start to finish. Comfortable 3-0 win, never in doubt."},
+    {"match": 78, "team_a": "Ivory Coast", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false, "note": "Norway edged a tight contest 2-1 in regular time. Close game as predicted."},
+    {"match": 79, "team_a": "Mexico", "team_b": "Ecuador", "score_a": 2, "score_b": 0, "winner": "Mexico", "extra_time": false, "penalties": false, "note": "Mexico's home advantage at Estadio Azteca proved decisive. Clean 2-0 win."},
+    {"match": 80, "team_a": "England", "team_b": "DR Congo", "score_a": 2, "score_b": 1, "winner": "England", "extra_time": false, "penalties": false, "note": "England trailed 0-1 and struggled badly before Harry Kane scored a late brace to complete a dramatic comeback. DR Congo's goalkeeper Mpasi was heroic."},
+    {"match": 81, "team_a": "USA", "team_b": "Bosnia and Herzegovina", "score_a": 2, "score_b": 0, "winner": "USA", "extra_time": false, "penalties": false, "note": "USA's first World Cup knockout win since 2002. Won 2-0 despite playing 30+ minutes with 10 men after Balogun's red card. Tillman's free kick sealed it."},
+    {"match": 82, "team_a": "Belgium", "team_b": "Senegal", "score_a": 3, "score_b": 2, "winner": "Belgium", "extra_time": true, "penalties": false, "note": "Incredible comeback. Belgium were 2-0 down in the 85th minute, scored twice in 3 minutes to force extra time, then Tielemans converted a 125th-minute penalty — the latest goal in World Cup history. First team ever to win after trailing 2-0 at the 85th minute."}
   ],
   "upcoming": [83, 84, 85, 86, 87, 88]
 }
