@@ -7,3 +7,6 @@ Brazil
 France
 Norway
 Mexico
+England
+USA
+Belgium

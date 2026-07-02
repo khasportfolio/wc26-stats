@@ -7,7 +7,10 @@
     {"match": 76, "team_a": "Brazil", "team_b": "Japan", "score_a": 2, "score_b": 1, "winner": "Brazil", "extra_time": false, "penalties": false},
     {"match": 77, "team_a": "France", "team_b": "Sweden", "score_a": 3, "score_b": 0, "winner": "France", "extra_time": false, "penalties": false},
     {"match": 78, "team_a": "Ivory Coast", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false},
-    {"match": 79, "team_a": "Mexico", "team_b": "Ecuador", "score_a": 2, "score_b": 0, "winner": "Mexico", "extra_time": false, "penalties": false}
+    {"match": 79, "team_a": "Mexico", "team_b": "Ecuador", "score_a": 2, "score_b": 0, "winner": "Mexico", "extra_time": false, "penalties": false},
+    {"match": 80, "team_a": "England", "team_b": "DR Congo", "score_a": 2, "score_b": 1, "winner": "England", "extra_time": false, "penalties": false},
+    {"match": 81, "team_a": "USA", "team_b": "Bosnia and Herzegovina", "score_a": 2, "score_b": 0, "winner": "USA", "extra_time": false, "penalties": false},
+    {"match": 82, "team_a": "Belgium", "team_b": "Senegal", "score_a": 3, "score_b": 2, "winner": "Belgium", "extra_time": false, "penalties": false}
   ],
-  "upcoming": [80, 81, 82, 83, 84, 85, 86, 87, 88]
+  "upcoming": [83, 84, 85, 86, 87, 88]
 }

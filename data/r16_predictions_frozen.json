@@ -31,5 +31,27 @@
     "reasoning": "Brazil is favored at 66% and leads 6/6 dimensions (Finishing, Creation, Control, Defense, Physicality, Pressing). Norway has edges in none. Both signals align \u2014 clear advantage for Brazil.",
     "a_dims": 6,
     "b_dims": 0
+  },
+  "92": {
+    "team_a": "Mexico",
+    "team_b": "England",
+    "prob_a": 46,
+    "prob_b": 54,
+    "predicted_winner": "England",
+    "is_tossup": false,
+    "reasoning": "England is favored at 54% and leads 4/6 dimensions (Creation, Control, Physicality, Pressing). Mexico has edges in Finishing. Both signals align \u2014 clear advantage for England.",
+    "a_dims": 1,
+    "b_dims": 4
+  },
+  "94": {
+    "team_a": "USA",
+    "team_b": "Belgium",
+    "prob_a": 42,
+    "prob_b": 58,
+    "predicted_winner": "Belgium",
+    "is_tossup": false,
+    "reasoning": "Belgium is favored at 58% and leads 5/6 dimensions (Finishing, Creation, Control, Physicality, Pressing). USA has edges in Defense. Both signals align \u2014 clear advantage for Belgium.",
+    "a_dims": 1,
+    "b_dims": 5
   }
 }
