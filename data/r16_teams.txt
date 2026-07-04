@@ -1,5 +1,4 @@
 # World Cup 2026 — Round of 16 Teams (winners of R32)
-# Fill in as R32 matches complete
 Canada
 Paraguay
 Morocco
@@ -11,3 +10,7 @@ England
 USA
 Belgium
 Spain
+Portugal
+Switzerland
+Argentina
+Egypt
