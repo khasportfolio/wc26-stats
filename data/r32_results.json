@@ -15,7 +15,8 @@
     {"match": 84, "team_a": "Spain", "team_b": "Austria", "score_a": 3, "score_b": 0, "winner": "Spain", "extra_time": false, "penalties": false, "note": "Spain cruised through. Mikel Oyarzabal scored twice as Spain extended their unbeaten run to 34 games. First World Cup knockout win since 2010."},
     {"match": 85, "team_a": "Switzerland", "team_b": "Algeria", "score_a": 2, "score_b": 0, "winner": "Switzerland", "extra_time": false, "penalties": false, "note": "Switzerland's first knockout victory since 1938. Embolo and Ndoye scored in a professional, dominant display in Vancouver."},
     {"match": 86, "team_a": "Argentina", "team_b": "Cape Verde", "score_a": 3, "score_b": 2, "winner": "Argentina", "extra_time": false, "penalties": false, "note": "Argentina survived a scare. Cape Verde pushed them all the way in Miami but Argentina's quality prevailed 3-2."},
-    {"match": 88, "team_a": "Australia", "team_b": "Egypt", "score_a": 1, "score_b": 1, "winner": "Egypt", "extra_time": true, "penalties": true, "pen_a": 2, "pen_b": 4, "note": "Egypt won on penalties 4-2 after a 1-1 draw. Another penalty shootout drama in Arlington."}
+    {"match": 88, "team_a": "Australia", "team_b": "Egypt", "score_a": 1, "score_b": 1, "winner": "Egypt", "extra_time": true, "penalties": true, "pen_a": 2, "pen_b": 4, "note": "Egypt won on penalties 4-2 after a 1-1 draw. Another penalty shootout drama in Arlington."},
+    {"match": 87, "team_a": "Colombia", "team_b": "Ghana", "score_a": 1, "score_b": 0, "winner": "Colombia", "extra_time": false, "penalties": false, "note": "Colombia edged a tight contest 1-0. Minimal margin, exactly the kind of close game our toss-up predicted."}
   ],
-  "upcoming": [87]
+  "upcoming": []
 }

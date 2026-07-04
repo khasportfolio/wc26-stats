@@ -43,6 +43,17 @@
     "a_dims": 1,
     "b_dims": 4
   },
+  "93": {
+    "team_a": "Portugal",
+    "team_b": "Spain",
+    "prob_a": 31,
+    "prob_b": 69,
+    "predicted_winner": "Spain",
+    "is_tossup": false,
+    "reasoning": "Spain is favored at 69% and leads 6/6 dimensions (Finishing, Creation, Control, Defense, Physicality, Pressing). Portugal has edges in none. Both signals align \u2014 clear advantage for Spain.",
+    "a_dims": 0,
+    "b_dims": 6
+  },
   "94": {
     "team_a": "USA",
     "team_b": "Belgium",
@@ -53,5 +64,27 @@
     "reasoning": "Belgium is favored at 58% and leads 5/6 dimensions (Finishing, Creation, Control, Physicality, Pressing). USA has edges in Defense. Both signals align \u2014 clear advantage for Belgium.",
     "a_dims": 1,
     "b_dims": 5
+  },
+  "95": {
+    "team_a": "Argentina",
+    "team_b": "Egypt",
+    "prob_a": 66,
+    "prob_b": 34,
+    "predicted_winner": "Argentina",
+    "is_tossup": false,
+    "reasoning": "Argentina is favored at 66% and leads 4/6 dimensions (Finishing, Control, Defense, Pressing). Egypt has edges in Physicality. Both signals align \u2014 clear advantage for Argentina.",
+    "a_dims": 4,
+    "b_dims": 1
+  },
+  "96": {
+    "team_a": "Switzerland",
+    "team_b": "Colombia",
+    "prob_a": 70,
+    "prob_b": 30,
+    "predicted_winner": "Switzerland",
+    "is_tossup": false,
+    "reasoning": "Switzerland is favored at 70% and leads 3/6 dimensions (Finishing, Physicality, Pressing). Colombia has edges in Creation, Control. Both signals align \u2014 clear advantage for Switzerland.",
+    "a_dims": 3,
+    "b_dims": 2
   }
 }

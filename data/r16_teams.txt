@@ -1,4 +1,4 @@
-# World Cup 2026 — Round of 16 Teams (winners of R32)
+# World Cup 2026 — Round of 16 Teams (all 16 R32 winners)
 Canada
 Paraguay
 Morocco
@@ -14,3 +14,4 @@ Portugal
 Switzerland
 Argentina
 Egypt
+Colombia

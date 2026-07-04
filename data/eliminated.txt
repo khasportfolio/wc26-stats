@@ -16,7 +16,7 @@ Tunisia
 Turkey
 Uruguay
 Uzbekistan
-# Round of 32 eliminated
+# Round of 32 eliminated (all 16 complete)
 Germany
 South Africa
 Japan
@@ -32,3 +32,4 @@ Croatia
 Algeria
 Australia
 Cape Verde
+Ghana
