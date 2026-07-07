@@ -24,10 +24,14 @@ from build_bracket import (
 from build_r32_dashboard import DIMS
 
 
-def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result=None, reasoning="", is_tossup=False):
-    """Build a detailed analysis block for one matchup."""
-    scores_a = compute_team_raw_scores(team_a)
-    scores_b = compute_team_raw_scores(team_b)
+def build_match_analysis(team_a, team_b, prob_a, predicted_winner, actual_result=None, reasoning="", is_tossup=False, max_matches=None):
+    """Build a detailed analysis block for one matchup.
+    
+    max_matches: if set, only use the first N matches for each team's scores.
+    This preserves the prediction as it was made (before the match happened).
+    """
+    scores_a = compute_team_raw_scores(team_a, max_matches=max_matches)
+    scores_b = compute_team_raw_scores(team_b, max_matches=max_matches)
     if not scores_a or not scores_b:
         return ""
 
@@ -171,7 +175,8 @@ def main():
 
         html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner, actual,
                                     reasoning=fp.get("reasoning", ""),
-                                    is_tossup=fp.get("is_tossup", False))
+                                    is_tossup=fp.get("is_tossup", False),
+                                    max_matches=3)  # R32 predictions used group stage only (3 matches)
         r32_analyses.append(html)
         print(f"    M{mn}: {team_a} vs {team_b}")
 
@@ -205,7 +210,8 @@ def main():
 
         html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner, actual,
                                     reasoning=fp.get("reasoning", ""),
-                                    is_tossup=fp.get("is_tossup", False))
+                                    is_tossup=fp.get("is_tossup", False),
+                                    max_matches=4)  # R16 predictions used group + R32 (4 matches)
         r16_analyses.append(html)
         print(f"    M{mn_str}: {team_a} vs {team_b}")
 
@@ -224,7 +230,8 @@ def main():
         predicted_winner = fp.get("predicted_winner")
         html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner,
                                     reasoning=fp.get("reasoning", ""),
-                                    is_tossup=fp.get("is_tossup", False))
+                                    is_tossup=fp.get("is_tossup", False),
+                                    max_matches=5)  # QF predictions used group + R32 + R16 (5 matches)
         qf_analyses.append(html)
         print(f"    M{mn_str}: {team_a} vs {team_b}")
 

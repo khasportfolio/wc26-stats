@@ -51,11 +51,13 @@ FLAGS = {
 }
 
 
-def compute_team_raw_scores(team_name):
+def compute_team_raw_scores(team_name, max_matches=None):
     """Compute recency-weighted raw dimension scores for a team."""
     matches = read_team_matches(team_name)
     if not matches:
         return None
+    if max_matches:
+        matches = matches[:max_matches]
     scores = {}
     for dim in DIMS:
         per_match = [compute_match_score(m, dim) for m in matches]
