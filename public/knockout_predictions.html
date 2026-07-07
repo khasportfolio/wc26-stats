@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>World Cup 2026 — Knockout Predictions</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<style>
+:root {
+    --wc-green:#3CAC3B;--wc-blue:#2A398D;--wc-red:#E61D25;
+    --bg:#FAFAFA;--card-bg:#FFF;--card-border:#E2E4E2;
+    --text-primary:#1A1A1A;--text-secondary:#3D3D3D;--text-muted:#666;
+    --bar-bg:#ECEEED;--hover-shadow:rgba(42,57,141,.08);
+    --win-green:#2D8A2C;--win-gold:#B8860B;--lose-gray:#999;
+}
+@media(prefers-color-scheme:dark){:root{
+    --bg:#0F1318;--card-bg:#1A1F27;--card-border:#2D333B;
+    --text-primary:#FFFFFF;--text-secondary:#D4D4D4;--text-muted:#A0A0A0;
+    --bar-bg:#2D333B;--hover-shadow:rgba(88,166,255,.1);
+    --win-green:#56D364;--win-gold:#F0C040;--lose-gray:#555;
+}}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text-primary);padding:20px;min-height:100vh}
+h1{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}
+.subtitle{text-align:center;color:var(--text-secondary);font-size:.82rem;margin-bottom:8px}
+.methodology{font-size:0.72rem;color:var(--text-muted);text-align:center;margin-bottom:18px;max-width:700px;margin-left:auto;margin-right:auto;line-height:1.5}
+.nav{text-align:center;margin-bottom:24px;font-size:.85rem}
+.nav-link{color:var(--text-secondary);text-decoration:none;padding:4px 10px;border-radius:4px}
+.nav-link:hover{background:var(--bar-bg)}
+.nav-link.active{color:var(--wc-blue);font-weight:600;background:rgba(42,57,141,.08)}
+@media(prefers-color-scheme:dark){h1{color:#79B8FF}.nav-link.active{color:#79B8FF;background:rgba(88,166,255,.12)}}
+
+/* Layout */
+.bracket-container{max-width:1100px;margin:0 auto}
+
+/* Quadrant section */
+.quadrants{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:32px}
+@media(max-width:768px){.quadrants{grid-template-columns:1fr}}
+
+.quadrant{background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:20px;transition:transform .15s,box-shadow .15s}
+.quadrant:hover{transform:translateY(-2px);box-shadow:0 4px 16px var(--hover-shadow)}
+.quadrant-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--card-border)}
+.quadrant-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted)}
+.quadrant-side{font-size:.65rem;padding:3px 8px;border-radius:4px;font-weight:600}
+.side-left{background:rgba(42,57,141,.1);color:var(--wc-blue)}
+.side-right{background:rgba(60,172,59,.1);color:var(--wc-green)}
+@media(prefers-color-scheme:dark){.side-left{background:rgba(121,184,255,.12);color:#79B8FF}.side-right{background:rgba(86,211,100,.12);color:#56D364}}
+
+/* Matchup rows */
+.matchup-row{display:flex;align-items:center;padding:8px 0;border-bottom:1px solid var(--bar-bg)}
+.matchup-row:last-child{border-bottom:none}
+.matchup-round{font-size:.62rem;font-weight:700;color:var(--text-muted);width:32px;flex-shrink:0;text-transform:uppercase}
+.matchup-teams{flex:1;display:flex;align-items:center;gap:6px}
+.matchup-team-name{font-size:.8rem}
+.matchup-vs{font-size:.65rem;color:var(--text-muted);font-weight:600}
+.matchup-result{display:flex;align-items:center;gap:6px;margin-left:auto}
+.matchup-winner{font-size:.8rem;font-weight:700;color:var(--win-green)}
+.matchup-prob{font-size:.65rem;color:var(--text-muted);font-weight:600}
+.matchup-conf{font-size:.6rem;padding:2px 6px;border-radius:3px;font-weight:600}
+.conf-high{background:rgba(60,172,59,.12);color:var(--win-green)}
+.conf-moderate{background:rgba(42,57,141,.1);color:var(--wc-blue)}
+.conf-lean{background:rgba(255,165,0,.1);color:#D48806}
+.conf-tossup{background:rgba(128,128,128,.1);color:var(--text-muted)}
+@media(prefers-color-scheme:dark){.conf-high{background:rgba(86,211,100,.15);color:#56D364}.conf-moderate{background:rgba(121,184,255,.12);color:#79B8FF}.conf-lean{background:rgba(240,192,64,.12);color:#F0C040}}
+
+/* Winner card */
+.quadrant-winner{display:flex;align-items:center;gap:10px;margin-top:14px;padding:10px 14px;background:var(--bar-bg);border-radius:8px}
+.winner-label{font-size:.65rem;font-weight:700;text-transform:uppercase;color:var(--text-muted)}
+.winner-name{font-size:1.1rem;font-weight:700;color:var(--win-green)}
+.winner-path{font-size:.65rem;color:var(--text-muted);margin-left:auto}
+
+/* Final section */
+.final-section{background:var(--card-bg);border:2px solid var(--wc-blue);border-radius:14px;padding:28px;text-align:center;max-width:600px;margin:0 auto 32px}
+@media(prefers-color-scheme:dark){.final-section{border-color:#79B8FF}}
+.final-title{font-size:1rem;font-weight:700;color:var(--wc-blue);margin-bottom:4px}
+@media(prefers-color-scheme:dark){.final-title{color:#79B8FF}}
+.final-venue{font-size:.72rem;color:var(--text-muted);margin-bottom:16px}
+.final-matchup{display:flex;align-items:center;justify-content:center;gap:20px;margin-bottom:16px}
+.final-team{text-align:center}
+.final-team-name{font-size:1.3rem;font-weight:700}
+.final-team-prob{font-size:.85rem;color:var(--text-muted);margin-top:2px}
+.final-team-side{font-size:.6rem;text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+.final-vs{font-size:1rem;font-weight:700;color:var(--text-muted)}
+.final-champion{margin-top:16px;padding:14px;background:linear-gradient(135deg,rgba(42,57,141,.06),rgba(60,172,59,.06));border-radius:10px}
+@media(prefers-color-scheme:dark){.final-champion{background:linear-gradient(135deg,rgba(121,184,255,.08),rgba(86,211,100,.08))}}
+.champion-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--text-muted);margin-bottom:4px}
+.champion-name{font-size:1.5rem;font-weight:800;color:var(--win-gold)}
+.champion-note{font-size:.72rem;color:var(--text-muted);margin-top:6px}
+
+/* Dimension breakdown */
+.dims-section{max-width:600px;margin:0 auto 20px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:12px;padding:20px}
+.dims-title{font-size:.82rem;font-weight:700;color:var(--text-secondary);margin-bottom:12px;text-align:center}
+.dim-row{display:flex;align-items:center;padding:6px 0;border-bottom:1px solid var(--bar-bg)}
+.dim-row:last-child{border-bottom:none}
+.dim-name{width:100px;font-size:.72rem;font-weight:600;color:var(--text-secondary)}
+.dim-weight{width:35px;font-size:.6rem;color:var(--text-muted);text-align:center}
+.dim-bar-container{flex:1;display:flex;align-items:center;gap:4px}
+.dim-bar-left{flex:1;display:flex;justify-content:flex-end}
+.dim-bar-right{flex:1;display:flex;justify-content:flex-start}
+.dim-bar{height:14px;border-radius:3px;min-width:2px;transition:width .5s ease}
+.dim-bar-a{background:var(--wc-blue)}
+.dim-bar-b{background:var(--wc-green)}
+@media(prefers-color-scheme:dark){.dim-bar-a{background:#79B8FF}.dim-bar-b{background:#56D364}}
+.dim-val{font-size:.6rem;font-weight:600;color:var(--text-muted);width:35px}
+.dim-val-left{text-align:right}
+.dim-val-right{text-align:left}
+.dim-edge{width:55px;font-size:.6rem;font-weight:700;text-align:center}
+.edge-a{color:var(--wc-blue)}
+.edge-b{color:var(--wc-green)}
+.edge-even{color:var(--text-muted)}
+@media(prefers-color-scheme:dark){.edge-a{color:#79B8FF}.edge-b{color:#56D364}}
+
+/* Timestamp */
+.timestamp{text-align:center;font-size:.68rem;color:var(--text-muted);margin-top:16px}
+</style>
+</head>
+<body>
+
+<h1>⚽ World Cup 2026 — Knockout Predictions</h1>
+<p class="subtitle">R16 → Quarter-Finals → Semi-Finals → Final</p>
+<p class="methodology">
+    Predictions use a 6-dimension model (Finishing, Creation, Control, Defense, Physicality, Pressing).
+    Knockout weighting: group stage matches share equal baseline weight (37.5% combined),
+    while the R32 knockout match carries 62.5% — reflecting current form over group stage noise.
+</p>
+
+<nav class="nav">
+    <a href="dashboard.html" class="nav-link">Group Stage</a> ·
+    <a href="r32.html" class="nav-link">Round of 32</a> ·
+    <a href="r16.html" class="nav-link">Round of 16</a> ·
+    <a href="trends.html" class="nav-link">Trends</a> ·
+    <a href="bracket.html" class="nav-link">Bracket</a> ·
+    <a href="predictions.html" class="nav-link">Predictions</a> ·
+    <a href="knockout_predictions.html" class="nav-link active">KO Forecast</a>
+</nav>
+
+<div class="bracket-container">
+
+<!-- THE FINAL -->
+<div class="final-section">
+    <div class="final-title">🏆 The Final — July 19</div>
+    <div class="final-venue">MetLife Stadium, East Rutherford</div>
+    <div class="final-matchup">
+        <div class="final-team">
+            <div class="final-team-name">Spain</div>
+            <div class="final-team-prob">52%</div>
+            <div class="final-team-side side-left">Left Side Winner</div>
+        </div>
+        <div class="final-vs">vs</div>
+        <div class="final-team">
+            <div class="final-team-name">Argentina</div>
+            <div class="final-team-prob">48%</div>
+            <div class="final-team-side side-right">Right Side Winner</div>
+        </div>
+    </div>
+    <div class="final-champion">
+        <div class="champion-label">Predicted Champion</div>
+        <div class="champion-name">🏆 Spain</div>
+        <div class="champion-note">Toss-up — Spain leads 4/6 dimensions but Argentina's improved Creation closes the gap</div>
+    </div>
+</div>
+
+<!-- Dimension breakdown for Final -->
+<div class="dims-section">
+    <div class="dims-title">Final Dimension Breakdown: Spain vs Argentina</div>
+    <div class="dim-row">
+        <div class="dim-name">Finishing</div>
+        <div class="dim-weight">25%</div>
+        <div class="dim-bar-container">
+            <div class="dim-val dim-val-left">56.4</div>
+            <div class="dim-bar-left"><div class="dim-bar dim-bar-a" style="width:46%"></div></div>
+            <div class="dim-bar-right"><div class="dim-bar dim-bar-b" style="width:55%"></div></div>
+            <div class="dim-val dim-val-right">66.9</div>
+        </div>
+        <div class="dim-edge edge-b">ARG</div>
+    </div>
+    <div class="dim-row">
+        <div class="dim-name">Creation</div>
+        <div class="dim-weight">15%</div>
+        <div class="dim-bar-container">
+            <div class="dim-val dim-val-left">178.3</div>
+            <div class="dim-bar-left"><div class="dim-bar dim-bar-a" style="width:73%"></div></div>
+            <div class="dim-bar-right"><div class="dim-bar dim-bar-b" style="width:64%"></div></div>
+            <div class="dim-val dim-val-right">154.8</div>
+        </div>
+        <div class="dim-edge edge-a">ESP</div>
+    </div>
+    <div class="dim-row">
+        <div class="dim-name">Control</div>
+        <div class="dim-weight">20%</div>
+        <div class="dim-bar-container">
+            <div class="dim-val dim-val-left">170.2</div>
+            <div class="dim-bar-left"><div class="dim-bar dim-bar-a" style="width:70%"></div></div>
+            <div class="dim-bar-right"><div class="dim-bar dim-bar-b" style="width:72%"></div></div>
+            <div class="dim-val dim-val-right">175.0</div>
+        </div>
+        <div class="dim-edge edge-even">EVEN</div>
+    </div>
+    <div class="dim-row">
+        <div class="dim-name">Defense</div>
+        <div class="dim-weight">25%</div>
+        <div class="dim-bar-container">
+            <div class="dim-val dim-val-left">162.4</div>
+            <div class="dim-bar-left"><div class="dim-bar dim-bar-a" style="width:67%"></div></div>
+            <div class="dim-bar-right"><div class="dim-bar dim-bar-b" style="width:58%"></div></div>
+            <div class="dim-val dim-val-right">140.8</div>
+        </div>
+        <div class="dim-edge edge-a">ESP</div>
+    </div>
+    <div class="dim-row">
+        <div class="dim-name">Physicality</div>
+        <div class="dim-weight">5%</div>
+        <div class="dim-bar-container">
+            <div class="dim-val dim-val-left">142.4</div>
+            <div class="dim-bar-left"><div class="dim-bar dim-bar-a" style="width:59%"></div></div>
+            <div class="dim-bar-right"><div class="dim-bar dim-bar-b" style="width:58%"></div></div>
+            <div class="dim-val dim-val-right">141.8</div>
+        </div>
+        <div class="dim-edge edge-even">EVEN</div>
+    </div>
+    <div class="dim-row">
+        <div class="dim-name">Pressing</div>
+        <div class="dim-weight">10%</div>
+        <div class="dim-bar-container">
+            <div class="dim-val dim-val-left">182.9</div>
+            <div class="dim-bar-left"><div class="dim-bar dim-bar-a" style="width:75%"></div></div>
+            <div class="dim-bar-right"><div class="dim-bar dim-bar-b" style="width:59%"></div></div>
+            <div class="dim-val dim-val-right">143.4</div>
+        </div>
+        <div class="dim-edge edge-a">ESP</div>
+    </div>
+</div>
+
+<!-- QUADRANTS -->
+<div class="quadrants">
+
+    <!-- Q1: Left Upper (France's quadrant) -->
+    <div class="quadrant">
+        <div class="quadrant-header">
+            <span class="quadrant-label">Quadrant 1</span>
+            <span class="quadrant-side side-left">Left Upper</span>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Paraguay</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">France</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">France</span>
+                <span class="matchup-conf conf-high">79%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Canada</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Morocco</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">—</span>
+                <span class="matchup-conf conf-tossup">50/50</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">QF</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">France</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Canada/Morocco</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">France</span>
+                <span class="matchup-conf conf-lean">59%</span>
+            </div>
+        </div>
+        <div class="quadrant-winner">
+            <span class="winner-label">Winner →</span>
+            <span class="winner-name">France</span>
+            <span class="winner-path">via R16 (79%) + QF (59%)</span>
+        </div>
+    </div>
+
+    <!-- Q2: Left Lower (Spain's quadrant) -->
+    <div class="quadrant">
+        <div class="quadrant-header">
+            <span class="quadrant-label">Quadrant 2</span>
+            <span class="quadrant-side side-left">Left Lower</span>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Portugal</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Spain</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Spain</span>
+                <span class="matchup-conf conf-moderate">69%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">USA</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Belgium</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Belgium</span>
+                <span class="matchup-conf conf-lean">58%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">QF</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Spain</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Belgium</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Spain</span>
+                <span class="matchup-conf conf-moderate">60%</span>
+            </div>
+        </div>
+        <div class="quadrant-winner">
+            <span class="winner-label">Winner →</span>
+            <span class="winner-name">Spain</span>
+            <span class="winner-path">via R16 (69%) + QF (60%)</span>
+        </div>
+    </div>
+
+    <!-- Q3: Right Upper (Brazil's quadrant) -->
+    <div class="quadrant">
+        <div class="quadrant-header">
+            <span class="quadrant-label">Quadrant 3</span>
+            <span class="quadrant-side side-right">Right Upper</span>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Brazil</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Norway</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Brazil</span>
+                <span class="matchup-conf conf-moderate">66%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Mexico</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">England</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">England</span>
+                <span class="matchup-conf conf-lean">54%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">QF</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Brazil</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">England</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Brazil</span>
+                <span class="matchup-conf conf-lean">56%</span>
+            </div>
+        </div>
+        <div class="quadrant-winner">
+            <span class="winner-label">Winner →</span>
+            <span class="winner-name">Brazil</span>
+            <span class="winner-path">via R16 (66%) + QF (56%)</span>
+        </div>
+    </div>
+
+    <!-- Q4: Right Lower (Argentina's quadrant) -->
+    <div class="quadrant">
+        <div class="quadrant-header">
+            <span class="quadrant-label">Quadrant 4</span>
+            <span class="quadrant-side side-right">Right Lower</span>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Argentina</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Egypt</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Argentina</span>
+                <span class="matchup-conf conf-moderate">66%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">R16</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Switzerland</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Colombia</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Switzerland</span>
+                <span class="matchup-conf conf-high">70%</span>
+            </div>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">QF</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Argentina</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Switzerland</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Argentina</span>
+                <span class="matchup-conf conf-moderate">60%</span>
+            </div>
+        </div>
+        <div class="quadrant-winner">
+            <span class="winner-label">Winner →</span>
+            <span class="winner-name">Argentina</span>
+            <span class="winner-path">via R16 (66%) + QF (60%)</span>
+        </div>
+    </div>
+
+</div>
+
+<!-- Semi-Finals -->
+<div class="quadrants">
+    <div class="quadrant">
+        <div class="quadrant-header">
+            <span class="quadrant-label">Semi-Final</span>
+            <span class="quadrant-side side-left">Left Side</span>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">SF</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">France</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Spain</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Spain</span>
+                <span class="matchup-conf conf-lean">55%</span>
+            </div>
+        </div>
+        <div class="quadrant-winner">
+            <span class="winner-label">→ Final</span>
+            <span class="winner-name">Spain</span>
+            <span class="winner-path">Spain's Defense + Pressing edges offset France's Finishing</span>
+        </div>
+    </div>
+
+    <div class="quadrant">
+        <div class="quadrant-header">
+            <span class="quadrant-label">Semi-Final</span>
+            <span class="quadrant-side side-right">Right Side</span>
+        </div>
+        <div class="matchup-row">
+            <span class="matchup-round">SF</span>
+            <div class="matchup-teams">
+                <span class="matchup-team-name">Brazil</span>
+                <span class="matchup-vs">vs</span>
+                <span class="matchup-team-name">Argentina</span>
+            </div>
+            <div class="matchup-result">
+                <span class="matchup-winner">Argentina</span>
+                <span class="matchup-conf conf-lean">55%</span>
+            </div>
+        </div>
+        <div class="quadrant-winner">
+            <span class="winner-label">→ Final</span>
+            <span class="winner-name">Argentina</span>
+            <span class="winner-path">Argentina's R32 surge (Cape Verde 3-2) boosts Creation + Finishing</span>
+        </div>
+    </div>
+</div>
+
+</div>
+
+<p class="timestamp">Generated July 6, 2026 • Knockout weighting: Group stage 37.5% (equal) + R32 match 62.5% • R16 predictions frozen from pre-R16 model</p>
+
+</body>
+</html>
