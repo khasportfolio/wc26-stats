@@ -1,0 +1,34 @@
+{
+  "97": {
+    "team_a": "France",
+    "team_b": "Morocco",
+    "prob_a": 48,
+    "prob_b": 52,
+    "predicted_winner": null,
+    "is_tossup": true
+  },
+  "98": {
+    "team_a": "Spain",
+    "team_b": "Belgium",
+    "prob_a": 43,
+    "prob_b": 57,
+    "predicted_winner": "Belgium",
+    "is_tossup": false
+  },
+  "99": {
+    "team_a": "Norway",
+    "team_b": "England",
+    "prob_a": 45,
+    "prob_b": 55,
+    "predicted_winner": "England",
+    "is_tossup": false
+  },
+  "100": {
+    "team_a": "Argentina",
+    "team_b": "Switzerland",
+    "prob_a": 60,
+    "prob_b": 40,
+    "predicted_winner": "Argentina",
+    "is_tossup": false
+  }
+}

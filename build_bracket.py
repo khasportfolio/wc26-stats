@@ -596,14 +596,18 @@ def generate_bracket_html(results, bracket, all_scores):
 <div class="score-line">FT: {score_str}</div>
 </div>'''
 
-        # If both teams known, check for frozen R16 prediction
+        # If both teams known, check for frozen predictions (R16 or QF)
         if team_a and team_b:
-            r16_frozen_path = os.path.join(DATA_DIR, "r16_predictions_frozen.json")
-            r16_pred = {}
-            if os.path.exists(r16_frozen_path):
-                with open(r16_frozen_path, "r", encoding="utf-8") as ff:
-                    r16_pred = json.load(ff)
-            pred = r16_pred.get(str(match_num))
+            # Try R16 predictions first, then QF predictions
+            pred = None
+            for pred_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json"]:
+                pred_path = os.path.join(DATA_DIR, pred_file)
+                if os.path.exists(pred_path):
+                    with open(pred_path, "r", encoding="utf-8") as ff:
+                        pred_data = json.load(ff)
+                    pred = pred_data.get(str(match_num))
+                    if pred:
+                        break
             if pred:
                 pct_a = pred["prob_a"]
                 pct_b = pred["prob_b"]
