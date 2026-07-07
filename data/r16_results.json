@@ -1,0 +1,11 @@
+{
+  "completed": [
+    {"match": 89, "team_a": "Paraguay", "team_b": "France", "score_a": 0, "score_b": 1, "winner": "France", "extra_time": false, "penalties": false},
+    {"match": 90, "team_a": "Canada", "team_b": "Morocco", "score_a": 0, "score_b": 3, "winner": "Morocco", "extra_time": false, "penalties": false},
+    {"match": 91, "team_a": "Brazil", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false},
+    {"match": 92, "team_a": "Mexico", "team_b": "England", "score_a": 2, "score_b": 3, "winner": "England", "extra_time": false, "penalties": false},
+    {"match": 93, "team_a": "Portugal", "team_b": "Spain", "score_a": 0, "score_b": 1, "winner": "Spain", "extra_time": false, "penalties": false},
+    {"match": 94, "team_a": "USA", "team_b": "Belgium", "score_a": 1, "score_b": 4, "winner": "Belgium", "extra_time": false, "penalties": false}
+  ],
+  "upcoming": [95, 96]
+}

@@ -33,3 +33,10 @@ Algeria
 Australia
 Cape Verde
 Ghana
+# Round of 16 eliminated
+Paraguay
+Canada
+Brazil
+Mexico
+Portugal
+USA

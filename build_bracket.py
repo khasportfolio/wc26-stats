@@ -523,17 +523,78 @@ def generate_bracket_html(results, bracket, all_scores):
         team_a_ref = match_info.get("team_a", "")
         team_b_ref = match_info.get("team_b", "")
 
+        # Load actual R16 results
+        r16_results_path = os.path.join(DATA_DIR, "r16_results.json")
+        r16_actual = {}
+        if os.path.exists(r16_results_path):
+            with open(r16_results_path, "r", encoding="utf-8") as ff:
+                r16_data = json.load(ff)
+            for r in r16_data.get("completed", []):
+                r16_actual[r["match"]] = r
+
         # Resolve W## references ONLY if that match is actually completed
         def resolve(ref):
             if ref.startswith("W"):
                 mn = int(ref[1:])
+                # Check R32 results first
                 r = results.get(mn)
                 if r and r.get("completed") and r.get("winner") and r["winner"] != "TBD":
                     return r["winner"]
+                # Check R16 results
+                if mn in r16_actual:
+                    return r16_actual[mn]["winner"]
             return None
 
         team_a = resolve(team_a_ref)
         team_b = resolve(team_b_ref)
+
+        if match_num in r16_actual:
+            actual = r16_actual[match_num]
+            act_team_a = actual["team_a"]
+            act_team_b = actual["team_b"]
+            actual_winner = actual["winner"]
+            score_str = f"{actual['score_a']}-{actual['score_b']}"
+            if actual.get("penalties"):
+                score_str += f" (pen {actual['pen_a']}-{actual['pen_b']})"
+            elif actual.get("extra_time"):
+                score_str += " (AET)"
+
+            flag_a = FLAGS.get(act_team_a, "???")
+            flag_b = FLAGS.get(act_team_b, "???")
+            short_a = act_team_a.replace("Bosnia and Herzegovina", "Bosnia")
+            short_b = act_team_b.replace("Bosnia and Herzegovina", "Bosnia")
+
+            # Use frozen predictions for original odds
+            r16_frozen_path = os.path.join(DATA_DIR, "r16_predictions_frozen.json")
+            frozen = {}
+            if os.path.exists(r16_frozen_path):
+                with open(r16_frozen_path, "r", encoding="utf-8") as ff:
+                    frozen = json.load(ff)
+            fp = frozen.get(str(match_num), {})
+            orig_pct_a = fp.get("prob_a", 50)
+            orig_pct_b = fp.get("prob_b", 50)
+            pred_winner = fp.get("predicted_winner", act_team_a)
+            is_tossup = abs(orig_pct_a - 50) <= 2
+
+            def get_cls(team):
+                if team == actual_winner:
+                    return "actual-winner"
+                elif team == pred_winner and not is_tossup:
+                    return "predicted-winner"
+                else:
+                    return "loser"
+
+            cls_a = get_cls(act_team_a)
+            cls_b = get_cls(act_team_b)
+            adv_a = " ✓" if actual_winner == act_team_a else ""
+            adv_b = " ✓" if actual_winner == act_team_b else ""
+
+            return f'''<div class="matchup completed">
+<div class="matchup-info">{match_info["venue"]} · {match_info["date"]}</div>
+<div class="matchup-team {cls_a}"><span class="flag">{flag_a}</span><span class="team-name">{short_a}{adv_a}</span><span class="prob">{orig_pct_a}%</span></div>
+<div class="matchup-team {cls_b}"><span class="flag">{flag_b}</span><span class="team-name">{short_b}{adv_b}</span><span class="prob">{orig_pct_b}%</span></div>
+<div class="score-line">FT: {score_str}</div>
+</div>'''
 
         # If both teams known, check for frozen R16 prediction
         if team_a and team_b:
