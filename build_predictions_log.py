@@ -178,14 +178,54 @@ def main():
     # Build analysis for R16 matches
     print("\n  Generating R16 analyses...")
     r16_analyses = []
-    for mn_str, fp in r16_frozen.items():
+    # Load R16 results
+    r16_results = {}
+    r16_results_path = os.path.join(DATA_DIR, "r16_results.json")
+    if os.path.exists(r16_results_path):
+        with open(r16_results_path, "r") as f:
+            r16_res_data = json.load(f)
+        for r in r16_res_data.get("completed", []):
+            r16_results[r["match"]] = r
+
+    for mn_str, fp in sorted(r16_frozen.items(), key=lambda x: int(x[0])):
+        mn = int(mn_str)
+        team_a = fp["team_a"]
+        team_b = fp["team_b"]
+        predicted_winner = fp.get("predicted_winner")
+
+        actual = None
+        if mn in r16_results:
+            c = r16_results[mn]
+            score_str = f"{c['score_a']}-{c['score_b']}"
+            if c.get("penalties"):
+                score_str += f" (pen {c['pen_a']}-{c['pen_b']})"
+            elif c.get("extra_time"):
+                score_str += " (AET)"
+            actual = {"winner": c["winner"], "score": score_str, "note": c.get("note", "")}
+
+        html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner, actual,
+                                    reasoning=fp.get("reasoning", ""),
+                                    is_tossup=fp.get("is_tossup", False))
+        r16_analyses.append(html)
+        print(f"    M{mn_str}: {team_a} vs {team_b}")
+
+    # Build analysis for QF matches
+    print("\n  Generating QF analyses...")
+    qf_analyses = []
+    qf_frozen = {}
+    qf_path = os.path.join(DATA_DIR, "qf_predictions_frozen.json")
+    if os.path.exists(qf_path):
+        with open(qf_path, "r") as f:
+            qf_frozen = json.load(f)
+
+    for mn_str, fp in sorted(qf_frozen.items(), key=lambda x: int(x[0])):
         team_a = fp["team_a"]
         team_b = fp["team_b"]
         predicted_winner = fp.get("predicted_winner")
         html = build_match_analysis(team_a, team_b, fp["prob_a"], predicted_winner,
                                     reasoning=fp.get("reasoning", ""),
                                     is_tossup=fp.get("is_tossup", False))
-        r16_analyses.append(html)
+        qf_analyses.append(html)
         print(f"    M{mn_str}: {team_a} vs {team_b}")
 
     # Generate HTML
@@ -272,6 +312,11 @@ h2{{font-size:1.2rem;color:var(--wc-blue);margin:30px 0 15px;padding-bottom:8px;
     if r16_analyses:
         html += f'''<h2>Round of 16 Predictions</h2>
 {"".join(r16_analyses)}
+'''
+
+    if qf_analyses:
+        html += f'''<h2>Quarter-Final Predictions</h2>
+{"".join(qf_analyses)}
 '''
 
     html += '''</div>
