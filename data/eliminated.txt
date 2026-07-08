@@ -40,3 +40,5 @@ Brazil
 Mexico
 Portugal
 USA
+Egypt
+Colombia

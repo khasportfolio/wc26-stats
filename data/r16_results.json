@@ -5,7 +5,9 @@
     {"match": 91, "team_a": "Brazil", "team_b": "Norway", "score_a": 1, "score_b": 2, "winner": "Norway", "extra_time": false, "penalties": false},
     {"match": 92, "team_a": "Mexico", "team_b": "England", "score_a": 2, "score_b": 3, "winner": "England", "extra_time": false, "penalties": false},
     {"match": 93, "team_a": "Portugal", "team_b": "Spain", "score_a": 0, "score_b": 1, "winner": "Spain", "extra_time": false, "penalties": false},
-    {"match": 94, "team_a": "USA", "team_b": "Belgium", "score_a": 1, "score_b": 4, "winner": "Belgium", "extra_time": false, "penalties": false}
+    {"match": 94, "team_a": "USA", "team_b": "Belgium", "score_a": 1, "score_b": 4, "winner": "Belgium", "extra_time": false, "penalties": false},
+    {"match": 95, "team_a": "Argentina", "team_b": "Egypt", "score_a": 3, "score_b": 2, "winner": "Argentina", "extra_time": false, "penalties": false},
+    {"match": 96, "team_a": "Switzerland", "team_b": "Colombia", "score_a": 0, "score_b": 0, "winner": "Switzerland", "extra_time": true, "penalties": true, "pen_a": 5, "pen_b": 3}
   ],
-  "upcoming": [95, 96]
+  "upcoming": []
 }

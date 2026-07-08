@@ -26,8 +26,8 @@
   "100": {
     "team_a": "Argentina",
     "team_b": "Switzerland",
-    "prob_a": 60,
-    "prob_b": 40,
+    "prob_a": 71,
+    "prob_b": 29,
     "predicted_winner": "Argentina",
     "is_tossup": false
   }
