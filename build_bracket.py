@@ -584,12 +584,16 @@ def generate_bracket_html(results, bracket, all_scores):
             short_a = act_team_a.replace("Bosnia and Herzegovina", "Bosnia")
             short_b = act_team_b.replace("Bosnia and Herzegovina", "Bosnia")
 
-            # Use frozen predictions for original odds
-            r16_frozen_path = os.path.join(DATA_DIR, "r16_predictions_frozen.json")
+            # Use frozen predictions for original odds (check R16, QF, SF files)
             frozen = {}
-            if os.path.exists(r16_frozen_path):
-                with open(r16_frozen_path, "r", encoding="utf-8") as ff:
-                    frozen = json.load(ff)
+            for frozen_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json", "sf_predictions_frozen.json"]:
+                frozen_path = os.path.join(DATA_DIR, frozen_file)
+                if os.path.exists(frozen_path):
+                    with open(frozen_path, "r", encoding="utf-8") as ff:
+                        data = json.load(ff)
+                    if str(match_num) in data:
+                        frozen = data
+                        break
             fp = frozen.get(str(match_num), {})
             orig_pct_a = fp.get("prob_a", 50)
             orig_pct_b = fp.get("prob_b", 50)
