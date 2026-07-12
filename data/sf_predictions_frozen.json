@@ -1,0 +1,18 @@
+{
+  "101": {
+    "team_a": "France",
+    "team_b": "Spain",
+    "prob_a": 44,
+    "prob_b": 56,
+    "predicted_winner": "Spain",
+    "is_tossup": false
+  },
+  "102": {
+    "team_a": "England",
+    "team_b": "Argentina",
+    "prob_a": 35,
+    "prob_b": 65,
+    "predicted_winner": "Argentina",
+    "is_tossup": false
+  }
+}

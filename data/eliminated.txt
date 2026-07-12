@@ -42,3 +42,8 @@ Portugal
 USA
 Egypt
 Colombia
+# Quarter-final eliminated
+Morocco
+Belgium
+Norway
+Switzerland

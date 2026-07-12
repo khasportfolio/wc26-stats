@@ -534,6 +534,15 @@ def generate_bracket_html(results, bracket, all_scores):
             for r in r16_data.get("completed", []):
                 r16_actual[r["match"]] = r
 
+        # Load actual QF results
+        qf_results_path = os.path.join(DATA_DIR, "qf_results.json")
+        qf_actual = {}
+        if os.path.exists(qf_results_path):
+            with open(qf_results_path, "r", encoding="utf-8") as ff:
+                qf_data = json.load(ff)
+            for r in qf_data.get("completed", []):
+                qf_actual[r["match"]] = r
+
         # Resolve W## references ONLY if that match is actually completed
         def resolve(ref):
             if ref.startswith("W"):
@@ -545,6 +554,9 @@ def generate_bracket_html(results, bracket, all_scores):
                 # Check R16 results
                 if mn in r16_actual:
                     return r16_actual[mn]["winner"]
+                # Check QF results
+                if mn in qf_actual:
+                    return qf_actual[mn]["winner"]
             return None
 
         team_a = resolve(team_a_ref)
@@ -552,6 +564,12 @@ def generate_bracket_html(results, bracket, all_scores):
 
         if match_num in r16_actual:
             actual = r16_actual[match_num]
+        elif match_num in qf_actual:
+            actual = qf_actual[match_num]
+        else:
+            actual = None
+
+        if actual:
             act_team_a = actual["team_a"]
             act_team_b = actual["team_b"]
             actual_winner = actual["winner"]
@@ -602,7 +620,7 @@ def generate_bracket_html(results, bracket, all_scores):
         if team_a and team_b:
             # Try R16 predictions first, then QF predictions
             pred = None
-            for pred_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json"]:
+            for pred_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json", "sf_predictions_frozen.json"]:
                 pred_path = os.path.join(DATA_DIR, pred_file)
                 if os.path.exists(pred_path):
                     with open(pred_path, "r", encoding="utf-8") as ff:

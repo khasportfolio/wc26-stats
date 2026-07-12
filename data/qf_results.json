@@ -1,0 +1,8 @@
+{
+  "completed": [
+    {"match": 97, "team_a": "France", "team_b": "Morocco", "score_a": 2, "score_b": 0, "winner": "France", "extra_time": false, "penalties": false},
+    {"match": 98, "team_a": "Spain", "team_b": "Belgium", "score_a": 2, "score_b": 1, "winner": "Spain", "extra_time": false, "penalties": false},
+    {"match": 99, "team_a": "Norway", "team_b": "England", "score_a": 1, "score_b": 2, "winner": "England", "extra_time": false, "penalties": false},
+    {"match": 100, "team_a": "Argentina", "team_b": "Switzerland", "score_a": 3, "score_b": 1, "winner": "Argentina", "extra_time": false, "penalties": false}
+  ]
+}
