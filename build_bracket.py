@@ -543,20 +543,37 @@ def generate_bracket_html(results, bracket, all_scores):
             for r in qf_data.get("completed", []):
                 qf_actual[r["match"]] = r
 
-        # Resolve W## references ONLY if that match is actually completed
+        # Load actual SF results
+        sf_results_path = os.path.join(DATA_DIR, "sf_results.json")
+        sf_actual = {}
+        if os.path.exists(sf_results_path):
+            with open(sf_results_path, "r", encoding="utf-8") as ff:
+                sf_data = json.load(ff)
+            for r in sf_data.get("completed", []):
+                sf_actual[r["match"]] = r
+
+        # Resolve W## and L## references ONLY if that match is actually completed
         def resolve(ref):
-            if ref.startswith("W"):
+            if ref.startswith("W") or ref.startswith("L"):
+                is_loser = ref.startswith("L")
                 mn = int(ref[1:])
-                # Check R32 results first
+                actual_match = None
                 r = results.get(mn)
                 if r and r.get("completed") and r.get("winner") and r["winner"] != "TBD":
-                    return r["winner"]
-                # Check R16 results
-                if mn in r16_actual:
-                    return r16_actual[mn]["winner"]
-                # Check QF results
-                if mn in qf_actual:
-                    return qf_actual[mn]["winner"]
+                    actual_match = r
+                elif mn in r16_actual:
+                    actual_match = r16_actual[mn]
+                elif mn in qf_actual:
+                    actual_match = qf_actual[mn]
+                elif mn in sf_actual:
+                    actual_match = sf_actual[mn]
+                if actual_match:
+                    winner = actual_match["winner"]
+                    if is_loser:
+                        ta = actual_match["team_a"]
+                        tb = actual_match["team_b"]
+                        return tb if winner == ta else ta
+                    return winner
             return None
 
         team_a = resolve(team_a_ref)
@@ -566,6 +583,8 @@ def generate_bracket_html(results, bracket, all_scores):
             actual = r16_actual[match_num]
         elif match_num in qf_actual:
             actual = qf_actual[match_num]
+        elif match_num in sf_actual:
+            actual = sf_actual[match_num]
         else:
             actual = None
 
@@ -586,7 +605,7 @@ def generate_bracket_html(results, bracket, all_scores):
 
             # Use frozen predictions for original odds (check R16, QF, SF files)
             frozen = {}
-            for frozen_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json", "sf_predictions_frozen.json"]:
+            for frozen_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json", "sf_predictions_frozen.json", "final_predictions_frozen.json"]:
                 frozen_path = os.path.join(DATA_DIR, frozen_file)
                 if os.path.exists(frozen_path):
                     with open(frozen_path, "r", encoding="utf-8") as ff:
@@ -624,7 +643,7 @@ def generate_bracket_html(results, bracket, all_scores):
         if team_a and team_b:
             # Try R16 predictions first, then QF predictions
             pred = None
-            for pred_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json", "sf_predictions_frozen.json"]:
+            for pred_file in ["r16_predictions_frozen.json", "qf_predictions_frozen.json", "sf_predictions_frozen.json", "final_predictions_frozen.json"]:
                 pred_path = os.path.join(DATA_DIR, pred_file)
                 if os.path.exists(pred_path):
                     with open(pred_path, "r", encoding="utf-8") as ff:

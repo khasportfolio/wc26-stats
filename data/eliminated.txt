@@ -47,3 +47,11 @@ Morocco
 Belgium
 Norway
 Switzerland
+# Quarter-final eliminated
+Morocco
+Belgium
+Norway
+Switzerland
+# Semi-final eliminated
+France
+England
