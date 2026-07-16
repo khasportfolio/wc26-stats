@@ -38,6 +38,7 @@
     {"match": 102, "team_a": "W99", "team_b": "W100", "date": "July 15", "venue": "Atlanta"}
   ],
   "final": [
+    {"match": 103, "team_a": "L101", "team_b": "L102", "date": "July 18", "venue": "Miami Gardens"},
     {"match": 104, "team_a": "W101", "team_b": "W102", "date": "July 19", "venue": "East Rutherford"}
   ]
 }

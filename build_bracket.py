@@ -702,6 +702,7 @@ def generate_bracket_html(results, bracket, all_scores):
     l_sf = [empty_slot_html(bracket_lookup[n]) for n in left_sf]
     r_sf = [empty_slot_html(bracket_lookup[n]) for n in right_sf]
     final_html = empty_slot_html(bracket_lookup[104])
+    third_place_html = empty_slot_html(bracket_lookup[103]) if 103 in bracket_lookup else ""
 
     # Assign individual slots for template
     l_r32_0, l_r32_1, l_r32_2, l_r32_3 = l_r32[0], l_r32[1], l_r32[2], l_r32[3]
@@ -884,6 +885,10 @@ h1{{text-align:center;font-size:1.7rem;color:var(--wc-blue);margin-bottom:4px}}
 <div class="bracket-group">
 <div class="trophy">🏆</div>
 {final_html}
+</div>
+<div class="bracket-group" style="margin-top:20px">
+<div class="round-label" style="margin-top:12px">3rd Place</div>
+{third_place_html}
 </div>
 </div>
 
